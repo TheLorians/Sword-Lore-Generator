@@ -16,10 +16,12 @@ def element(startseed):
     suffix = ['ite','ium','alt','sten','thril','yx','muth']
     return word('met',startseed)+choose(suffix)
 def normalmetal(startseed):
+    #returns an existing metal from a list
     global seed
     seed = startseed
     return choose(['iron','steel','brass','bronze','silver','gold','pewter','tungsten','cast iron','pig iron','titanium','copper','lodestone','bismuth','nickel','duralumin','billon','tombac','ormolu','electrum','hepatizon','sterling silver','mithril'])
 def specificmetal(startseed):
+    #makes the name of a new metal 
     global seed
     seed = startseed
     adjective = ['blood','ancient','red','black','white','astral','meteoric','rose','crucible',word('Name',startseed)+"'s",'cursed','spectral','solar','raw']
@@ -135,26 +137,42 @@ def epithet(startseed,dobject,gender = 'male'):
     else:
         genpronoun = 'daughter'
     if dobject == 'beast':
-        #nerf god of
+        simple_descriptor = choose(['ghastly','undying','unspeakable','unseen','unheard','silent','ancient','relentless','hellish','hundred-eyed','thousand-eyed','immortal','unholy','howling','undead','festering','abominable','formidable','wretched','grusome','blind','dreadful','great'])+' '
+        dominion = choose(['orc','goblin','skelton','skeletal warrior','demon','man','hobgoblin','demon','cyclops','giant','troll','knight','undead','ice giant','ghost',cavespawn(startseed)])
         Epithet = choose([
             choose(['reaper','eater','harvester','swallower','corrupter','defiler','reckoner','render','digester'])+' of '+choose(['souls','minds','flesh','bone','the damned','blood']),
-            'the '+choose(['ghastly','undying','unspeakable','unseen','unheard','silent','ancient','relentless','hellish','hundred-eyed','thousand-eyed','immortal','unholy','howling','undead','festering','abominable','formidable','wretched','grusome','blind','dreadful','great'])+' '+choose(['mind','overmind','beast','horror','terror','monster','evil','abomination','seer','overseer','priest']),
-            choose(['keeper','king','god','ruler','prince'])+' of '+choose(['worms','maggots','the dead','the undead','bones','blood','souls','minds','snakes','fire','darkness','gold']),
-            'the '+choose(['ghastly','undying','unspeakable','unseen','unheard','silent','ancient','relentless','hellish','hundred-eyed','thousand-eyed','immortal','unholy','howling','undead','festering','abominable','formidable','wretched','grusome','blind','dreadful','great'])+' '+choose(['worm','maggot','snake'])+' '+choose(['keeper','eater','lord','god']),
-            choose(['king','god','lord','master','ruler','prince'])+' of the '+choose(['orcs','goblins','skeltons','skeletal warriors','demons','men','hobgoblins','demons','cyclopses','giants','trolls','knights','undead','ice giants',plural(cavespawn(startseed))])
-        ])
+            
+            'the '+simple_descriptor+choose(['mind','overmind','beast','horror','terror','monster','evil','abomination','seer','overseer','priest','gatekeeper']),
+            
+            choose([
+                choose(['keeper','king','god','ruler','prince','master'])+' of '+choose(['worms','maggots','the dead','the undead','bones','blood','souls','minds','snakes','fire','darkness','gold']),
+                
+                'the '+boose([simple_descriptor])+choose(['worm','maggot','snake','soul'])+' '+choose(['keeper','eater','lord','god']),
+                
+                choose(['king','god','ruler','prince','master'])+' of the '+plural(dominion).replace('undeads','undead'),
+                
+                'the '+boose([simple_descriptor])+dominion+' '+choose(['king','god','ruler','prince','master'])
+            ])
+        ]).replace('  ',' ')
     elif dobject == 'hero':
+        #room for improvement
         Epithet = choose(['the '+choose(['brave','strong','great','stoic','elder','younger','tall','short','powerful','adored','ox','boar','bull','mountain','rock','stoic','wise','peaceful','calm','fast','bear','wolf','fox','lion','thirsty','hungry','tired','gentle','giant','last','holy','divine','fearless','steadfast','enlightened','exhalted']),choose(['lion','bear','wolf','kind','soft'])+'-hearted',genpronoun+' of '+word('Father',startseed),choose(['dragon','minotaur','cyclops','ogre','ghast','beast','serpent','wolf','lion','bear','wyvern','worm','lindworm',cavespawn(seed),choose(['the ',''])+dragon(startseed)])+' '+choose(['slayer','killer'])])
     elif dobject == 'noble':
+        #room for improvement
         romannumeral = ['I','II','III','IV','V','VI','VII','VIII','IX','X']
         Epithet = choose([', the '+choose(['fair','kind','noble','just','wise','great','cruel','terrible','horrible','rotten','foolish']),', '+genpronoun+' of '+land(startseed),' '+choose(romannumeral)])
     elif dobject == 'maker':
+        #room for improvement
         Epithet = choose(['the steady handed','the steady of hand','the craftsman','the fireproof','the iron '+choose(['thumbed','fingered','skinned']),'the careful','the sharp-eyed','fire bellied','the bloodless','the dirty','the soot covered'])+','
     elif dobject == 'game':
+        #this generates epithets for use in the legendry_game function
+        #room for improvement
         Epithet = ' of '+location(seed,choose(['valley','plain','forest','woods','mountain']))
     elif dobject == 'wizard':
+        #room for improvement
         Epithet = choose([' the '+color(seed),' the '+wizardtype(startseed)+' of '+location(seed,choose(['valley','mountains','hills','caves','caverns','plains','plateu','island','desert','lake','swamp','forest','canyon','ravine','chasm','hollow']))])
     else:
+        #in case I made a mistake
         Epithet = 'the forsaken'
     return Epithet
 def legendry_game(startseed):
@@ -908,3 +926,6 @@ if __name__ == '__main__':
     #print(bowlore(23))
     #print
     print(paintinglore(305))
+    print
+    for x in range(0,30):
+        print epithet(seed+x,'noble','male')
