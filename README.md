@@ -1,5 +1,6 @@
 # Sword-Lore-Generator
 This makes sword lore
+
 Eamon's to do list:
 * before 1.0
 * aprentices
@@ -9,6 +10,12 @@ Eamon's to do list:
 * enchanted swords
 * fix startseed variance
 * lost swords
+* rewrite language engine
 * after 1.0
 * beetles
 * bugs
+
+Louis' to do list:
+
+Mark's to do list:
+
