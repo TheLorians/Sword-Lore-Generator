@@ -401,12 +401,14 @@ def epithet(startseed,dobject,gender = 'male'):
     else:
         genpronoun = 'daughter'
     if dobject == 'beast':
+        #nerf god of
         Epithet = choose([
             choose(['reaper','eater','harvester','swallower','corrupter','defiler','reckoner','render','digester'])+' of '+choose(['souls','minds','flesh','bone','the damned','blood']),
             'the '+choose(['ghastly','undying','unspeakable','unseen','unheard','silent','ancient','relentless','hellish','hundred-eyed','thousand-eyed','immortal','unholy','howling','undead','festering','abominable','formidable','wretched','grusome','blind','dreadful','great'])+' '+choose(['mind','overmind','beast','horror','terror','monster','evil','abomination','seer','overseer','priest']),
             choose(['keeper','king','god','ruler','prince'])+' of '+choose(['worms','maggots','the dead','the undead','bones','blood','souls','minds','snakes','fire','darkness','gold']),
             'the '+choose(['ghastly','undying','unspeakable','unseen','unheard','silent','ancient','relentless','hellish','hundred-eyed','thousand-eyed','immortal','unholy','howling','undead','festering','abominable','formidable','wretched','grusome','blind','dreadful','great'])+' '+choose(['worm','maggot','snake'])+' '+choose(['keeper','eater','lord','god']),
-            choose(['king','god','lord','master','ruler','prince'])+' of the '+choose(['orcs','goblins','skeltons','skeletal warriors','demons','men','hobgoblins','demons','cyclopses','giants','trolls','knights','undead','ice giants',plural(cavespawn(startseed))])])
+            choose(['king','god','lord','master','ruler','prince'])+' of the '+choose(['orcs','goblins','skeltons','skeletal warriors','demons','men','hobgoblins','demons','cyclopses','giants','trolls','knights','undead','ice giants',plural(cavespawn(startseed))])
+        ])
     elif dobject == 'hero':
         Epithet = choose(['the '+choose(['brave','strong','great','stoic','elder','younger','tall','short','powerful','adored','ox','boar','bull','mountain','rock','stoic','wise','peaceful','calm','fast','bear','wolf','fox','lion','thirsty','hungry','tired','gentle','giant','last','holy','divine','fearless','steadfast','enlightened','exhalted']),choose(['lion','bear','wolf','kind','soft'])+'-hearted',genpronoun+' of '+word('Father',startseed),choose(['dragon','minotaur','cyclops','ogre','ghast','beast','serpent','wolf','lion','bear','wyvern','worm','lindworm',cavespawn(seed),choose(['the ',''])+dragon(startseed)])+' '+choose(['slayer','killer'])])
     elif dobject == 'noble':
@@ -645,7 +647,7 @@ def glass(startseed):
     return choose(glass)
 def specificglass(startseed):
     #makes the name of a non-real type of glass
-    #work in progress
+    #room for progress
     global seed
     seed = startseed
     return color(startseed)+' glass'
@@ -682,15 +684,19 @@ def academicbook(startseed):
     title = ['Principles of '+choose(field),precep(choose(academic))+'\'s '+choose(['Handbook','Guidebook']),'A Guide to '+choose(fieldadjective)+' Principles','Mastering '+choose(field),'A '+boose(['Brief ','Comprehensive '])+'History of '+choose(field)]
     return choose(title)
 def enscript(startseed):
+    #Eamon's function
     global seed
     seed = startseed
     return '\t'+choose(['All that is gold does not glitter','Not all those who wander are lost','The old that is strong does not wither','Deep roots are not reached by the frost','From the ashes a fire shall be woken','A light from the shadows shall spring','Renewed shall be blade that was broken','The crownless again shall be king','All that is gold does not glitter,\nNot all those who wander are lost;\nDeep roots are not reached by the frost.\nFrom the ashes a fire shall be woken,\nA light from the shadows shall spring;\nRenewed shall be blade that was broken,\nThe crownless again shall be king','Three Rings for the Elven-kings under the sky,\nSeven for the Dwarf-lords in their halls of stone,\nNine for Mortal Men doomed to die,\nOne for the Dark Lord on his dark throne\nIn the Land of Mordor where the Shadows lie.\nOne Ring to rule them all, One Ring to find them,\nOne Ring to bring them all and in the darkness bind them\nIn the Land of Mordor where the Shadows lie.','One Ring to rule them all, One Ring to find them,\nOne Ring to bring them all and in the darkness bind them','Do not go gently into that good night','Where is your god now','I hurt people']).replace('\n','\n\t')+'\n'
 def war(startseed):
+    global seed
+    seed = startseed
     pass
 def salamander(startseed):
     #makes salamanders
     #http://www.californiaherps.com/allsalamanders.html
     #THIS GENERATOR IS NOW OBSOLETE
+    #(no longer in use not actually obsolete)
     #See amphibian instead
     global seed
     seed = startseed
@@ -804,7 +810,8 @@ def blood(startseed):
     #makes blood
     global seed
     seed = startseed
-    return boose(['orc','woad','goblin','hobgoblin','kobold','gnome','troll','giant','cyclops','minotaur',cavespawn(startseed)])+' blood'
+    reflist = {'':15,'coagulated ':1}
+    return woose(['','coagulated'])+boose(['orc','woad','goblin','hobgoblin','kobold','gnome','troll','giant','cyclops','minotaur',cavespawn(startseed)])+' blood'
 def ant(startseed):
     #makes the names of types of ants
     #http://www.antstuff.net/html/species_of_ants.html
@@ -852,6 +859,8 @@ def antlore(startseed):
     
     return choose([template1,template2,template3])+boose([extra1,extra2,extra3])
 def battle(startseed):
+    #makes a battle
+    #room for improvement
     global seed
     seed = startseed
     return 'the battle of '+word('Batel',startseed)
@@ -1160,8 +1169,8 @@ def swordlore(startseed):
 ################################################################################
 
 if __name__ == '__main__':
-    print(swordlore(142613))
-    #print
-    #print(bowlore(23))
+    print(swordlore(142614))
     print
-    print(paintinglore(300))
+    #print(bowlore(23))
+    #print
+    print(paintinglore(305))
