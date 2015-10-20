@@ -620,7 +620,7 @@ def battle(startseed):
     #room for improvement
     global seed
     seed = startseed
-    return 'the '+choose(['battle','seige'])+' of '+choose([word('Batel',startseed),location(seed,choose(['valley','mountains','hills','caves','caverns','plains','plateu','island','desert','lake','swamp','forest','canyon','ravine','chasm','hollow']))])
+    return 'the '+choose(['battle','seige','rape','capture'])+' of '+choose([word('Batel',startseed),location(seed,choose(['valley','mountains','hills','caves','caverns','plains','plateu','island','desert','lake','swamp','forest','canyon','ravine','chasm','hollow']))])
 def seige(startseed):
     #this makes only seiges
     #in case you need a seige but no a battle
@@ -695,7 +695,11 @@ def paintinglore(startseed):
         ])+choose([
             'it is '+carving(startseed,False),
             carving(startseed,False).replace('a depiction of','it depicts'),
-            'it is a landscape painting'+boose([' of '+location(seed,choose(['valley','plain','forest','woods','mountain']))])
+            'it is a landscape painting'+boose([
+                ' of '+location(seed,choose([
+                    'valley','plain','forest','woods','mountain'
+                ]))
+            ])
         ])+'. '+boose([
             'It was '+choose([
                 'lost',
@@ -940,8 +944,8 @@ def swordlore(startseed):
         #The code below adds swords with repaired cracks
         if known:
             lore += choose([
-                'A crack in the blade '+choose(['has been filled with '+choose([specificmetal(seed),normalmetal(seed),element(seed)]),'was '+choose(['filled','repaired'])+' by '+professional(seed,choose(['singular','plural']),'blacksmith','black')]),
-                'Originally destroyed '+choose(['during','in'])+' the '+choose([age(seed),war(seed)])+', It was repaired by '+professional(seed,choose(['singular','plural']),'blacksmith','black')+boose([choose([' in'+' during'])+' the '+age(seed)])
+                'A crack in the blade '+choose(['has been filled with '+choose([specificmetal(seed),normalmetal(seed),element(seed)]),'was '+choose(['filled','repaired'])+' by '+professional(seed,'blacksmith',choose(['singular','plural']),'black')]),
+                'Originally destroyed '+choose(['during','in'])+' the '+choose([age(seed),war(seed)])+', it was repaired by '+professional(seed,'blacksmith',choose(['singular','plural']),'black')+boose([choose([' in'+' during'])+' the '+age(seed)])
             ])
         else:
             lore += 'A crack in the blade has been filled with '+choose([specificmetal(seed),normalmetal(seed),element(seed)])         
@@ -978,7 +982,7 @@ if __name__ == '__main__':
     print
     print(bowlore(30))
     print
-    print(paintinglore(345))
+    print(paintinglore(346))
     print
     #for x in range(0,30):
         #print epithet(seed+x,'noble','male')
