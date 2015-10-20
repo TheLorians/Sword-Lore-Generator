@@ -29,29 +29,23 @@ def specificmetal(startseed):
     return choose(adjective)+' '+choose(metal)
 def blacksmith(startseed,dobject):
     #fossil function see professional
-    return professional(startseed,'singular','blacksmith',dobject)
+    return professional(startseed,'blacksmith','singular',dobject)
 def blacksmiths(startseed,dobject):
     #fossil function see professional
-    return professional(startseed,'plural','blacksmith',dobject)
+    return professional(startseed,'blacksmith','plural',dobject)
 def craftsman(startseed):
     #fossil function see professional
-    return professional(startseed,'singular','craftsman')
+    return professional(startseed,'craftsman','singular')
 def craftsmen(startseed):
     #fossil function see professional
-    return professional(startseed,'plural','craftsman')
+    return professional(startseed,'craftsman', 'plural')
 def glassmith(startseed):
     #fossil function see professional
-    return professional(startseed,'singular','glassmith')
+    return professional(startseed,'glassmith','singular')
 def glassmiths(startseed):
     #fossil function see professional
-    return professional(startseed,'plural','glassmith')
-def bowyer(startseed):
-    #fossil function see professional
-    return professional(startseed,'singular','bowyer')
-def bowyers(startseed):
-    #fossil function see professional
-    return professional(startseed,'plural','bowyer')
-def professional(startseed,plurality,profession,dobject = 'none'):
+    return professional(startseed,'glassmith','plural')
+def professional(startseed,profession,plurality = choose(['singular','plural']),dobject = 'none'):
     #a combination of the old professsional functions (fossilized above).  It takes a type of profession and creates the name and title of a person of that profession
     global seed
     seed = startseed
@@ -61,21 +55,19 @@ def professional(startseed,plurality,profession,dobject = 'none'):
     Class = choose(synonyms[profession])
     if randint(0,1) == 1:
         Class = 'master '+Class
-    name = word('Smith',startseed)
+    name = word(capitalize(profession),startseed)
+    #RIP Akteerg the painter
     epithettype = 'maker'
-    if profession == 'wizard':
-        epithettype = 'wizard'
+    if profession == 'wizard':epithettype = 'wizard'
     single = choose([Class+' '+name,name+' the '+Class,name+', '+epithet(startseed,epithettype)])
-    if plurality == 'singular':
-        return single
+    if plurality == 'singular':return single
     else:
         template = choose(['the # & of @','the & of @','the last great & of @','the first great & of @','# & from @','& from @','the '+choose(['disciples','followers','aprentices'])+' of '+single])
         Class = choose([
             choose(['dwarf','elf','man','gnome']+synonyms[profession]),
             choose(['dwarven','elven','human','gnomish'])+' '+Class
         ])
-        if Class.split(' ')[0] not in ['dwarf','elf','man','gnome','dwarven','elven','human','gnomish'] and randint(0,1) == 1:
-            Class = 'master '+Class
+        if Class.split(' ')[0] not in ['dwarf','elf','man','gnome','dwarven','elven','human','gnomish'] and randint(0,1) == 1: Class = 'master '+Class
         temp = template.replace('#',str(randint(2,9)))
         temp = temp.replace('&',plural(Class))
         temp = temp.replace('@',capitalize(word('place',startseed)))
@@ -163,7 +155,7 @@ def epithet(startseed,dobject,gender = 'male'):
         Epithet = choose([', the '+choose(['fair','kind','noble','just','wise','great','cruel','terrible','horrible','rotten','foolish']),', '+genpronoun+' of '+land(startseed),' '+choose(romannumeral)])
     elif dobject == 'maker':
         #room for improvement
-        Epithet = choose(['the steady handed','the steady of hand','the craftsman','the fireproof','the iron '+choose(['thumbed','fingered','skinned']),'the careful','the sharp-eyed','fire bellied','the bloodless','the dirty','the soot covered'])+','
+        Epithet = choose(['the steady handed','the steady of hand','the craftsman','the fireproof','the iron '+choose(['thumbed','fingered','skinned']),'the careful','the sharp-eyed','fire bellied','the bloodless','the dirty','the soot covered'])
     elif dobject == 'game':
         #this generates epithets for use in the legendry_game function
         #room for improvement
@@ -430,7 +422,7 @@ def academicbook(startseed):
     seed = startseed
     academic = ['Physicist','Mathematician','Chemist','Alchemist','Scientist','Herpetologist','Herbologist','Entemologist','Philosopher','Logician','Economist','Engineer','Botanist','Zoologist','Pharmacologist','Geologist','Astronomer','Psychologist']
     field = ['Physics','Mathematics','Chemistry','Alchemy','Science','Herpetology','Herbology','Entemology','Philosophy','Logic','Economics','Engineering','Botany','Zoology','Pharmacology','Geology','Astronomy','Psychology']
-    fieldadjective = ['Physical','Mathematical','Chemical','Alchemical','Scientific','Herpetologic','Herbologic','Entemologic','Philosophic','Logical','Economic','Engineering','Botanical','Zoologic','Pharmacologic','Geologic','Astronomic','Psychologic']
+    fieldadjective = ['Physical','Mathematical','Chemi cal','Alchemical','Scientific','Herpetologic','Herbologic','Entemologic','Philosophic','Logical','Economic','Engineering','Botanical','Zoologic','Pharmacologic','Geologic','Astronomic','Psychologic']
     place = ['Plains','Savana','Arctic','Tropics']
     organism = ['Insects','Plants','Fungi','Birds','Fish','Reptiles','Mammals','Amphibians','Arachnids','Beetles']
     title = ['Principles of '+choose(field),precep(choose(academic))+'\'s '+choose(['Handbook','Guidebook']),'A Guide to '+choose(fieldadjective)+' Principles','Mastering '+choose(field),'A '+boose(['Brief ','Comprehensive '])+'History of '+choose(field)]
@@ -443,7 +435,21 @@ def enscript(startseed):
 def war(startseed):
     global seed
     seed = startseed
-    pass
+    tempseed = seed
+    participant1 = land(tempseed,'demonym')
+    paritcipant1l = land(tempseed)
+    participant2 = land(startseed,'demonym')
+    participant2l = land(startseed)
+    while participant1 == participant2:
+        tempseed = seed
+        participant1 = land(tempseed,'demonym')
+        participant1l = land(tempseed)
+        seed += 1
+    return 'the '+choose([
+        boose(['first','second','third'])+' '+participant1+'-'+participant2+' war',
+        participant1+' civil war',
+        participant1+choose([' invasion',' conquest'])+' of '+participant2l
+    ])
 def salamander(startseed):
     #makes salamanders
     #http://www.californiaherps.com/allsalamanders.html
@@ -479,10 +485,7 @@ def carving(startseed,epithets = True):
     if not epithets:
         royal = royal.split(',')[0]
     picture = choose([
-        'the '+choose([
-            'battle',
-            'seige'
-        ])+' of '+word('Battle',seed),
+        boose([hero(seed)+' leading troops in '])+battle(startseed),
         hero(seed)+', '+choose([
             'fighting',
             'slaying',
@@ -498,7 +501,8 @@ def carving(startseed,epithets = True):
             'hounds',
             'dogs',
             plural(dog(startseed)),
-            'a '+dog(startseed)
+            'a '+dog(startseed),
+            professional(startseed,'hunter')
         ])+' '+choose([
             'hunting',
             'chasing'
@@ -526,7 +530,7 @@ def clothlore(startseed):
     seed = startseed
     color_chart = {'purple' : ['murex']}
     lore = ''
-    lore += choose(['woven','spun'])+' from '+choose([spider(startseed)+' silk','hemp','straw','grass','sisal','cotton','wool','cashmere','qiviut','silk',choose([specificmetal(startseed),normalmetal(startseed)])])+boose([' by '+professional(startseed,choose(['singular','plural']),'weaver')])
+    lore += choose(['woven','spun'])+' from '+choose([spider(startseed)+' silk','hemp','straw','grass','sisal','cotton','wool','cashmere','qiviut','silk',choose([specificmetal(startseed),normalmetal(startseed)])])+boose([' by '+professional(startseed,'weaver')])
     return lore
 def fabric(startseed):
     global seed
@@ -611,11 +615,17 @@ def antlore(startseed):
     
     return choose([template1,template2,template3])+boose([extra1,extra2,extra3])
 def battle(startseed):
-    #makes a battle
+    #makes a battle or seige
     #room for improvement
     global seed
     seed = startseed
-    return 'the battle of '+word('Batel',startseed)
+    return 'the '+choose(['battle','seige'])+' of '+choose([word('Batel',startseed),location(seed,choose(['valley','mountains','hills','caves','caverns','plains','plateu','island','desert','lake','swamp','forest','canyon','ravine','chasm','hollow']))])
+def seige(startseed):
+    #this makes only seiges
+    #in case you need a seige but no a battle
+    global seed
+    seed = startseed
+    return 'the seige of '+word('seig',startseed)
 def gramcheck(string):
     '''Checks for common errors/basic grammar'''
     local_string = string
@@ -641,10 +651,17 @@ def paintinglore(startseed):
         #this should probably be made a separate function if I ever use it again
         global seed
         seed = startseed
+        royal1, royal2 = royalty(seed), royalty(startseed)
+        while royal1 == royal2:
+            #In the unlikely event that the royals are the same 
+            #(It has happened)
+            #try again
+            royal1 = royalty(seed)
+            seed += 1
         tlore = choose([
                     choose([
                         'It was ',
-                        'It is one of '+str(randint(2,11))+' painting '
+                        'It is one of '+str(randint(2,11))+' paintings '
                         ]),
                     choose([
                         'Commissioned',
@@ -653,33 +670,67 @@ def paintinglore(startseed):
                             royalty(startseed),
                             council(startseed)
                         ])+', it was ',
-                    'A painting gifted from '+royalty(seed)+' to '+royalty(startseed)+boose([' as a peace offering'])+', it was '
+                    'A painting gifted from '+royal1+' to '+royal2+boose([' as a peace offering'])+', it was '
                 ])
-        return tlore    
+        return tlore  
+    year_of_creation = randint(1,1500)
     return gramcheck(
         choose([
-            'Painted by '+professional(
-                startseed,
-                choose([
-                    'plural',
-                    'singular'
-                ]),
-                'painter'
-            )+boose([
+            'Painted by '+professional(startseed,'painter')+boose([
                 ' for '+royalty(startseed),
                 ' during the '+age(startseed)
             ])+', ',
-            commission(startseed)+'painted by '+professional(
-                startseed,
+            commission(startseed)+'painted by '+professional(startseed,'painter')+boose([
                 choose([
-                    'plural',
-                    'singular'
-                ]),
-                'painter'
-            )+boose([
-                ' during the '+age(startseed)
+                    ' during',
+                    ' in'
+                ])+' the '+age(startseed),
+                choose([
+                    ' during',
+                    ' in'
+                ])+' the year '+str(year_of_creation),
+                ' under a '+moonphase(startseed)+' moon'
             ])+'. '
-        ])+'it is '+carving(startseed,False)+'. '
+        ])+choose([
+            'it is '+carving(startseed,False),
+            carving(startseed,False).replace('a depiction of','it depicts')
+        ])+'. '+boose([
+            'It was '+choose([
+                'lost',
+                'stolen'
+            ])+choose([
+                choose([
+                    ' during',
+                    ' in'
+                ])+' the '+age(seed),
+                choose([
+                    ' during',
+                    ' in'
+                ])+' the year '+str(randint(year_of_creation,1501)),
+                ' during '+seige(startseed),
+                ' during '+war(seed)
+            ])+'. ',
+            'It was '+choose([
+                'thought to be',
+                'presumed',
+                'believed to have been'
+            ])+' '+choose([
+                'lost',
+                'stolen',
+                'destroyed'
+            ])+boose([
+                choose([
+                    ' during',
+                    ' in'
+                ])+' the '+age(seed),
+                choose([
+                    ' during',
+                    ' in'
+                ])+' the year '+str(randint(year_of_creation,1501)),
+                ' during '+seige(startseed),
+                ' during '+war(seed)
+            ])+'. '
+        ])
     )
 def strangelore(startseed):
     #this was originally contained within the swordlore generator but because I also wanted to use it for the bowlore generator I have moved it outside
@@ -704,7 +755,7 @@ def strangelore(startseed):
         #swords that are haunted by ghosts
         global seed
         seed = startseed
-        haunts = choose(['is haunted by the '+ghost(seed),'>>>'+professional(startseed,choose(['singular','plural']),'wizard')+', bound the '+ghost(seed)+', to this '+choose(['sword','blade'])])
+        haunts = choose(['is haunted by the '+ghost(seed),'>>>'+professional(startseed,'wizard')+', bound the '+ghost(seed)+', to this '+choose(['sword','blade'])])
         return haunts            
     def useless(startseed):
         #currently houses anything that I can't fit into any of the other generators above and I don't think is large enough to warrant its own generator.
@@ -725,7 +776,7 @@ def bowlore(startseed):
     global seed
     seed = startseed
     lore = ''
-    lore += 'It was '+boose(['painstakingly ','skillfully ','artfully '])+'carved from '+biomaterial(startseed,'large')+boose([' by '+bowyer(startseed),' by '+bowyers(startseed)])
+    lore += 'It was '+boose(['painstakingly ','skillfully ','artfully '])+'carved from '+biomaterial(startseed,'large')+boose([' by '+professional(startseed,'bowyer')])
     lore += '. '
     enscription = boose(['It is enscribed with '+choose(['a'+choose(['n ancient',' mysterious'])+' script',choose(['ancient','mysterious'])+' '+choose(['runes','glyphs','hieroglyphics']),script(startseed)]),'It is engraved with '+carving(startseed),'There is a crudely scratched '+script(startseed)+' enscription','It is engraved with a '+choose(['geometric','floral'])+' pattern','It is engraved with '+choose(['an unknown','the '+land(startseed,'demonym'),'the '+word('Famil',startseed)+' family'])+' coat of arms'])
     lore += enscription
@@ -888,7 +939,7 @@ def swordlore(startseed):
         if known:
             lore += choose([
                 'A crack in the blade '+choose(['has been filled with '+choose([specificmetal(seed),normalmetal(seed),element(seed)]),'was '+choose(['filled','repaired'])+' by '+professional(seed,choose(['singular','plural']),'blacksmith','black')]),
-                'Originally destroyed '+choose(['during','in'])+' the '+age(seed)+', It was repaired by '+professional(seed,choose(['singular','plural']),'blacksmith','black')+boose([choose([' in'+' during'])+' the '+age(seed)])
+                'Originally destroyed '+choose(['during','in'])+' the '+choose([age(seed),war(seed)])+', It was repaired by '+professional(seed,choose(['singular','plural']),'blacksmith','black')+boose([choose([' in'+' during'])+' the '+age(seed)])
             ])
         else:
             lore += 'A crack in the blade has been filled with '+choose([specificmetal(seed),normalmetal(seed),element(seed)])         
@@ -923,9 +974,9 @@ def swordlore(startseed):
 if __name__ == '__main__':
     print(swordlore(142614))
     print
-    #print(bowlore(23))
-    #print
-    print(paintinglore(305))
+    print(bowlore(30))
     print
-    for x in range(0,30):
-        print epithet(seed+x,'noble','male')
+    print(paintinglore(331))
+    print
+    #for x in range(0,30):
+        #print epithet(seed+x,'noble','male')
