@@ -17,6 +17,9 @@ Eamon's to do list:
 * bugs
 
 Louis' to do list:
+* Epithets
+  * Add epithets for places and certain other inaminate objects
+  * Add longer and potentially recursive epithets (recursive example: Hiln, son of Coel the mild)
 
 Mark's to do list:
 
