@@ -622,13 +622,14 @@ def dog(startseed):
 
 def book(startseed):
     # makes the title for a fictional book
+    # room for improvement
     global seed
     seed = startseed
 
     def epic():
         people = ['bard', 'king', 'knight', 'jester', 'man']
         title = choose(['the tale of ' + word('Epic', startseed), 'the fall of ' + word('Epic', startseed),
-                        'the epic of ' + word('Epic', startseed), 'the myth of' + word('Epic', startseed),
+                        'the epic of ' + word('Epic', startseed), 'the myth of ' + word('Epic', startseed),
                         word('Epic', startseed)])
         return title
 
@@ -1517,7 +1518,7 @@ if __name__ == '__main__':
     print
     print(bowlore(30))
     print
-    print(paintinglore(345))
+    print(paintinglore(352))
     print
     # for x in range(0,30):
     # print epithet(seed+x,'noble','male')
