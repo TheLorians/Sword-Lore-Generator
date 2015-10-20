@@ -1,5 +1,6 @@
 from BasicFunctions import *
 def color(startseed):
+    #this makes colors
     global seed
     seed = startseed
     def ish(color):
@@ -625,7 +626,7 @@ def seige(startseed):
     #in case you need a seige but no a battle
     global seed
     seed = startseed
-    return 'the seige of '+word('seig',startseed)
+    return 'the seige of '+word('Seig',startseed)
 def gramcheck(string):
     '''Checks for common errors/basic grammar'''
     local_string = string
@@ -693,7 +694,8 @@ def paintinglore(startseed):
             ])+'. '
         ])+choose([
             'it is '+carving(startseed,False),
-            carving(startseed,False).replace('a depiction of','it depicts')
+            carving(startseed,False).replace('a depiction of','it depicts'),
+            'it is a landscape painting'+boose([' of '+location(seed,choose(['valley','plain','forest','woods','mountain']))])
         ])+'. '+boose([
             'It was '+choose([
                 'lost',
@@ -976,7 +978,7 @@ if __name__ == '__main__':
     print
     print(bowlore(30))
     print
-    print(paintinglore(331))
+    print(paintinglore(345))
     print
     #for x in range(0,30):
         #print epithet(seed+x,'noble','male')
