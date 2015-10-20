@@ -88,7 +88,7 @@ def capitalize(word):
     #similar to .capitalize except it leaves all the rest of the word in the same case it was
     #Example:
     #fOo BaR.capitalize() = Foo bar
-    #FOo BaR.capitalize() = FOo BaR
+    #fOo BaR.capitalize() = FOo BaR
     return word[0].upper()+word[1:]
 def plural(string):
     #makes a word plural
