@@ -41,14 +41,14 @@ def randint(lower, upper):
     return lower + (seed % (upper - lower + 1))
 
 
-def relist(array, freqlist):
-    # This creates a new list based upon an array and freqlist
-    # This is used in in the woose function to create weightedness
-    newarray = []
-    for index in array:
-        for x in range(0, freqlist[index]):
-            newarray.append(index)
-    return newarray
+#def relist(array, freqlist):
+    ## This creates a new list based upon an array and freqlist
+    ## This is used in in the woose function to create weightedness
+    #newarray = []
+    #for index in array:
+        #for x in range(0, freqlist[index]):
+            #newarray.append(index)
+    #return newarray
 
 
 # Below are the ooses.
@@ -70,9 +70,16 @@ def choose(array, times=1):
         return result
 
 
-def woose(array, freqlist):
+def woose(array, freqdict):
     # weighted version of choose
-    return choose(relist(array, freqlist))
+    majorsum = sum(map(lambda x: freqdict.get(x,0),array))
+    selection = randint(0,majorsum)
+    for item in array:
+        selection -= freqdict.get(item,0)
+        if selection < 0:
+            return item
+    else:
+        print 'Something has gone horribly wrong (in woose).'
 
 
 def boose(array):
@@ -290,3 +297,9 @@ def word(word, startseed):
     if oldword[0] == oldword[0].upper():
         word = capitalize(word)
     return word
+
+
+if __name__ == '__main__':
+    seed = 82914372
+    for x in range(0,30):
+        print woose(['gnome', 'elf', 'goblin'], {'elf': 23, 'gnome': 1, 'dwarf': 9324})
