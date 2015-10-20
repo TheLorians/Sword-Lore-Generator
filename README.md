@@ -11,6 +11,7 @@ Eamon's to do list:
 * fix startseed variance
 * lost swords
 * rewrite language engine
+* Add painters who are upset with their profession
 * after 1.0
 * beetles
 * bugs
