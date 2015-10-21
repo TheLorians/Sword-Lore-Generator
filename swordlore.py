@@ -47,7 +47,7 @@ def loredmetal(startseed):
     # makes metal with lore
     global seed
     seed = startseed
-    return choose([specificmetal(startseed), normalmeta(startseed)]) + ' mined from ' + boose(['beneath ','under ']) + mountain(seed)
+    return choose([specificmetal(startseed), normalmetal(startseed)]) + ' mined from ' + boose(['beneath ','under ']) + mountain(seed)
 
 def blacksmith(startseed, dobject):
     # fossil function see professional
@@ -1248,7 +1248,7 @@ def strangelore(startseed):
         # Some of this stuff will be moved out later as I flesh out parts of this function.
         global seed
         seed = startseed
-        temp = 'is ' + boose(['strangely', 'suprisingly', 'oddly']) + choose(
+        temp = 'is ' + boose(['strangely', 'suprisingly', 'oddly']) + ' ' + choose(
             ['cold', 'cool', 'warm', 'hot']) + ' to the touch'
         weight = 'is ' + choose(['strangely', 'suprisingly', 'oddly']) + ' ' + choose(['heavy', 'light'])
         creeps = 'feels as if ' + choose(
@@ -1321,7 +1321,7 @@ def swordlore(startseed):
                 royalty(startseed),
                 council(startseed)
             ]) + ', it was ',
-            'A decorative sword gifted from ' + royalty(seed) + ' to ' + royalty(seed) + boose(
+            'A decorative sword gifted from ' + royalty(seed) + ' to ' + royalty(seed+1) + boose(
                 [' as a peace offering']) + ', it was '
         ])
         return tlore
@@ -1332,19 +1332,25 @@ def swordlore(startseed):
             gocation = 'in ' + gocation
         else:
             gocation = choose(['beneath', 'under', 'below']) + ' ' + gocation[7:]
+        body_metal = choose([
+                        specificmetal(startseed),
+                        normalmetal(startseed),
+                        element(startseed),
+                        loredmetal(startseed)
+                    ])
+        gild_metal = choose([
+            specificmetal(seed+1),
+            normalmetal(seed+1),
+            element(seed+1),
+            loredmetal(seed+1)
+        ])        
         tlore += commission(startseed)
         tlore += choose(['forged', 'wrought', 'cast', 'conceived'])
         if gocation in ['in fire', 'in flame', 'in darkness', 'in the shadows']:
             tlore += ' ' + gocation
-        tlore += ' from ' + choose([specificmetal(startseed), normalmetal(startseed), element(startseed)]) + boose([
-            ' and gilded with ' + choose(
-                [
-                    specificmetal(
-                        startseed + 1),
-                    normalmetal(
-                        startseed + 1),
-                    element(
-                        startseed + 1)])])
+        tlore += ' from ' + body_metal + boose([
+            ' and gilded with ' + gild_metal
+        ])
         tlore += ' by ' + choose([blacksmiths(startseed, 'sword'), blacksmith(startseed, 'sword')])
         if gocation not in ['in fire', 'in flame', 'in darkness']:
             tlore += ' ' + choose([gocation, time]) + '. '
@@ -1479,9 +1485,9 @@ def swordlore(startseed):
             lore += choose([
                 'A crack in the blade ' + choose(
                     ['has been filled with ' + choose([specificmetal(seed), normalmetal(seed), element(seed)]),
-                     'was ' + choose(['filled', 'repaired']) + ' by ' + professional(seed, 'blacksmith', dobject = 'black')]),
+                     'was ' + choose(['filled', 'repaired']) + ' by ' + professional(seed, 'blacksmith', dobject = 'sword')]),
                 'Originally destroyed ' + choose(['during', 'in']) + ' the ' + choose(
-                    [age(seed), war(seed)]) + ', it was repaired by ' + professional(seed, 'blacksmith', dobject = 'black') + boose(
+                    [age(seed), war(seed)]) + ', it was repaired by ' + professional(seed, 'blacksmith', dobject = 'sword') + boose(
                     [choose([' in' + ' during']) + ' the ' + age(seed)])
             ])
         else:
@@ -1519,9 +1525,9 @@ def swordlore(startseed):
 '''
 
 if __name__ == '__main__':
-    print(swordlore(142614))
+    print(swordlore(142635))
     print
-    print(bowlore(30))
+    print(loredmetal(30))
     print
     print(paintinglore(352))
     print
