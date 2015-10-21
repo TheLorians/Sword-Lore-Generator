@@ -76,10 +76,13 @@ def woose(array, freqdict):
     selection = randint(0,majorsum)
     for item in array:
         selection -= freqdict.get(item,0)
-        if selection < 0:
+        if selection <= 0:
             return item
     else:
         print 'Something has gone horribly wrong (in woose).'
+        print 'Inputs:'
+        print array
+        print freqdict
 
 
 def boose(array):
@@ -266,7 +269,7 @@ def word(word, startseed):
     for x in range(0, number):
         syllable = ''
         syllable_skeleton = woose(syllables, frequencies)
-        for letter in syllable_skeleton:
+        for letter in list(syllable_skeleton):
             syllable += woose(letters[letter], frequencies)
         # <polish syllable:
         # <Fix yy:
@@ -280,10 +283,10 @@ def word(word, startseed):
         # >iw fixed
         # <Fix (letter)l:
         for letter in ['d', 't', 'r', '$', '%']:
-            syllable = syllable.replace(letter + 'l', letter + choose(relist(letters['3'], frequencies)) + 'l')
+            syllable = syllable.replace(letter + 'l', letter + woose(letters['3'], frequencies) + 'l')
         # >(letter)l fixed
         # <Fix lr:
-        syllable = syllable.replace('lr', 'l' + choose(relist(letters['3'], frequencies)) + 'r')
+        syllable = syllable.replace('lr', 'l' + woose(letters['3'], frequencies) + 'r')
         # >lr fixed
         # <Fix duplicate liquid:
         syllable = syllable.replace('rr', 'r')
@@ -301,5 +304,5 @@ def word(word, startseed):
 
 if __name__ == '__main__':
     seed = 82914372
-    for x in range(0,30):
-        print woose(['gnome', 'elf', 'goblin'], {'elf': 23, 'gnome': 1, 'dwarf': 9324})
+    for x in range(0,1000):
+        print word('hi', seed)

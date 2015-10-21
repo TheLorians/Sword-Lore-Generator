@@ -43,6 +43,11 @@ def specificmetal(startseed):
     metal = ['iron', 'steel', 'silver', 'metal', 'brass', 'bronze']
     return choose(adjective) + ' ' + choose(metal)
 
+def loredmetal(startseed):
+    # makes metal with lore
+    global seed
+    seed = startseed
+    return choose([specificmetal(startseed), normalmeta(startseed)]) + ' mined from ' + boose(['beneath ','under ']) + mountain(seed)
 
 def blacksmith(startseed, dobject):
     # fossil function see professional
