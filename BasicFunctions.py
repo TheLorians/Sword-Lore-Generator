@@ -110,7 +110,7 @@ def capitalize(word):
     # similar to .capitalize except it leaves all the rest of the word in the same case it was
     # Example:
     # fOo BaR.capitalize() = Foo bar
-    # FOo BaR.capitalize() = FOo BaR
+    # fOo BaR.capitalize() = FOo BaR
     return word[0].upper() + word[1:]
 
 
@@ -132,7 +132,7 @@ def plural(string):
 
 
 def precep(word):
-    # adds the correct version pf either a or an before the input
+    # adds the correct version of either a or an before the input
     # because I was doing this individually before and it was a pain in the butt
     # (I don't remember why I called it preceps but the name is stuck now)
     if word[0].lower() in 'aeiou':
