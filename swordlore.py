@@ -1147,6 +1147,7 @@ def paintinglore(startseed):
                 ' for ' + royalty(startseed),
                 ' during the ' + age(startseed)
             ]) + ', ',
+            'One of ' + professional(startseed, 'painter') + '\'s lesser known works, ',
             commission(startseed) + 'painted by ' + professional(startseed, 'painter') + boose([
                 choose([
                     ' during',
@@ -1201,6 +1202,33 @@ def paintinglore(startseed):
             ]) + '. '
         ])
     )
+
+
+def potterylore(startseed):
+    # This makes pottery lore
+    global seed
+    seed = startseed
+    pass
+
+
+def musiclore(startseed):
+    # This makes the lore for a piece of music
+    global seed
+    seed = startseed
+    pass
+
+
+def music(startseed):
+    # This makes the name of a piece of music
+    global seed
+    seed = startseed
+    pass
+
+def scuplpturelore(startseed):
+    # This makes the lore for a sculpture
+    global seeed
+    seed = startseed
+    pass
 
 
 def strangelore(startseed):
@@ -1525,7 +1553,7 @@ def swordlore(startseed):
 '''
 
 if __name__ == '__main__':
-    print(swordlore(142635))
+    print(swordlore(142637))
     print
     print(loredmetal(30))
     print
