@@ -56,10 +56,10 @@ def randint(lower, upper):
 # They each have a specific task but all take and array and return some of the elements
 # Choose is currently the only one that returns multiple elements
 # (and perhaps will always be)
-def choose(array, times=1):
+def choose(array, times = 1):
     # Chooses a number of elements from an array
     result = []
-    virtual = array
+    virtual = array[::]
     for x in range(0, times):
         temp = virtual[randint(0, len(virtual) - 1)]
         result.append(temp)
