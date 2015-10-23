@@ -70,13 +70,15 @@ def choose(array, times=1):
         return result
 
 
-def woose(array, freqdict):
+def woose(freqdict, array = None):
     # weighted version of choose
+    if array == None:
+        array = freqdict.keys()
     majorsum = sum(map(lambda x: freqdict.get(x,0),array))
-    selection = randint(0,majorsum)
+    selection = randint(0,majorsum-1)
     for item in array:
         selection -= freqdict.get(item,0)
-        if selection <= 0:
+        if selection < 0:
             return item
     else:
         print 'Something has gone horribly wrong (in woose).'
@@ -268,9 +270,9 @@ def word(word, startseed):
     word = ''
     for x in range(0, number):
         syllable = ''
-        syllable_skeleton = woose(syllables, frequencies)
+        syllable_skeleton = woose(frequencies, syllables)
         for letter in list(syllable_skeleton):
-            syllable += woose(letters[letter], frequencies)
+            syllable += woose(frequencies, letters[letter])
         # <polish syllable:
         # <Fix yy:
         if 'y' == syllable[0]:
@@ -283,10 +285,10 @@ def word(word, startseed):
         # >iw fixed
         # <Fix (letter)l:
         for letter in ['d', 't', 'r', '$', '%']:
-            syllable = syllable.replace(letter + 'l', letter + woose(letters['3'], frequencies) + 'l')
+            syllable = syllable.replace(letter + 'l', letter + woose(frequencies, letters['3']) + 'l')
         # >(letter)l fixed
         # <Fix lr:
-        syllable = syllable.replace('lr', 'l' + woose(letters['3'], frequencies) + 'r')
+        syllable = syllable.replace('lr', 'l' + woose(frequencies, letters['3']) + 'r')
         # >lr fixed
         # <Fix duplicate liquid:
         syllable = syllable.replace('rr', 'r')

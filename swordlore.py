@@ -411,7 +411,7 @@ def strange_biomaterial(startseed):
     seed = startseed
     # crustacesan based
     reflist = {'': 954, 'blue ': 50, 'yellow ': 5, 'white ': 1}
-    color = woose(['', 'blue ', 'yellow ', 'white '], reflist)
+    color = woose(reflist)
     crust = color + choose(['crab', 'lobster']) + ' ' + choose(['shell', 'chitin'])
     # I can't think of anymore right now I'll add some later
     return choose([crust])
@@ -505,9 +505,7 @@ def moss(startseed):
                           'streak', 'rose', 'ghost', 'turf', 'shaggy', 'dew', 'bark', 'club', 'ganite', 'umbrella',
                           'dung']
 
-    variety = woose(
-        ['moss', 'peatmoss', 'smoothcap', 'bryum', 'ditrichum', 'grimmia', 'pottia', 'pincusion', 'redshank',
-         'quillwort'], {'moss': 8, 'peatmoss': 1, 'smoothcap': 1, 'bryum': 1, 'ditrichum': 1, 'grimmia': 1, 'pottia': 1,
+    variety = woose({'moss': 8, 'peatmoss': 1, 'smoothcap': 1, 'bryum': 1, 'ditrichum': 1, 'grimmia': 1, 'pottia': 1,
                         'pincusion': 1, 'redshank': 1, 'quillwort': 1})
 
     moss = (boose(primaryadjective) + ' ' + variety).replace(' moss', ' ' + boose(secondaryadjective) + '-moss')
@@ -980,7 +978,7 @@ def blood(startseed):
     global seed
     seed = startseed
     reflist = {'': 15, 'coagulated ': 1}
-    return woose(['', 'coagulated '], reflist) + boose(
+    return woose(reflist) + boose(
         ['orc', 'woad', 'goblin', 'hobgoblin', 'kobold', 'gnome', 'troll', 'giant', 'cyclops', 'minotaur',
          cavespawn(startseed)]) + ' blood'
 
