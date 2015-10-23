@@ -137,7 +137,7 @@ def location(startseed, feature):
     return choose(['the ' + capitalize(choose(adjectives)), word('Plaq', startseed)]) + ' ' + capitalize(feature)
 
 
-def forge(startseed):
+def forge(startseed, dobject='none'):
     # room for improvement
     global seed
     seed = startseed
@@ -145,11 +145,18 @@ def forge(startseed):
                  #'& caverns']
     #return choose(templates).replace('&', word('Forge', startseed))
     return choose([
-        'the '+choose([
+        'the ' + choose([
             'forges ',
             'hearth '
-        ])+ choose([
-            'of '+land(seed),
+        ]) + choose([
+            # make separate guild function
+            'of ' + choose([
+                choose([
+                    professional(seed, 'blacksmith', 'singular', dobject),
+                    'the ' + professional(seed, 'blacksmith', 'plural', dobject)
+                ]),
+                land(seed)
+            ]),
             choose([
                 'under ',
                 'beneath '
@@ -1100,7 +1107,7 @@ def seige(startseed):
 def gramcheck(string):
     '''Checks for common errors/basic grammar'''
     local_string = string
-    local_string = local_string.replace(' .', '.').replace('  ', ' ').replace(',.', '.').replace('..', '.')
+    local_string = local_string.replace(' .', '.').replace('  ', ' ').replace(',.', '.').replace('..', '.').replace('the the', 'the')
     for letter in list('abcdefghijklmnopqrstuvwxyz'):
         local_string = local_string.replace('. ' + letter, '. ' + letter.upper())
     for letter in list('aeiou'):
@@ -1340,7 +1347,8 @@ def swordlore(startseed):
     lore = ''
     gocation = choose(['the ' + choose(['depths', 'flames', 'hearth', 'fires']) + ' of Hell', 'fire', 'flame',
                        choose(['white', 'red']) + ' hot ' + choose(['flames', 'fire']), 'darkness',
-                       'the ' + forge(startseed), 'beneath ' + mountain(startseed)])
+                       'the ' + forge(startseed, choose(['sword', ])), 'beneath ' + mountain(startseed)])
+    #                                       add material in here ^
     time = choose(['during the ' + age(startseed), 'during the year ' + str(randint(1, 1500)),
                    'under a ' + moonphase(startseed) + ' moon'])
 
@@ -1565,11 +1573,14 @@ def swordlore(startseed):
 '''
 
 if __name__ == '__main__':
-    print(swordlore(142637))
-    print
-    print(loredmetal(30))
-    print
-    print(paintinglore(352))
+    #print(swordlore(142637))
+    #print
+    #print(loredmetal(30))
+    #print
+    #print(paintinglore(352))
+    #print
+    for x in range(0, 30):
+        print(gramcheck(forge(x,'sword')))
     print
     # for x in range(0,30):
     # print epithet(seed+x,'noble','male')
