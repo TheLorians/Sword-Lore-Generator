@@ -2,7 +2,6 @@
 This makes sword lore
 
 Eamon's to do list:
-* before 1.0
 * guilds
 * aprentices
 * written engravings
@@ -13,7 +12,6 @@ Eamon's to do list:
 * lost swords
 * rewrite language engine
 * Add painters who are upset with their profession
-* after 1.0
 * beetles
 * bugs
 
