@@ -3,6 +3,7 @@ This makes sword lore
 
 Eamon's to do list:
 * before 1.0
+* guilds
 * aprentices
 * written engravings
 * warswords
@@ -20,6 +21,7 @@ Louis' to do list:
 * Epithets
   * Add epithets for places and certain other inaminate objects
   * Add longer and potentially recursive epithets (recursive example: Hiln, son of Coel the mild)
+* Guilds
 
 Mark's to do list:
 
