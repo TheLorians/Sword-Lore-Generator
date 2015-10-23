@@ -138,11 +138,25 @@ def location(startseed, feature):
 
 
 def forge(startseed):
+    # room for improvement
     global seed
     seed = startseed
-    templates = ['Halls of &', 'fires of &', 'flames of &', 'forges of &', 'Hearth of &', 'embers of &', '& caves',
-                 '& caverns']
-    return choose(templates).replace('&', word('Forge', startseed))
+    #templates = ['Halls of &', 'fires of &', 'flames of &', 'forges of &', 'Hearth of &', 'embers of &', '& caves',
+                 #'& caverns']
+    #return choose(templates).replace('&', word('Forge', startseed))
+    return choose([
+        'the '+choose([
+            'forges ',
+            'hearth '
+        ])+ choose([
+            'of '+land(seed),
+            choose([
+                'under ',
+                'beneath '
+            ]) + mountain(seed)
+        ])
+        
+    ])
 
 
 def land(startseed, type='country'):
