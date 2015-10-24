@@ -114,6 +114,7 @@ def professional(startseed, profession, plurality=choose(['singular', 'plural'])
     if plurality == 'singular':
         return singlular
     else:
+        professional_class = choose(synonyms[profession])
         template = choose(
             ['the # & of @', 'the & of @', 'the last great & of @', 'the first great & of @', '# & from @', '& from @',
              'the ' + choose(['disciples', 'followers', 'aprentices']) + ' of ' + singlular])
@@ -121,8 +122,7 @@ def professional(startseed, profession, plurality=choose(['singular', 'plural'])
             choose(['dwarf', 'elf', 'man', 'gnome'] + synonyms[profession]),
             choose(['dwarven', 'elven', 'human', 'gnomish']) + ' ' + professional_class
         ])
-        if professional_class.split(' ')[0] not in ['dwarf', 'elf', 'man', 'gnome',
-                                                    'dwarven', 'elven', 'human', 'gnomish'] and randint(0, 1) == 1:
+        if professional_class.split(' ')[0] not in ['dwarf', 'elf', 'man', 'gnome','dwarven', 'elven', 'human', 'gnomish'] and randint(0, 1) == 1:
             professional_class = 'master ' + professional_class
         temp = template.replace('#', str(randint(2, 9)))
         temp = temp.replace('&', plural(professional_class))
@@ -1585,16 +1585,24 @@ def swordlore(startseed):
  ▄████████▀   ▀███▀███▀   ▀██████▀    ███    ███ ████████▀       █████▄▄██  ▀██████▀    ███    ███   ██████████
                                       ███    ███                 ▀                      ███    ███
 '''
+'''
+                 █
+                ██
+                ██
+                ████████████████████████████████████████████████████████████████████
+       ████████████████████████                                             █████████████
+                █████████████████████████████████████████████████████████████████████
+                ██
+                ██
+                 █
+'''
 
 if __name__ == '__main__':
-    #print(swordlore(142637))
+    print(swordlore(142657))
     #print
     #print(loredmetal(30))
     #print
     #print(paintinglore(352))
     #print
-    for x in range(0, 90):
-        print(professional(seed+x,'blacksmith','singular','sword'))
-    print
     # for x in range(0,30):
     # print epithet(seed+x,'noble','male')
