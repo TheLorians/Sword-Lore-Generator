@@ -3,7 +3,6 @@ This makes sword lore
 
 Eamon's to do list:
 * guilds
-* aprentices
 * written engravings
 * warswords
 * book based enscriptions

@@ -87,23 +87,36 @@ def professional(startseed, profession, plurality=choose(['singular', 'plural'])
     synonyms = {'bowyer': ['bowyer'], 'glassmith': ['gaffer', 'glassmith', 'glassblower'], 'craftsman': ['craftsman'],
                 'blacksmith': ['smith', 'blacksmith', 'goldsmith', 'pewtersmith', 'coppersmith', 'silversmith',
                                dobject + 'smith'], 'wizard': [wizardtype(startseed)]}
-    if profession not in synonyms:
-        synonyms.update({profession: [profession]})
-    professional_class = choose(synonyms[profession])
-    if randint(0, 1) == 1:
-        professional_class = 'master ' + professional_class
-    name = word(capitalize(profession), startseed)
-    # RIP Akteerg the painter
-    epithettype = 'maker'
-    if profession == 'wizard': epithettype = 'wizard'
-    single = choose([professional_class + ' ' + name, name + ' the ' + professional_class, name + ', '
-                     + epithet(startseed, epithettype)])
+    professional_class = ''
+    def single():
+        #This is a function created so I can create apprentices without creating the potential for infinite or long loops
+        #E.G. Sam the master swordsmith while apprenticed to dave the iron smith while apprenticed to Garett the blacksmith
+        #basically allow you to call it only twice
+        global professional_class
+        if profession not in synonyms:
+            synonyms.update({profession: [profession]})
+        professional_class = choose(synonyms[profession])
+        if randint(0, 1) == 1:
+            professional_class = 'master ' + professional_class
+        name = word(capitalize(profession), startseed)
+        # RIP Akteerg the painter
+        epithettype = 'maker'
+        if profession == 'wizard': epithettype = 'wizard'
+        singlular = choose([professional_class + ' ' + name, name + ' the ' + professional_class, name + ', '
+                         + epithet(startseed, epithettype)])
+        return singlular
+    singlular = single()
+    if randint(0,1) == 0:
+        # when guilds are complete add to this
+        seed += randint(12,3677)  # without this line of code the last entry is never selected
+                                  # fix this eventually please
+        singlular += boose([' while apprenticed to '+single(),' while he was an apprentice',' while he was working to join a guild'])
     if plurality == 'singular':
-        return single
+        return singlular
     else:
         template = choose(
             ['the # & of @', 'the & of @', 'the last great & of @', 'the first great & of @', '# & from @', '& from @',
-             'the ' + choose(['disciples', 'followers', 'aprentices']) + ' of ' + single])
+             'the ' + choose(['disciples', 'followers', 'aprentices']) + ' of ' + singlular])
         professional_class = choose([
             choose(['dwarf', 'elf', 'man', 'gnome'] + synonyms[profession]),
             choose(['dwarven', 'elven', 'human', 'gnomish']) + ' ' + professional_class
@@ -147,6 +160,7 @@ def forge(startseed, dobject='none'):
     return choose([
         'the ' + choose([
             'forges ',
+            'forge ',
             'hearth '
         ]) + choose([
             # make separate guild function
@@ -1579,8 +1593,8 @@ if __name__ == '__main__':
     #print
     #print(paintinglore(352))
     #print
-    for x in range(0, 30):
-        print(gramcheck(forge(x,'sword')))
+    for x in range(0, 90):
+        print(professional(seed+x,'blacksmith','singular','sword'))
     print
     # for x in range(0,30):
     # print epithet(seed+x,'noble','male')
