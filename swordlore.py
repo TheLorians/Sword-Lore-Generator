@@ -1135,7 +1135,7 @@ def ghost(startseed):
     global seed
     seed = startseed
     return 'the ' + choose(['ghost', 'spirit']) + ' of ' + choose(
-        [royalty(seed), hero(seed), professional(seed, 'singular', 'wizard')])
+        [royalty(seed), hero(seed), professional(seed, 'wizard','singular')])
 
 
 def paintinglore(startseed):
@@ -1584,8 +1584,6 @@ def swordlore(startseed):
    ▄█    ███ ███ ▄█▄ ███ ███    ███   ███    ███ ███   ▄███      ███▌    ▄ ███    ███   ███    ███   ███    ███
  ▄████████▀   ▀███▀███▀   ▀██████▀    ███    ███ ████████▀       █████▄▄██  ▀██████▀    ███    ███   ██████████
                                       ███    ███                 ▀                      ███    ███
-'''
-'''
                  █
                 ██
                 ██
@@ -1598,7 +1596,7 @@ def swordlore(startseed):
 '''
 
 if __name__ == '__main__':
-    print(swordlore(142657))
+    print(swordlore(142668))
     #print
     #print(loredmetal(30))
     #print
