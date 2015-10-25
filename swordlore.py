@@ -5,11 +5,8 @@ import re
 from BasicFunctions import *
 
 # Functions~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-def color(startseed):
+def color():
     # this makes colors
-    global seed
-    seed = startseed
-
     def ish(color):
         if color[-1] == 'e':
             return color[:-1] + 'ish'
@@ -20,47 +17,36 @@ def color(startseed):
     return choose([boose(['bright ', 'dark ', 'pale ']) + choose(color), choose(color), ish(choose(color))])
 
 
-def element(startseed):
+def element():
     # makes the name of an element 
-    global seed
-    seed = startseed
     suffix = ['ite', 'ium', 'alt', 'sten', 'thril', 'yx', 'muth']
-    return word('met', startseed) + choose(suffix)
+    return word('met') + choose(suffix)
 
 
-def normalmetal(startseed):
+def normalmetal():
     # returns an existing metal from a list
-    global seed
-    seed = startseed
     return choose(['iron', 'steel', 'brass', 'bronze', 'silver', 'gold', 'pewter', 'tungsten', 'cast iron', 'pig iron',
                    'titanium', 'copper', 'lodestone', 'bismuth', 'nickel', 'duralumin', 'billon', 'tombac', 'ormolu',
                    'electrum', 'hepatizon', 'sterling silver', 'mithril'])
 
 
-def specificmetal(startseed):
+def specificmetal():
     # makes the name of a new metal 
-    global seed
-    seed = startseed
     adjective = ['blood', 'ancient', 'red', 'black', 'white', 'astral', 'meteoric', 'rose', 'crucible',
-                 word('Name', startseed) + "'s", 'cursed', 'spectral', 'solar', 'raw']
+                 word('Name') + "'s", 'cursed', 'spectral', 'solar', 'raw']
     metal = ['iron', 'steel', 'silver', 'metal', 'brass', 'bronze']
     return choose(adjective) + ' ' + choose(metal)
 
 
-def loredmetal(startseed):
+def loredmetal():
     # makes metal with lore
     # room for improvement
-    global seed
-    seed = startseed
-    return choose([specificmetal(startseed), normalmetal(startseed)]) + ' mined from ' + boose(
-        ['beneath ', 'under ']) + mountain(seed)
+    return choose([specificmetal(), normalmetal()]) + ' mined from ' + boose(['beneath ', 'under ']) + mountain()
 
 
-def professional(startseed, profession, plurality=choose(['singular', 'plural']), dobject='none'):
+def professional(profession, plurality=choose(['singular', 'plural']), dobject='none'):
     # a combination of the old professional functions.
     # It takes a type of profession and creates the name and title of a person of that profession.
-    global seed
-    seed = startseed
     basicsynonym = {
         'bowyer': [
             'bowyer'
@@ -84,7 +70,7 @@ def professional(startseed, profession, plurality=choose(['singular', 'plural'])
         ],
         'wizard': [
             'wizard',
-            wizardtype(startseed)
+            wizardtype()
         ]
     }
     advanced_synonym = {}
@@ -103,19 +89,17 @@ def professional(startseed, profession, plurality=choose(['singular', 'plural'])
         professional_class = choose(advanced_synonym[profession])
         if randint(0, 1) == 1:
             professional_class = 'master ' + professional_class
-        name = word(capitalize(profession), startseed)
+        name = word(capitalize(profession))
         # RIP Akteerg the painter
         epithettype = 'maker'
         if profession == 'wizard': epithettype = 'wizard'
         singular = choose([professional_class + ' ' + name, name + ' the ' + professional_class, name + ', '
-                           + epithet(startseed, epithettype)])
+                           + epithet(epithettype)])
         return singular
 
     singular = single()
     if randint(0, 1) == 0:
         # when guilds are complete add to this
-        seed += randint(12, 3677)  # without this line of code the last entry is never selected
-        # fix this eventually please
         singular += boose([' while apprenticed to ' + single(), ' while he was an apprentice',
                            ' while he was working to join a guild'])
     if plurality == 'singular':
@@ -134,37 +118,33 @@ def professional(startseed, profession, plurality=choose(['singular', 'plural'])
             professional_class = 'master ' + professional_class
         temp = template.replace('#', str(randint(2, 9)))
         temp = temp.replace('&', plural(professional_class))
-        temp = temp.replace('@', capitalize(word('place', startseed)))
+        temp = temp.replace('@', capitalize(word('place')))
         return temp
 
 
-def mountain(startseed):
+def mountain():
     # creates the name of a mountain
-    global seed
-    seed = startseed
+
+
     # TODO: Move this out of the function
     adjectives = ['lonely', 'icy', 'misty', 'red', 'golden', 'silver', 'frozen', 'ancient', 'cold', 'windy', 'cloudy',
                   'north', 'south', 'east', 'west', 'crying', 'burning', 'walking', 'wandering', 'howling', 'windswept',
                   'white', 'silver', 'sleepy', 'sleeping']
     return choose(
-        ['The ' + capitalize(choose(adjectives)) + ' Mountains', 'Mount ' + capitalize(word('mount', startseed))])
+        ['The ' + capitalize(choose(adjectives)) + ' Mountains', 'Mount ' + capitalize(word('mount'))])
 
 
-def location(startseed, feature):
+def location(feature):
     # This makes a natural location
-    global seed
-    seed = startseed
     # TODO: Move this out of the function
     adjectives = ['lonely', 'icy', 'misty', 'red', 'golden', 'silver', 'frozen', 'ancient', 'cold', 'windy', 'cloudy',
                   'north', 'south', 'east', 'west', 'crying', 'burning', 'walking', 'wandering', 'howling', 'windswept',
                   'white', 'silver', 'sleepy', 'sleeping']
-    return choose(['the ' + capitalize(choose(adjectives)), word('Plaq', startseed)]) + ' ' + capitalize(feature)
+    return choose(['the ' + capitalize(choose(adjectives)), word('Plaq')]) + ' ' + capitalize(feature)
 
 
-def forge(startseed, dobject='none'):
+def forge(dobject='none'):
     # room for improvement
-    global seed
-    seed = startseed
     # templates = ['Halls of &', 'fires of &', 'flames of &', 'forges of &', 'Hearth of &', 'embers of &', '& caves',
     # '& caverns']
     # return choose(templates).replace('&', word('Forge', startseed))
@@ -177,25 +157,23 @@ def forge(startseed, dobject='none'):
             # make separate guild function
             'of ' + choose([
                 choose([
-                    professional(seed, 'blacksmith', 'singular', dobject),
-                    'the ' + professional(seed, 'blacksmith', 'plural', dobject)
+                    professional('blacksmith', 'singular', dobject),
+                    'the ' + professional('blacksmith', 'plural', dobject)
                 ]),
-                land(seed)
+                land()
             ]),
             choose([
                 'under ',
                 'beneath '
-            ]) + mountain(seed)
+            ]) + mountain()
         ])
 
     ])
 
 
-def land(startseed, type='country'):
+def land(type='country'):
     # makes a country or a demonym 
-    global seed
-    seed = startseed
-    root = word('Land', startseed)
+    root = word('Land')
     while root[-1] in list('aeiou') and len(root) > 1:
         root = root[:-1]
     root += choose(['ia', 'land'])
@@ -208,32 +186,26 @@ def land(startseed, type='country'):
             return choose([root + 'ic', root[:-4] + 'ish'])
 
 
-def cavespawn(startseed):
+def cavespawn():
     # the cavespawn are a collection of ancient races that inhabit the darkest corners of the earth
     # they are generally rather passive and appear in small groups
     # they are mute but have elaborate writing systems and social orders
     # kings have waged war with them over millennia but they still remain
-    global seed
-    seed = startseed
     lingtype = ['eye', 'ear', 'ghost', 'rock', 'bone', 'stone', 'wood', 'husk']
     mantype = ['slug', 'snail', 'snake', 'bird', 'moth', 'worm', 'pig', 'wolf', 'bear', 'fish', 'pig', 'husk', 'lava',
                'magma', 'rock', 'mail', 'olm', 'frog', 'lizard', 'leopard', 'dog']
     return choose([choose(lingtype) + 'ling', choose(mantype) + 'man'])
 
 
-def wizardtype(startseed):
+def wizardtype():
     # this makes wizard types
     # this is not really a generator because it chooses from a predetermined list and doesn't mix up the parts
     # there is room for improvement here
-    global seed
-    seed = startseed
     return choose(['wizard', 'sorcerer', 'mage', 'alchemist', 'warlock', choose(['necro', 'pyro', 'litho']) + 'mancer'])
 
 
-def epithet(startseed, dobject, gender='male'):
+def epithet(dobject, gender='male'):
     # gives epithets to various things to add flavour
-    global seed
-    seed = startseed
     if gender == 'male':
         genpronoun = 'son'
     else:
@@ -280,7 +252,7 @@ def epithet(startseed, dobject, gender='male'):
             'undead',
             'ice giant',
             'ghost',
-            cavespawn(startseed)
+            cavespawn()
         ])
         epithet_name = choose([
             choose([
@@ -374,16 +346,16 @@ def epithet(startseed, dobject, gender='male'):
              'boar', 'bull', 'mountain', 'rock', 'stoic', 'wise', 'peaceful', 'calm', 'fast', 'bear', 'wolf', 'fox',
              'lion', 'thirsty', 'hungry', 'tired', 'gentle', 'giant', 'last', 'holy', 'divine', 'fearless', 'steadfast',
              'enlightened', 'exalted']), choose(['lion', 'bear', 'wolf', 'kind', 'soft']) + '-hearted',
-                               genpronoun + ' of ' + word('Father', startseed), choose(
+                               genpronoun + ' of ' + word('Father'), choose(
                 ['dragon', 'minotaur', 'cyclops', 'ogre', 'ghast', 'beast', 'serpent', 'wolf', 'lion', 'bear', 'wyvern',
-                 'worm', 'lindworm', cavespawn(seed), choose(['the ', '']) + dragon(startseed)]) + ' ' + choose(
+                 'worm', 'lindworm', cavespawn(), choose(['the ', '']) + dragon()]) + ' ' + choose(
                 ['slayer', 'killer'])])
     elif dobject == 'noble':
         # room for improvement
         romannumeral = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X']
         epithet_name = choose([', the ' + choose(
             ['fair', 'kind', 'noble', 'just', 'wise', 'great', 'cruel', 'terrible', 'horrible', 'rotten', 'foolish']),
-                               ', ' + genpronoun + ' of ' + land(startseed), ' ' + choose(romannumeral)])
+                               ', ' + genpronoun + ' of ' + land(), ' ' + choose(romannumeral)])
     elif dobject == 'maker':
         # room for improvement
         epithet_name = choose(['the steady handed', 'the steady of hand', 'the craftsman', 'the fireproof',
@@ -392,10 +364,10 @@ def epithet(startseed, dobject, gender='male'):
     elif dobject == 'game':
         # this generates epithets for use in the legendry_game function
         # room for improvement
-        epithet_name = ' of ' + location(seed, choose(['valley', 'plain', 'forest', 'woods', 'mountain']))
+        epithet_name = ' of ' + location(choose(['valley', 'plain', 'forest', 'woods', 'mountain']))
     elif dobject == 'wizard':
         # room for improvement
-        epithet_name = choose([' the ' + color(seed), ' the ' + wizardtype(startseed) + ' of ' + location(seed, choose(
+        epithet_name = choose([' the ' + color(), ' the ' + wizardtype() + ' of ' + location(choose(
             ['valley', 'mountains', 'hills', 'caves', 'caverns', 'plains', 'plateau', 'island', 'desert', 'lake',
              'swamp', 'forest', 'canyon', 'ravine', 'chasm', 'hollow']))])
     else:
@@ -404,30 +376,24 @@ def epithet(startseed, dobject, gender='male'):
     return epithet_name
 
 
-def legendary_game(startseed):
+def legendary_game():
     # creates the name of a legendary game animal
-    global seed
-    seed = startseed
     coloration = choose(['white', 'silver', 'black', 'golden'])
     genus = choose(['elk', 'stag', 'ram', 'bison'])
-    return 'the ' + boose(['great ']) + coloration + ' ' + genus + ' ' + epithet(startseed, 'game')
+    return 'the ' + boose(['great ']) + coloration + ' ' + genus + ' ' + epithet('game')
 
 
-def dragon(startseed):
+def dragon():
     # this makes the name for a type of dragon
     # Not a specific dragon
     # there is plenty room for improvement here
-    global seed
-    seed = startseed
     return choose(
         ['lind', 'grind', 'lode', 'blood', 'flesh', 'gore', 'grist', 'grit', 'stench', 'fester', 'bone', 'old', 'book',
          'stone', 'husk']) + choose(['worm', 'wurm', 'wyrm'])
 
 
-def worm(startseed):
+def worm():
     # creates the name of a worm
-    global seed
-    seed = startseed
     classification = choose(
         ['blood', 'book', 'bone', 'flesh', 'mind', 'earth', 'stone', 'night', 'fire', 'lung', 'gut', 'mud', 'moss',
          'wood', 'sludge', 'husk', 'book'])
@@ -435,46 +401,38 @@ def worm(startseed):
     return choose(['giant ', '']) + classification + basis
 
 
-def beast(startseed):
+def beast():
     # creates the name of an evil beast or creature
-    global seed
-    seed = startseed
     Class = choose(
         ['dragon', 'minotaur', 'cyclops', 'ogre', 'ghast', 'beast', 'serpent', 'wolf', 'lion', 'bear', 'wyvern', 'worm',
-         'lindworm', 'frost giant', dragon(startseed)])
+         'lindworm', 'frost giant', dragon()])
     # TODO this was copy pasted from line 395, move outside functions
-    origin = location(startseed, choose(
+    origin = location(choose(
         ['valley', 'mountains', 'hills', 'caves', 'caverns', 'plains', 'plateau', 'island', 'desert', 'lake', 'swamp',
          'forest', 'canyon', 'ravine', 'chasm', 'hollow']))
-    name = capitalize(word('beast', startseed))
-    Epithet = epithet(startseed, 'beast')
+    name = capitalize(word('beast'))
+    Epithet = epithet('beast')
     return choose([choose(['', name + ', ']) + 'the ' + Class + ' of ' + origin, name + ', ' + Epithet])
 
 
-def horde(startseed):
-    global seed
-    seed = startseed
+def horde():
     return choose(['a horde of', 'an army of', choose(
         ['one thousand', 'ten thousand', 'five hundred', 'one hundred', 'fifty', 'forty', 'thirty'])]) + ' ' + boose(
         ['angry', 'unholy', 'demonic', 'ravenous', 'ghastly']) + ' ' + choose(
         ['orcs', 'goblins', 'skeletons', 'skeletal warriors', 'demons', 'men', 'hobgoblins', 'demons', 'cyclopes',
-         'giants', 'trolls', 'knights', 'undead', 'frost giants', plural(cavespawn(startseed))])  #  TODO use plural function
+         'giants', 'trolls', 'knights', 'undead', 'frost giants', plural(cavespawn())])  #  TODO use plural function
 
 
-def hero(startseed):
+def hero():
     # creates the name and title of a mythical hero
-    global seed
-    seed = startseed
-    name = word('Hero', startseed)
-    epithet_name = epithet(startseed, 'hero')
+    name = word('Hero')
+    epithet_name = epithet('hero')
     return name + ', ' + epithet_name
 
 
-def royalty(startseed):
+def royalty():
     # creates the name and title of a royal
-    global seed
-    seed = startseed
-    name = word('King', startseed)
+    name = word('King')
     title = choose(
         ['King', 'Queen', 'Duke', 'Duchess', 'Grand Duke', 'Archduke', 'Lord', 'Lady', 'Prince', 'Princess', 'Marquess',
          'Earl', 'Count', 'Countess', 'Baron', 'Baroness', 'Viscount', 'Viscountess']).lower()
@@ -482,80 +440,65 @@ def royalty(startseed):
         gender = 'female'
     else:
         gender = 'male'
-    epithet_name = epithet(startseed, 'noble', gender)
-    return choose([capitalize(title) + ' ' + name + epithet_name, 'the ' + title + ' of ' + land(seed)])
+    epithet_name = epithet('noble', gender)
+    return choose([capitalize(title) + ' ' + name + epithet_name, 'the ' + title + ' of ' + land()])
 
 
-def spirit(startseed):
+def spirit():
     # please comment this
-    global seed
-    seed = startseed
     class_type = choose(['nymph', 'spirit', 'lady'])
-    origin = location(startseed, choose(['lake', 'pond', 'forest']))
+    origin = location(choose(['lake', 'pond', 'forest']))
     return 'the ' + class_type + ' of ' + origin
 
 
-def coral(startseed):
+def coral():
     # makes coral
-    global seed
-    seed = startseed
-    affix = ['fire', 'cloak', 'cactus', 'brain', 'ghost', 'cloud', 'rock', 'stone', color(seed) + ' crust',
-             choose(['elk', 'bison', 'bull', 'deer', 'moose', 'stag']) + 'horn', land(seed, 'demonym')]
+    affix = ['fire', 'cloak', 'cactus', 'brain', 'ghost', 'cloud', 'rock', 'stone', color() + ' crust',
+             choose(['elk', 'bison', 'bull', 'deer', 'moose', 'stag']) + 'horn', land('demonym')]
     return choose(affix) + ' coral'
 
 
-def bone(startseed):
+def bone():
     # makes bone
-    global seed
-    seed = startseed
-    bsource = choose(['goblin', 'orc', 'human', 'dwarf', 'giant', 'troll', 'fish', 'deer', 'cow', cavespawn(seed)])
+    bsource = choose(['goblin', 'orc', 'human', 'dwarf', 'giant', 'troll', 'fish', 'deer', 'cow', cavespawn()])
     classification = choose(['rib', 'bone', 'tooth', 'spine', 'jaw'])
-    lbsource = choose([beast(seed)])
+    lbsource = choose([beast()])
     return choose([bsource + ' ' + classification, 'the ' + classification + ' of ' + lbsource + ','])
 
 
-def wood(startseed):
+def wood():
     # makes wood
-    # room for improvement
-    global seed
-    seed = startseed
     wsource = choose(
         ['oak', 'spruce', 'cedar', 'birch', 'pine', 'fir', 'hemlock', 'ash', 'chestnut', 'beech', 'elm', 'mahogany',
          'hickory', 'maple', 'stone'])
     return wsource + ' wood'
 
 
-def ivory(startseed):
+def ivory():
     # makes ivory
-    global seed
-    seed = startseed
-    i_source = boose(['mammoth', 'walrus', 'whale', land(seed, 'demonym')])
+    i_source = boose(['mammoth', 'walrus', 'whale', land('demonym')])
     return i_source + ' ivory'
 
 
-def biomaterial(startseed, size='small'):
+def biomaterial(size='small'):
     # makes biological materials
-    global seed
-    seed = startseed
     # bone:
-    bsource = bone(startseed)
+    bsource = bone()
     # wood:
-    wsource = wood(startseed)
+    wsource = wood()
     # ivory:
-    isource = ivory(startseed)
+    isource = ivory()
     # coral:
-    csource = coral(startseed)
+    csource = coral()
     if size == 'small':
         return choose([bsource, wsource, isource, csource])
     else:
         return choose([wsource, isource, csource])
 
 
-def strange_biomaterial(startseed):
+def strange_biomaterial():
     # makes strange or unconventional biological materials
     # there is room for improvement here
-    global seed
-    seed = startseed
     # crustacean based
     reflist = {'': 954, 'blue ': 50, 'yellow ': 5, 'white ': 1}
     coloration = woose(reflist)
@@ -564,23 +507,19 @@ def strange_biomaterial(startseed):
     return choose([crust])
 
 
-def material(startseed, size='small'):
+def material(size='small'):
     # makes materials
     # mainly used for sword blades and hilts
-    global seed
-    seed = startseed
-    biomat = biomaterial(startseed, size)
-    strangemat = strange_biomaterial(startseed)
+    biomat = biomaterial(size)
+    strangemat = strange_biomaterial()
     inertmat = choose(['petrified', 'calcified', 'fossilized']) + ' ' + biomat
     return choose([biomat, inertmat, strangemat])
 
 
-def script(startseed):
+def script():
     # creates the name for a form of writing or alphabet
-    global seed
-    seed = startseed
-    preprefix = choose([land(startseed, 'demonym') + ' ', choose(
-        ['proto-', 'elvish ', 'goblin ', 'dwarven ', cavespawn(startseed) + ' ', 'rudimentary ', 'ancient '])])
+    preprefix = choose([land('demonym') + ' ', choose(
+        ['proto-', 'elvish ', 'goblin ', 'dwarven ', cavespawn() + ' ', 'rudimentary ', 'ancient '])])
     prefix = choose(['rune', 'glyph', 'old', 'stone', 'bone', 'dark', 'death', 'cipher ', 'cryptic ', 'sand'])
     suffix = choose(['script', 'rune', 'glyph', 'scratch', 'form'])
     if prefix == suffix:
@@ -590,19 +529,15 @@ def script(startseed):
     return choose([preprefix, '']) + prefix + suffix
 
 
-def council(startseed):
+def council():
     # creates the name of a council
-    global seed
-    seed = startseed
     variety = ['council', 'aldermen', 'senate', 'congress']
-    place_of_origin = land(startseed)
+    place_of_origin = land()
     return 'the' + choose([' high', ' grand', '']) + ' ' + choose(variety) + ' of ' + place_of_origin
 
 
-def age(startseed):
+def age():
     # creates the name of an age or era
-    global seed
-    seed = startseed
     var = choose(['age', 'era'])
     time = choose([
         choose([
@@ -641,7 +576,7 @@ def age(startseed):
             'magic',
             'wizards',
             'war',
-            word('Ruler', startseed),
+            word('Ruler'),
             plural(choose([
                 'orc',
                 'woad',
@@ -652,30 +587,26 @@ def age(startseed):
                 'man',
                 'elf',
                 'dwarf',
-                cavespawn(startseed)
+                cavespawn()
             ]))
         ])
     ])
     return time.title()
 
 
-def moonphase(startseed):
+def moonphase():
     # a generator for special phases of the moon
     # It does't really create new phases just picks from a list of existing ones
-    global seed
-    seed = startseed
     phase = choose(['full', 'new', 'blood', 'blue', 'harvest', 'hunter\'s' + ' moon'])
     return phase
 
 
-def moss(startseed):
+def moss():
     # A generator for types of mosses
     # https://en.wikipedia.org/wiki/List_of_the_mosses_of_Britain_and_Ireland
-    global seed
-    seed = startseed
     attribute = choose(
         ['soft', 'long', 'wide', 'smooth', 'fine', 'bent', 'thin', 'short', 'tiny', 'slender', 'round', 'many', 'thick',
-         color(startseed)]) + '-' + choose(['tufted', 'leafed', 'capped', 'stalked', 'fruited', 'tipped', 'capped'])
+         color()]) + '-' + choose(['tufted', 'leafed', 'capped', 'stalked', 'fruited', 'tipped', 'capped'])
 
     primary_adjective = [choose(
         ['calcareous', 'flagellate', 'bimous', 'sessile', 'glaucous', 'alpine', 'silvergreen', 'western', 'northern',
@@ -685,8 +616,8 @@ def moss(startseed):
          'smaller', 'tendril', 'compact', 'silky', 'field', 'common', 'dusky', 'spiral', 'ribbed', 'fringed', 'fuzzy',
          'chalk', 'felted', 'shady', 'cordate', 'blunt', 'pretty', 'clustered', 'thin', 'hooded', 'starry', 'whorled',
          'elegant', 'striated', 'fatfoot', 'tiny', 'curled', 'petty', 'dappled', 'dingy', 'polar', 'soft', 'snow',
-         'sparkling', 'feathery', 'snowy', 'woolly', 'bristly', 'tall']), word('Lord', startseed) + '\'s',
-        color(startseed), land(startseed, 'demonym'), attribute]
+         'sparkling', 'feathery', 'snowy', 'woolly', 'bristly', 'tall']), word('Lord') + '\'s',
+        color(), land('demonym'), attribute]
 
     secondary_adjective = ['pygmy', 'dwarf', 'hump', 'feather', 'yoke', 'fork', 'wood', 'beard', 'beardless', 'rock',
                            'thread', 'silver', 'earth', 'carrion', 'groove', 'apple', 'shield', 'spear', 'bow',
@@ -710,25 +641,19 @@ def moss(startseed):
     return moss_name
 
 
-def pattern(startseed):
+def pattern():
     # This makes body patterns for animals (and maybe other things
     # this is a pretty good function further implementation could benefit the program
-    global seed
-    seed = startseed
     modifier = ['long', 'short', 'wide', 'thin', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight']
     base = ['band', 'spot', 'stripe']
-    return choose([choose(modifier), color(seed)]) + choose(base)
+    return choose([choose(modifier), color()]) + choose(base)
 
 
-def spider(startseed):
+def spider():
     # makes spiders
     # https://en.wikipedia.org/wiki/List_of_spider_common_names
-    global seed
-    seed = startseed
 
-    def weaver(startseed):
-        global seed
-        seed = startseed
+    def weaver():
         shape = ['orb', 'hammock', 'tent', 'dome', 'rob', 'net', 'tower', 'maze', 'labyrinth']
         return choose(shape) + 'weaver'
 
@@ -745,18 +670,16 @@ def spider(startseed):
          'goldenrod', 'dewdrop', 'sand', 'bottle', 'diving', 'flower', 'humpbacked', 'ivory', 'borrowing', 'bold',
          'water', 'bronze', 'spined', 'wall', 'ebony', 'trapdoor', 'ghost', 'pike', 'labyrinth', 'robber', 'coffin',
          'grass', 'elegant', 'orchard'])
-    var = ['orbweaver', 'tarantula', 'meshweaver', 'jumper', 'birdeater', 'widow', weaver(startseed)]
-    subvar = choose([subvar, pattern(startseed)])
+    var = ['orbweaver', 'tarantula', 'meshweaver', 'jumper', 'birdeater', 'widow', weaver()]
+    subvar = choose([subvar, pattern()])
     tempor = choose(['$', '%', '&', '$ %', '$ &', '% &', '$ % &']) + ' ' + choose([choose(var), 'spider'])
-    return tempor.replace('$', color(seed)).replace('%', land(seed, 'demonym')).replace('&', subvar)
+    return tempor.replace('$', color()).replace('%', land('demonym')).replace('&', subvar)
 
 
-def normalgem(startseed):
+def normalgem():
     # A generator for real gemstones
     # https://www.wikiwand.com/en/List_of_gemstone_species
     # http://www.gemselect.com/other-info/gemstone-list.php
-    global seed
-    seed = startseed
     gem = ['alexandrite', 'andalusite', 'axinite', 'benitoite', 'beryl', 'aquamarine', 'bixbite', 'emerald',
            'morganite', 'blood stone', 'cassiterite', 'celestite', 'chrysoberyl', "cat's eye", 'chrysocolla',
            'clinohumite', 'cordierite', 'corundum', 'ruby', 'saphire', 'danburite', 'diamond', 'diopside', 'dioptase',
@@ -775,64 +698,54 @@ def normalgem(startseed):
     return choose(gem)
 
 
-def specificgem(startseed):
+def specificgem():
     # This makes a gem that may or may not exist
-    global seed
-    seed = startseed
     adjective = ['mystic', 'cat\'s eye', 'andesine', 'color-change', 'dendritic', 'fire', 'star', 'pyrope', 'rainbow',
-                 'rutile', 'rose', 'tashmarine', 'chrome', color(startseed)]
-    return choose(adjective) + ' ' + normalgem(startseed)
+                 'rutile', 'rose', 'tashmarine', 'chrome', color()]
+    return choose(adjective) + ' ' + normalgem()
 
 
-def glass(startseed):
+def glass():
     # a generator for real types of glasses
     # https://en.wikipedia.org/wiki/Category:Glass_types
     # http://www.cmog.org/article/types-glass
     # https://en.wikipedia.org/wiki/Category:Glass_compositions
-    global seed
-    seed = startseed
     glass = ['glass', 'beveled glass', 'plate glass', 'carnival glass', 'crown glass', 'depression glass',
              'favrile glass', 'flat glass', 'float glass', 'vitrum flextile', 'flexible glass', 'frosted glass',
              'fumed silica', 'pyrogenic silica', 'fused quartz', 'glass of antimony', 'goofus glass', 'ground glass',
              'moss agate glass', 'rippled glass', 'sitall', 'starfire glass', 'tiffany glass', 'toughened glass',
              'reinforced glass', 'tempered glass', 'photochromic glass', 'soda-lime glass', 'lead glass',
              'cobalt glass', 'cranberry glass', 'dichroic glass', 'flint glass', 'jadeite', 'leaded glass',
-             'milk glass', 'opaline glass', 'reagent bottle', 'uranium glass', color(startseed) + ' glass',
-             color(startseed) + ' plate glass']
+             'milk glass', 'opaline glass', 'reagent bottle', 'uranium glass', color() + ' glass',
+             color() + ' plate glass']
     return choose(glass)
 
 
-def specificglass(startseed):
+def specificglass():
     # makes the name of a non-real type of glass
     # room for progress
-    global seed
-    seed = startseed
-    return color(startseed) + ' glass'
+    return color() + ' glass'
 
 
-def dog(startseed):
+def dog():
     # makes the name for a type of dog
-    global seed
-    seed = startseed
-    adjective = ['alpine', 'great', 'king', 'lowland', 'highland', color(startseed)]
+    adjective = ['alpine', 'great', 'king', 'lowland', 'highland', color()]
     prey = ['fox', 'rabbit', 'sheep', 'deer', 'wolf', 'seal']
     base = ['hound', 'shepherd', 'malamute', 'akita', 'mountain dog', 'bloodhound', 'setter', 'greyhound', 'sleddog',
             'mastiff', choose(prey) + choose(['hound', 'dog'])]
     return choose(adjective) + ' ' + choose(base)
 
 
-def book(startseed):
+def book():
     # makes the title for a fictional book
     # room for improvement
-    global seed
-    seed = startseed
 
     def epic():
         # TODO Improve this, use people sometime
         people = ['bard', 'king', 'knight', 'jester', 'man']
-        title = choose(['the tale of ' + word('Epic', startseed), 'the fall of ' + word('Epic', startseed),
-                        'the epic of ' + word('Epic', startseed), 'the myth of ' + word('Epic', startseed),
-                        word('Epic', startseed)])
+        title = choose(['the tale of ' + word('Epic'), 'the fall of ' + word('Epic'),
+                        'the epic of ' + word('Epic'), 'the myth of ' + word('Epic'),
+                        word('Epic')])
         return title
 
     def contemporary():
@@ -843,10 +756,8 @@ def book(startseed):
     return choose([epic(), contemporary()])
 
 
-def academicbook(startseed):
+def academicbook():
     # makes a non-fiction book title
-    global seed
-    seed = startseed
     academic = ['Physicist', 'Mathematician', 'Chemist', 'Alchemist', 'Scientist', 'Herpetologist', 'Herbologist',
                 'Entomologist', 'Philosopher', 'Logician', 'Economist', 'Engineer', 'Botanist', 'Zoologist',
                 'Pharmacologist', 'Geologist', 'Astronomer', 'Psychologist']
@@ -867,10 +778,8 @@ def academicbook(startseed):
     return choose(title)
 
 
-def enscript(startseed):
+def enscript():
     # Eamon's function
-    global seed
-    seed = startseed
     return '\t' + choose(['All that is gold does not glitter', 'Not all those who wander are lost',
                           'The old that is strong does not wither', 'Deep roots are not reached by the frost',
                           'From the ashes a fire shall be woken', 'A light from the shadows shall spring',
@@ -891,20 +800,18 @@ def enscript(startseed):
         '\n', '\n\t') + '\n'
 
 
-def war(startseed):
-    # This makes the name of a war
-    global seed
-    seed = startseed
-    tempseed = seed
-    participant1 = land(tempseed, 'demonym')
-    paritcipant1l = land(tempseed)
-    participant2 = land(startseed, 'demonym')
-    participant2l = land(startseed)
+def war():
+    state = random.getstate()
+    participant1 = land('demonym')
+    random.setstate(state);
+    participant1l = land()
+    participant2 = participant1
+    participant2l = participant1l
     while participant1 == participant2:
-        tempseed = seed
-        participant1 = land(tempseed, 'demonym')
-        participant1l = land(tempseed)
-        seed += 1
+        state = random.getstate()
+        participant1 = land('demonym')
+        random.setstate(state)
+        participant1l = land()
     return 'the ' + choose([
         boose(['first', 'second', 'third']) + ' ' + participant1 + '-' + participant2 + ' war',
         participant1 + ' civil war',
@@ -912,30 +819,26 @@ def war(startseed):
     ])
 
 
-def salamander(startseed):
+def salamander():
     # makes salamanders
     # http://www.californiaherps.com/allsalamanders.html
     # THIS GENERATOR IS NOW OBSOLETE
     # (no longer in use not actually obsolete)
     # See amphibian instead
-    global seed
-    seed = startseed
-    bodyadject = ['long', 'short', 'slender', color(seed)]
+    bodyadject = ['long', 'short', 'slender', color()]
     bodypart = ['toed', 'legged', 'tailed']
-    adject = ['western', 'southern', 'eastern', 'northern', 'spotted', 'lesser', 'greater', land(startseed, 'demonym')]
+    adject = ['western', 'southern', 'eastern', 'northern', 'spotted', 'lesser', 'greater', land('demonym')]
     denom = ['Tiger', 'cloud', 'aboreal', 'wandering', 'mountain', 'garden', 'alpine', 'desert', 'river', 'brook',
              'spring', 'dusky', 'pygmy', 'giant', 'slimy']
     return choose([choose(bodyadject) + '-' + choose(bodypart), choose(adject)]) + ' ' + boose(denom) + choose(
         ['salamander', 'newt', 'eft', 'olm'])
 
 
-def amphibian(startseed):
+def amphibian():
     # makes amphibians
     # https://en.wikipedia.org/wiki/List_of_amphibians_of_Europe
     # http://www.californiaherps.com/allsalamanders.
     # http://www.californiaherps.com/allfrogs.html
-    global seed
-    seed = startseed
     bodymodifier = ['long', 'feather', 'star', 'greater', 'fire', 'straight', 'flame', 'stripe', 'curved', 'hammer',
                     'thick', 'thin', 'slender', 'round']
     bodypart = ['legged', 'headed', 'bellied', 'kneed', 'toed', 'footed', 'backed', 'mouth', 'shouldered']
@@ -945,37 +848,35 @@ def amphibian(startseed):
          'tiger', 'cloud', 'aboreal', 'wandering', 'mountain', 'garden', 'alpine', 'desert', 'river', 'brook', 'spring',
          'dusky', 'pygmy', 'giant', 'slimy', 'boreal', 'spectal', 'king', 'queen', 'leopard', 'chorus', 'clawed'])
     genera = ['frog', 'salamander', 'toad', 'newt', 'spadefoot', 'bullfrog', 'eft', 'olm', 'axolotl', 'treefrog']
-    subvar = choose([subvar, pattern(startseed)])
+    subvar = choose([subvar, pattern()])
     tempor = choose(['$', '%', '&', '$ %', '$ &', '% &', '$ % &']) + ' ' + choose(genera)
-    return tempor.replace('$', color(seed)).replace('%', land(seed, 'demonym')).replace('&', subvar)
+    return tempor.replace('$', color()).replace('%', land('demonym')).replace('&', subvar)
 
 
-def carving(startseed, epithets=True):
-    global seed
-    seed = startseed
+def carving(epithets=True):
     prey = choose(['fox', 'bear', 'moose', 'deer', 'stag', 'rabbit'])
-    royal = royalty(startseed)
+    royal = royalty()
     if not epithets:
         royal = royal.split(',')[0]
     picture = choose([
-        boose([hero(seed) + ' leading troops in ']) + battle(startseed),
-        hero(seed) + ', ' + choose([
+        boose([hero() + ' leading troops in ']) + battle(),
+        hero() + ', ' + choose([
             'fighting',
             'slaying',
             'defeating'
             , 'vanquishing'
         ]) + ' ' + choose([
-            beast(seed),
-            horde(seed)
+            beast(),
+            horde()
         ]),
         choose([
             'hunters',
             'huntsmen',
             'hounds',
             'dogs',
-            plural(dog(startseed)),
-            'a ' + dog(startseed),
-            professional(startseed, 'hunter')
+            plural(dog()),
+            'a ' + dog(),
+            professional('hunter')
         ]) + ' ' + choose([
             'hunting',
             'chasing'
@@ -984,58 +885,48 @@ def carving(startseed, epithets=True):
                 'wild '
             ]) + prey,
             plural(prey),
-            legendary_game(startseed)
+            legendary_game()
         ]),
-        'a scene from ' + book(startseed),
-        royal + '\'s ' + dog(startseed) + ' ' + word('Dog', startseed)
+        'a scene from ' + book(),
+        royal + '\'s ' + dog() + ' ' + word('Dog')
     ])
     return 'a depiction of ' + picture
 
 
-def stringthing(startseed):
+def stringthing():
     # makes literal strings.
     # like for bows and such.
-    global seed
-    seed = startseed
     mamsource = ['elk', 'deer', 'moose', 'pig', 'cow']
-    return choose([choose(mamsource) + ' ' + choose(['sinew']), spider(startseed) + ' silk'])
+    return choose([choose(mamsource) + ' ' + choose(['sinew']), spider() + ' silk'])
 
 
-def clothlore(startseed):
+def clothlore():
     # provides short lore for cloth
-    global seed
-    seed = startseed
     color_chart = {'purple': ['murex']}
     lore = ''
     lore += choose(['woven', 'spun']) + ' from ' + choose(
-        [spider(startseed) + ' silk', 'hemp', 'straw', 'grass', 'sisal', 'cotton', 'wool', 'cashmere', 'qiviut', 'silk',
-         choose([specificmetal(startseed), normalmetal(startseed)])]) + boose(
-        [' by ' + professional(startseed, 'weaver')])
+        [spider() + ' silk', 'hemp', 'straw', 'grass', 'sisal', 'cotton', 'wool', 'cashmere', 'qiviut', 'silk',
+         choose([specificmetal(), normalmetal()])]) + boose(
+        [' by ' + professional('weaver')])
     return lore
 
 
-def fabric(startseed):
-    global seed
-    seed = startseed
+def fabric():
     return choose([choose(
         ['raw hide', choose(['cow', 'goat', 'deer', 'elk', 'caribou', 'reindeer', 'ox', 'bison', 'buffalo']) + ' hide',
-         'cloth', color(startseed) + ' cloth', color(startseed) + ' wool', color(startseed) + ' silk', 'fabric',
+         'cloth', color() + ' cloth', color() + ' wool', color() + ' silk', 'fabric',
          'velvet', 'silk', 'leather', 'black leather', 'brown leather', 'red leather', 'bat leather', 'fish leather',
          'deerskin', 'human skin', 'goblin skin', 'snakeskin', 'lizard skin', 'dragon skin']),
-        boose([color(seed)]) + ' ' + choose(['cloth', 'fabric']) + ' ' + clothlore(startseed)])
+        boose([color()]) + ' ' + choose(['cloth', 'fabric']) + ' ' + clothlore()])
 
 
-def bird(startseed):
+def bird():
     # this makes bird names
     """Makes Birds"""
-    global seed
-    seed = startseed
     genera_count = 0
 
-    def bird_genera(startseed):
+    def bird_genera():
         # this makes formulaic bird genera names
-        global seed
-        seed = startseed
         global genera_count
         prefixes = ['ant', 'eas', 'sun', 'humming', 'snow', 'wes', 'bell', 'bower', 'fairy', 'black', 'mocking',
                     'cuckoo', 'grass', 'jungle', 'puff', 'love', 'gold', 'wren', 'rifle', 'bush', 'tropic', 'bit',
@@ -1053,7 +944,7 @@ def bird(startseed):
         return choose(prefixes) + choose(suffixes)
 
     # TODO wat @ next line
-    voriabel = bird_genera(seed)
+    voriabel = bird_genera()
     common_genera = ['sparrow', 'owl', 'woodpecker', 'flycatcher', 'warbler', 'eagle', 'parrot', 'goose', 'oriole',
                      'penguin', 'duck', 'kingfisher', 'hawk', 'pigeon', 'finch', 'cuckoo', 'petrel', 'robin', 'dove',
                      'vulture', 'thrush', 'gull', 'plover', 'heron', 'quetzal']
@@ -1171,27 +1062,23 @@ def bird(startseed):
     genera_count = 1144
     # print (len(common_genera)+len(uncommon_genera)+len(rare_genera)+genera_count+2)*(len(prefix)+(len(body_adjective)
     # +60)*len(body_part)+60)
-    return choose([choose(prefix), choose([color(seed), choose(body_adjective)]) + choose(body_part), color(seed),
-                   word('Bird', startseed) + '\'s', land(seed, 'demonym')]) + ' ' + choose(
-        [choose(common_genera), choose(uncommon_genera), choose(rare_genera), bird_genera(startseed)])
+    return choose([choose(prefix), choose([color(), choose(body_adjective)]) + choose(body_part), color(),
+                   word('Bird') + '\'s', land('demonym')]) + ' ' + choose(
+        [choose(common_genera), choose(uncommon_genera), choose(rare_genera), bird_genera()])
 
 
-def blood(startseed):
+def blood():
     # makes blood
-    global seed
-    seed = startseed
     reflist = {'': 15, 'coagulated ': 1}
     return woose(reflist) + boose(
         ['orc', 'woad', 'goblin', 'hobgoblin', 'kobold', 'gnome', 'troll', 'giant', 'cyclops', 'minotaur',
-         cavespawn(startseed)]) + ' blood'
+         cavespawn()]) + ' blood'
 
 
-def ant(startseed):
+def ant():
     # makes the names of types of ants
     # http://www.antstuff.net/html/species_of_ants.html
     # http://www.myrmecos.net/north-american-ants/
-    global seed
-    seed = startseed
     bodymodifier = ['long', 'feather', 'star', 'greater', 'tuft', 'fire', 'straight', 'flame', 'stripe', 'curved',
                     'hammer', 'thick', 'thin', 'slender', 'round']
     bodypart = ['horned', 'legged', 'headed', 'bellied', 'kneed', 'toed', 'footed', 'jawed', 'backed', 'mouth',
@@ -1205,17 +1092,15 @@ def ant(startseed):
               'bronze', 'spined', 'ebony', 'trapdoor', 'ghost', 'pike', 'labyrinth', 'robber', 'coffin', 'grass',
               'elegant', 'orchard', 'rover', 'needle', 'turtle', 'acrobat', 'fungus-growing', 'cone', 'field', 'guest',
               'tree', 'tiger', 'harvester', 'winter', 'acorn']
-    return boose([land(seed, 'demonym') + ' ', color(seed) + ' ',
-                  choose([choose(bodymodifier), color(seed)]) + ' ' + choose(bodypart) + ' ']) + choose(adject) + ' ant'
+    return boose([land('demonym') + ' ', color() + ' ',
+                  choose([choose(bodymodifier), color()]) + ' ' + choose(bodypart) + ' ']) + choose(adject) + ' ant'
 
 
-def antlore(startseed):
+def antlore():
     # A generator for the descriptions of ant species
     # I have no plans of implementation I just noticed that the descriptions on this website
     # (http://www.antstuff.net/html/species_of_ants.html) looked very formulaic so I decided to emulate them
-    global seed
-    seed = startseed
-    antname = ant(startseed)
+    antname = ant()
     family = ['Monomorium minimum', 'Monomorium pharaonis', 'Formicidae', 'Myrmecia', 'Nothomyrmecia',
               'Pheidole megacephala', 'Solenopsis invicta']
     antvar = ['stinging ant', 'indoor pest ant']
@@ -1234,7 +1119,7 @@ def antlore(startseed):
         relsize = 'small'
 
     template1 = 'Belonging to the ' + choose(family) + ' family. A ' + boose(['very ']) + choose(
-        ['small', 'large']) + ', ' + color(seed) + ' ant closely related to the ' + ant(seed) + ' (' + precep(
+        ['small', 'large']) + ', ' + color() + ' ant closely related to the ' + ant() + ' (' + precep(
         choose(antvar)) + '). It nests in ' + nestplaces[0] + ', ' + nestplaces[1] + ' or ' + nestplaces[
                     2] + '. It also builds nests in ' + nestplaces[3] + '. The nests in the ground are ' + choose(
         nesttype) + ' of very fine soil. '
@@ -1245,10 +1130,10 @@ def antlore(startseed):
         nesttype) + ' in ' + nestplaces[0] + ', and feeds mostly on ' + foods[0] + ' and ' + foods[1] + '. ' + plural(
         antname.capitalize()) + ' often attack small animals and can kill them. '
 
-    tempant = ant(seed)
+    tempant = ant()
     template3 = 'The ' + antname + ' is one of about a dozen species of ' + plural(
-        tempant) + ' in the family ' + choose(family) + ', found from ' + land(seed) + ' to ' + land(
-        seed) + '. This species is one of the ' + choose(['largest',
+        tempant) + ' in the family ' + choose(family) + ', found from ' + land() + ' to ' + land(
+        ) + '. This species is one of the ' + choose(['largest',
                                                           'smallest']) + ' ' + tempant + \
                 ' species, and can be recognized by the smooth and shining ' + choose(
         bodypart) + ' of the ' + choose(['largest', 'smallest']) + ' ' + choose(
@@ -1259,31 +1144,27 @@ def antlore(startseed):
         temprole) + ' and minor ' + plural(temprole) + '. ' + choose(['Major', 'Minor']) + ' ' + plural(
         temprole) + ' have a ' + boose(['very ']) + 'large ' + choose(bodypart) + ' in proportion to their bodies.'
 
-    extra2 = capitalize(plural(antname)) + ' are social insects found in warmer regions of ' + land(seed) + '. '
+    extra2 = capitalize(plural(antname)) + ' are social insects found in warmer regions of ' + land() + '. '
 
     extra3 = ' These ants are ' + relsize + ', ranging from ' + str(size) + ' mm to ' + str(
-        size) + '.5 mm in length. The ' + plural(choose(antrole)) + ' are ' + color(seed) + ' to ' + color(
-        seed) + ', while the winged reproductives are ' + color(seed) + '.'
+        size) + '.5 mm in length. The ' + plural(choose(antrole)) + ' are ' + color() + ' to ' + color(
+        ) + ', while the winged reproductives are ' + color() + '.'
 
     return choose([template1, template2, template3]) + boose([extra1, extra2, extra3])
 
 
-def battle(startseed):
+def battle():
     # makes a battle or seige
     # room for improvement
-    global seed
-    seed = startseed
-    return 'the ' + choose(['battle', 'seige']) + ' of ' + choose([word('Batel', startseed), location(seed, choose(
+    return 'the ' + choose(['battle', 'seige']) + ' of ' + choose([word('Batel'), location(choose(
         ['valley', 'mountains', 'hills', 'caves', 'caverns', 'plains', 'plateu', 'island', 'desert', 'lake', 'swamp',
          'forest', 'canyon', 'ravine', 'chasm', 'hollow']))])
 
 
-def seige(startseed):
+def seige():
     # this makes only seiges
     # in case you need a seige but no a battle
-    global seed
-    seed = startseed
-    return 'the seige of ' + word('Seig', startseed)
+    return 'the seige of ' + word('Seig')
 
 
 def gramcheck(string):
@@ -1299,32 +1180,25 @@ def gramcheck(string):
     return local_string
 
 
-def ghost(startseed):
+def ghost():
     # this makes the name of a ghost
-    global seed
-    seed = startseed
     return 'the ' + choose(['ghost', 'spirit']) + ' of ' + choose(
-        [royalty(seed), hero(seed), professional(seed, 'wizard', 'singular')])
+        [royalty(), hero(), professional('wizard', 'singular')])
 
 
-def paintinglore(startseed):
+def paintinglore():
     # this makes the lore of a painting
-    global seed
-    seed = startseed
 
-    def commission(startseed):
+    def commission():
         # this makes the starting description for commissioned paintings
         # I stole and modified this code from swordlore
         # this should probably be made a separate function if I ever use it again
-        global seed
-        seed = startseed
-        royal1, royal2 = royalty(seed), royalty(startseed)
+        royal1, royal2 = royalty(), royalty()
         while royal1 == royal2:
             # In the unlikely event that the royals are the same 
             # (It has happened)
             # try again
-            royal1 = royalty(seed)
-            seed += 1
+            royal1 = royalty()
         tlore = choose([
             choose([
                 'It was ',
@@ -1334,8 +1208,8 @@ def paintinglore(startseed):
                 'Commissioned',
                 'One of ' + str(randint(2, 11)) + ' paintings commissioned'
             ]) + ' by ' + choose([
-                royalty(startseed),
-                council(startseed)
+                royalty(),
+                council()
             ]) + ', it was ',
             'A painting gifted from ' + royal1 + ' to ' + royal2 + boose([' as a peace offering']) + ', it was '
         ])
@@ -1345,27 +1219,27 @@ def paintinglore(startseed):
 
     return gramcheck(
         choose([
-            'Painted by ' + professional(startseed, 'painter') + boose([
-                ' for ' + royalty(startseed),
-                ' during the ' + age(startseed)
+            'Painted by ' + professional('painter') + boose([
+                ' for ' + royalty(),
+                ' during the ' + age()
             ]) + ', ',
-            'One of ' + professional(startseed, 'painter') + '\'s lesser known works, ',
-            commission(startseed) + 'painted by ' + professional(startseed, 'painter') + boose([
+            'One of ' + professional('painter') + '\'s lesser known works, ',
+            commission() + 'painted by ' + professional('painter') + boose([
                 choose([
                     ' during',
                     ' in'
-                ]) + ' the ' + age(startseed),
+                ]) + ' the ' + age(),
                 choose([
                     ' during',
                     ' in'
                 ]) + ' the year ' + str(year_of_creation),
-                ' under a ' + moonphase(startseed) + ' moon'
+                ' under a ' + moonphase() + ' moon'
             ]) + '. '
         ]) + choose([
-            'it is ' + carving(startseed, False),
-            carving(startseed, False).replace('a depiction of', 'it depicts'),
+            'it is ' + carving(False),
+            carving(False).replace('a depiction of', 'it depicts'),
             'it is a landscape painting' + boose(
-                [' of ' + location(seed, choose(['valley', 'plain', 'forest', 'woods', 'mountain']))])
+                [' of ' + location(choose(['valley', 'plain', 'forest', 'woods', 'mountain']))])
         ]) + '. ' + boose([
             'It was ' + choose([
                 'lost',
@@ -1374,13 +1248,13 @@ def paintinglore(startseed):
                 choose([
                     ' during',
                     ' in'
-                ]) + ' the ' + age(seed),
+                ]) + ' the ' + age(),
                 choose([
                     ' during',
                     ' in'
                 ]) + ' the year ' + str(randint(year_of_creation, 1501)),
-                ' during ' + seige(startseed),
-                ' during ' + war(seed)
+                ' during ' + seige(),
+                ' during ' + war()
             ]) + '. ',
             'It was ' + choose([
                 'thought to be',
@@ -1394,91 +1268,73 @@ def paintinglore(startseed):
                 choose([
                     ' during',
                     ' in'
-                ]) + ' the ' + age(seed),
+                ]) + ' the ' + age(),
                 choose([
                     ' during',
                     ' in'
                 ]) + ' the year ' + str(randint(year_of_creation, 1501)),
-                ' during ' + seige(startseed),
-                ' during ' + war(seed)
+                ' during ' + seige(),
+                ' during ' + war()
             ]) + '. '
         ])
     )
 
 
-def potterylore(startseed):
+def potterylore():
     # This makes pottery lore
-    global seed
-    seed = startseed
     pass
 
 
-def musiclore(startseed):
+def musiclore():
     # This makes the lore for a piece of music
-    global seed
-    seed = startseed
     pass
 
 
-def music(startseed):
+def music():
     # This makes the name of a piece of music
-    global seed
-    seed = startseed
     pass
 
 
-def scuplpturelore(startseed):
+def scuplpturelore():
     # This makes the lore for a sculpture
-    global seeed
-    seed = startseed
     pass
 
 
-def strangelore(startseed):
+def strangelore():
     # This was originally contained within the swordlore generator
     # I also wanted to use it for the bowlore generator so I have moved it outside
-    global seed
-    seed = startseed
     lore = ''
 
-    def smell(startseed):
+    def smell():
         # describes the smell of the sword
-        global seed
-        seed = startseed
-        smell = ['metal', blood(startseed), 'sulfur', 'brimstone', 'smoke', 'bile', 'sweat', 'the sea']
+        smell = ['metal', blood(), 'sulfur', 'brimstone', 'smoke', 'bile', 'sweat', 'the sea']
         smells = choose(smell, 2)
         return 'smells ' + boose(['strongly ', 'faintly ']) + 'of ' + smells[0] + boose([' and ' + smells[1]])
 
-    def detection(startseed):
+    def detection():
         # swords that react to a certain situation
-        global seed
-        seed = startseed
         signal = ['when ' + plural(
-            choose(['orc', 'goblin', 'troll', 'giant', 'cyclops', cavespawn(startseed)])) + ' are ' + choose(
+            choose(['orc', 'goblin', 'troll', 'giant', 'cyclops', cavespawn()])) + ' are ' + choose(
             ['near', 'nearby']), 'in the presence of ' + boose(['dark', 'black']) + ' magic',
                   'when emersed in ' + choose(['magma', 'lava', 'fire', 'water']),
-                  'when it touches ' + blood(startseed), 'in ' + choose(['the dark', 'low light', 'bright light'])]
-        response = ['glows', 'glows ' + color(seed), 'turns ' + color(startseed),
+                  'when it touches ' + blood(), 'in ' + choose(['the dark', 'low light', 'bright light'])]
+        response = ['glows', 'glows ' + color(), 'turns ' + color(),
                     'becomes ' + choose(['cold', 'cool', 'warm', 'hot']), 'vibrates', 'pulses', 'shakes',
-                    '>>> A hidden ' + script(startseed) + ' enscription becomes visible']
+                    '>>> A hidden ' + script() + ' enscription becomes visible']
         return choose(response) + ' ' + choose(signal)
 
-    def haunted(startseed):
+    def haunted():
         # swords that are haunted by ghosts
-        global seed
-        seed = startseed
-        haunts = choose(['is haunted by the ' + ghost(seed),
-                         '>>>' + professional(startseed, 'wizard') + ', bound the ' + ghost(
-                             seed) + ', to this ' + choose(['sword', 'blade'])])
+        haunts = choose(['is haunted by the ' + ghost(),
+                         '>>>' + professional('wizard') + ', bound the ' + ghost(
+                             ) + ', to this ' + choose(['sword', 'blade'])])
         return haunts
 
-    def useless(startseed):
+    def useless():
         # currently houses anything that I can't fit into any of the other generators above.
         # I don't think is large enough to warrant its own generator.
         # Generally this is minor stuff hence the term useless.
         # Some of this stuff will be moved out later as I flesh out parts of this function.
-        global seed
-        seed = startseed
         temp = 'is ' + boose(['strangely', 'suprisingly', 'oddly']) + ' ' + choose(
             ['cold', 'cool', 'warm', 'hot']) + ' to the touch'
         weight = 'is ' + choose(['strangely', 'suprisingly', 'oddly']) + ' ' + choose(['heavy', 'light'])
@@ -1490,57 +1346,49 @@ def strangelore(startseed):
             [' gently', ' with ' + choose(['mysterious', 'ancient']) + ' ' + choose(['energy', 'power'])])
         return choose([temp, weight, creeps, speaks, vibrates])
 
-    lore += 'It ' + choose([smell(startseed), detection(startseed), haunted(startseed), useless(startseed)]) + '.'
+    lore += 'It ' + choose([smell(), detection(), haunted(), useless()]) + '.'
     lore = lore.replace('It >>>', '')
     return lore
 
 
-def bowlore(startseed):
-    global seed
-    seed = startseed
+def bowlore():
     lore = ''
-    lore += 'It was ' + boose(['painstakingly ', 'skillfully ', 'artfully ']) + 'carved from ' + biomaterial(startseed,
-                                                                                                             'large') \
-            + boose([' by ' + professional(startseed, 'bowyer')])
+    lore += 'It was ' + boose(['painstakingly ', 'skillfully ', 'artfully ']) + 'carved from ' + biomaterial('large') \
+            + boose([' by ' + professional('bowyer')])
     lore += '. '
     enscription = boose(['It is enscribed with ' + choose(['a' + choose(['n ancient', ' mysterious']) + ' script',
                                                            choose(['ancient', 'mysterious']) + ' ' + choose(
                                                                ['runes', 'glyphs', 'hieroglyphics']),
-                                                           script(startseed)]),
-                         'It is engraved with ' + carving(startseed),
-                         'There is a crudely scratched ' + script(startseed) + ' enscription',
+                                                           script()]),
+                         'It is engraved with ' + carving(),
+                         'There is a crudely scratched ' + script() + ' enscription',
                          'It is engraved with a ' + choose(['geometric', 'floral']) + ' pattern',
-                         'It is engraved with ' + choose(['an unknown', 'the ' + land(startseed, 'demonym'),
-                                                          'the ' + word('Famil',
-                                                                        startseed) + ' family']) + ' coat of arms'])
+                         'It is engraved with ' + choose(['an unknown', 'the ' + land('demonym'),
+                                                          'the ' + word('Famil') + ' family']) + ' coat of arms'])
     lore += enscription
     lore += '. '
-    lore += boose(['Its bowstring is made of ' + stringthing(startseed) + '. '])
+    lore += boose(['Its bowstring is made of ' + stringthing() + '. '])
     if randint(0, 1) == 0:
-        lore += strangelore(seed)
+        lore += strangelore()
     return gramcheck(lore)
 
 
-def swordlore(startseed):
+def swordlore():
     # This is the heart and soul of this program
     # This makes the lore for a particular sword
     # I will comment this better in the future
-    global seed
-    seed = startseed
     known = True
     lore = ''
     gocation = choose(['the ' + choose(['depths', 'flames', 'hearth', 'fires']) + ' of Hell', 'fire', 'flame',
                        choose(['white', 'red']) + ' hot ' + choose(['flames', 'fire']), 'darkness',
-                       'the ' + forge(startseed, choose(['sword', ])), 'beneath ' + mountain(startseed)])
+                       'the ' + forge(choose(['sword', ])), 'beneath ' + mountain()])
     #                                       add material in here ^
-    time = choose(['during the ' + age(startseed), 'during the year ' + str(randint(1, 1500)),
-                   'under a ' + moonphase(startseed) + ' moon'])
+    time = choose(['during the ' + age(), 'during the year ' + str(randint(1, 1500)),
+                   'under a ' + moonphase() + ' moon'])
 
-    def commission(startseed):
+    def commission():
         # this makes the starting description for a sword commissioned
         # currently in use in both the glass and metal swords
-        global seed
-        seed = startseed
         tlore = choose([
             choose([
                 'It was ',
@@ -1550,10 +1398,10 @@ def swordlore(startseed):
                 'Commissioned',
                 'One of ' + str(randint(2, 11)) + ' swords commissioned'
             ]) + ' by ' + choose([
-                royalty(startseed),
-                council(startseed)
+                royalty(),
+                council()
             ]) + ', it was ',
-            'A decorative sword gifted from ' + royalty(seed) + ' to ' + royalty(seed + 1) + boose(
+            'A decorative sword gifted from ' + royalty() + ' to ' + royalty() + boose(
                 [' as a peace offering']) + ', it was '
         ])
         return tlore
@@ -1565,25 +1413,25 @@ def swordlore(startseed):
         else:
             gocation = choose(['beneath', 'under', 'below']) + ' ' + gocation[7:]
         body_metal = choose([
-            specificmetal(startseed),
-            normalmetal(startseed),
-            element(startseed),
-            loredmetal(startseed)
+            specificmetal(),
+            normalmetal(),
+            element(),
+            loredmetal()
         ])
         gild_metal = choose([
-            specificmetal(seed + 1),
-            normalmetal(seed + 1),
-            element(seed + 1),
-            loredmetal(seed + 1)
+            specificmetal(),
+            normalmetal(),
+            element(),
+            loredmetal()
         ])
-        tlore += commission(startseed)
+        tlore += commission()
         tlore += choose(['forged', 'wrought', 'cast', 'conceived'])
         if gocation in ['in fire', 'in flame', 'in darkness', 'in the shadows']:
             tlore += ' ' + gocation
         tlore += ' from ' + body_metal + boose([
             ' and gilded with ' + gild_metal
         ])
-        tlore += ' by ' + professional(startseed, 'blacksmith', dobject='sword')
+        tlore += ' by ' + professional('blacksmith', dobject='sword')
         if gocation not in ['in fire', 'in flame', 'in darkness']:
             tlore += ' ' + choose([gocation, time]) + '. '
         else:
@@ -1596,14 +1444,14 @@ def swordlore(startseed):
             gocation = 'in ' + gocation
         else:
             gocation = choose(['beneath', 'under', 'below']) + ' ' + gocation[7:]
-        tlore += commission(startseed)
-        tlore += 'made from ' + choose([glass(startseed), specificglass(seed)])
-        tlore += boose([' by ' + professional(startseed, 'glassmith') + ' ' + boose([gocation, time])])
+        tlore += commission()
+        tlore += 'made from ' + choose([glass(), specificglass()])
+        tlore += boose([' by ' + professional('glassmith') + ' ' + boose([gocation, time])])
         tlore += '. '
-        tlore += boose([choose(['A single ' + color(startseed) + ' ' + choose(['rose', 'flower', 'feather']),
-                                capitalize(precep(boose(['single ']) + bird(startseed) + ' feather')), capitalize(
-                precep(choose(['salamander', 'frog', 'toad', 'newt', 'eft', 'olm', 'worm', amphibian(startseed),
-                               spider(startseed), worm(startseed)])))]) + ' is ' + boose(['perfectly ']) + choose(
+        tlore += boose([choose(['A single ' + color() + ' ' + choose(['rose', 'flower', 'feather']),
+                                capitalize(precep(boose(['single ']) + bird() + ' feather')), capitalize(
+                precep(choose(['salamander', 'frog', 'toad', 'newt', 'eft', 'olm', 'worm', amphibian(),
+                               spider(), worm()])))]) + ' is ' + boose(['perfectly ']) + choose(
             ['encased', 'preserved']) + ' within the glass. '])
         return tlore
 
@@ -1611,12 +1459,11 @@ def swordlore(startseed):
         tlore = ''
         tlore = 'It was '
         tlore += choose(['given to ', 'gifted to ', 'presented to '])
-        tlore += hero(startseed)
-        tlore += ', by ' + choose([spirit(startseed), royalty(startseed) + ','])
+        tlore += hero()
+        tlore += ', by ' + choose([spirit(), royalty() + ','])
         if randint(0, 1) == 1:
-            tlore += ' for his ' + choose(['victory at ' + battle(startseed),
-                                           choose(['defeating', 'killing', 'slaying', 'vanquishing']) + ' ' + beast(
-                                               seed), choose(
+            tlore += ' for his ' + choose(['victory at ' + battle(),
+                                           choose(['defeating', 'killing', 'slaying', 'vanquishing']) + ' ' + beast(), choose(
                     ['valor', 'honesty', 'bravery', 'kindness', 'skill', 'fairness', 'gentle spirit'])])
         tlore += '. '
         if lore[-3:] == ',. ':
@@ -1629,8 +1476,8 @@ def swordlore(startseed):
         tlore += choose(['painstakingly ', 'meticulously ', ''])
         tlore += choose(['carved', 'crafted'])
         tlore += ' from one solid piece of '
-        tlore += choose([biomaterial(startseed, 'large')])
-        tlore += boose([' by ' + professional(startseed, 'craftsman')])
+        tlore += choose([biomaterial('large')])
+        tlore += boose([' by ' + professional('craftsman')])
         tlore += boose([' ' + time])
         tlore += '. '
         return tlore
@@ -1639,14 +1486,13 @@ def swordlore(startseed):
         tlore = 'The sword is '
         tlore += 'of '
         tlore += choose(
-            [choose(['dwarven', 'elvish', 'goblin', cavespawn(startseed)]), 'unknown', land(startseed, 'demonym')])
+            [choose(['dwarven', 'elvish', 'goblin', cavespawn()]), 'unknown', land('demonym')])
         tlore += ' origin. '
-        return choose(['The sword is ' + land(startseed, 'demonym') + '. ', tlore])
+        return choose(['The sword is ' + land('demonym') + '. ', tlore])
 
     def strangesword():
         tlore = ''
-        tlore += 'The sword ' + choose(['seems like it is', 'seems to be', 'is']) + ' made of ' + material(startseed,
-                                                                                                           'Large')
+        tlore += 'The sword ' + choose(['seems like it is', 'seems to be', 'is']) + ' made of ' + material('Large')
         tlore += '. '
         return tlore
 
@@ -1672,35 +1518,35 @@ def swordlore(startseed):
                 'glyphs',
                 'hieroglyphics'
             ]),
-            script(startseed)
+            script()
         ]),
-        'its blade is engraved with ' + carving(startseed),
+        'its blade is engraved with ' + carving(),
         'there is ' + precep(choose([
             'crudely',
             'unskillfully'
-        ])) + ' scratched ' + script(startseed) + ' enscription on its blade',
+        ])) + ' scratched ' + script() + ' enscription on its blade',
         'its blade is engraved with a ' + choose([
             'geometric',
             'floral'
         ]) + ' pattern',
         'its blade is engraved with ' + choose([
             'an unknown',
-            'the ' + land(startseed, 'demonym'),
-            'the ' + word('Famil', startseed) + ' family'
+            'the ' + land('demonym'),
+            'the ' + word('Famil') + ' family'
         ]) + ' coat of arms'
     ]) + '. '
     if randint(0, 2) == 0:
-        wrapping = fabric(startseed)
-        encrusting = choose([normalgem(startseed), specificgem(startseed), element(startseed + 1)])
+        wrapping = fabric()
+        encrusting = choose([normalgem(), specificgem(), element()])
         if randint(0, 1) == 0:
             lore += choose([
-                'Its hilt is ' + boose(['made of ' + material(startseed) + ' ']) + 'encrusted with ' + encrusting,
+                'Its hilt is ' + boose(['made of ' + material() + ' ']) + 'encrusted with ' + encrusting,
                 'Its ' + encrusting + ' encrusted hilt is ' + choose(['worn', 'smooth']) + ' from ' + choose(
                     ['battle', 'use', 'combat'])
             ])
         else:
             addition = choose([
-                'Its hilt is ' + boose(['made of ' + material(startseed) + ' ']) + boose([boose(['tightly ']) + choose(
+                'Its hilt is ' + boose(['made of ' + material() + ' ']) + boose([boose(['tightly ']) + choose(
                     ['wrapped in ', 'wound with ']) + boose(
                     ['worn', 'tattered', 'bloodstained', 'frayed']) + ' ' + wrapping]),
                 'Its hilt is ' + choose(['worn', 'smooth']) + ' from ' + choose(['battle', 'use', 'combat'])
@@ -1716,17 +1562,15 @@ def swordlore(startseed):
         if known:
             lore += choose([
                 'A crack in the blade ' + choose(
-                    ['has been filled with ' + choose([specificmetal(seed), normalmetal(seed), element(seed)]),
-                     'was ' + choose(['filled', 'repaired']) + ' by ' + professional(seed, 'blacksmith',
-                                                                                     dobject='sword')]),
+                    ['has been filled with ' + choose([specificmetal(), normalmetal(), element()]),
+                     'was ' + choose(['filled', 'repaired']) + ' by ' + professional('blacksmith', dobject='sword')]),
                 'Originally destroyed ' + choose(['during', 'in']) + ' the ' + choose(
-                    [age(seed), war(seed)]) + ', it was repaired by ' + professional(seed, 'blacksmith',
-                                                                                     dobject='sword') + boose(
+                    [age(), war()]) + ', it was repaired by ' + professional('blacksmith', dobject='sword') + boose(
                     [choose([' in' + ' during']) + ' the ' + age(seed)])
             ])
         else:
             lore += 'A crack in the blade has been filled with ' + choose(
-                [specificmetal(seed), normalmetal(seed), element(seed)])
+                [specificmetal(), normalmetal(), element()])
         lore += '. '
     else:
         lore += capitalize(enscription)
@@ -1734,15 +1578,14 @@ def swordlore(startseed):
     lore = lore.replace('ts hilt is and i', '')
     if randint(0, 2) == 0 and known:
         lore += choose(['Wielded by ', 'In the hands of ', 'Held by ']) + choose(
-            [hero(startseed).split(',')[0], hero(seed)]) + ', it ' + choose(['once ']) + choose(
-            ['slew ', 'defeated ', 'killed ', 'vanquished ']) + choose([horde(startseed), beast(startseed)]) + '.'
+            [hero().split(',')[0], hero()]) + ', it ' + choose(['once ']) + choose(
+            ['slew ', 'defeated ', 'killed ', 'vanquished ']) + choose([horde(), beast()]) + '.'
     elif randint(0, 1) == 0 and known:
         lore += 'It was ' + choose(['wielded by ', 'held by ']) + choose(
-            [hero(startseed).split(',')[0], hero(seed) + ',']) + choose([' in ', ' during ']) + battle(
-            startseed) + ' ' + choose(
-            ['', ' where it ' + choose(['slew', 'killed']) + ' ' + choose([hero(seed), royalty(seed)])]) + '.'
+            [hero().split(',')[0], hero() + ',']) + choose([' in ', ' during ']) + battle() + ' ' + choose(
+            ['', ' where it ' + choose(['slew', 'killed']) + ' ' + choose([hero(), royalty()])]) + '.'
     else:
-        lore += strangelore(seed)
+        lore += strangelore()
     return gramcheck(lore)
 
 
@@ -1779,11 +1622,16 @@ def print_as_sentences(lore):
 
 # Body~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 if __name__ == '__main__':
-    print_as_sentences(swordlore(142668))
+    seed(142669)
+    print_as_sentences(swordlore())
     # print
-    # print(loredmetal(30))
+    # seed(30)
+    # print(loredmetal())
     # print
-    # print(paintinglore(352))
+    # seed(352)
+    # print(paintinglore())
     # print
-    # for x in range(0,30):
-    # print epithet(seed+x,'noble','male')
+    # baseSeed = 0
+    # for x in range(baseSeed, baseSeed + 30):
+    #     seed(x)
+    #     print epithet('noble','male')
