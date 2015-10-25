@@ -1,8 +1,8 @@
 # M V S E V M:
 
-import random
+#from random import random
 
-# This is the line of code that used to import the random module.
+# This is the line of code that used to import the randint function from the random module.
 # Those were dark days indeed.
 
 # def randint(lower,upper,startseed):
@@ -19,8 +19,78 @@ import random
 # Other core functions such as the ooses held this archaic holdover
 
 
-seed = 0
+# Imports~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+import random
+
+# Variables~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+seed = 0
+letters = {
+    '1': list('bcdfgjkprstvwz$%'),
+    '2': list('lrj'),
+    '3': list('aeiouy&'),
+    '4': list('lr'),
+    '5': list('bcdfgjklmnprstvxz$%^'),
+    '6': list('bcdfghjklpqrstvwxyz$%^'),
+    '7': list('bcdfghjklprstvwxyz$%^'),
+    '8': ['ae', 'ai', 'ao', 'au', 'ea', 'ee', 'ei', 'ie', 'oe', 'oi', 'ou', 'ue']
+}
+frequencies = {
+    'a': 82,
+    'b': 15,
+    'c': 28,
+    'd': 43,
+    'e': 127,
+    'f': 22,
+    'g': 20,
+    'h': 61,
+    'i': 70,
+    'j': 2,
+    'k': 8,
+    'l': 40,
+    'm': 24,
+    'n': 67,
+    'o': 75,
+    'p': 19,
+    'q': 1,
+    'r': 60,
+    's': 63,
+    't': 91,
+    'u': 28,
+    'v': 10,
+    'w': 24,
+    'wh': 24,
+    'x': 2,
+    'y': 20,
+    'z': 1,
+    '$': 33,
+    '%': 33,
+    '&': 80,
+    '^': 33,
+    '3': 9,
+    '63': 30,
+    '37': 30,
+    '123': 1,
+    '637': 90,
+    '345': 1,
+    '1237': 10,
+    '6345': 13,
+    '12345': 1
+}
+syllables = [
+    '3',
+    '63',
+    '37',
+    '123',
+    '637',
+    '345',
+    '1237',
+    '6345',
+    '12345'
+]
+
+# Functions~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 def randint(lower, upper):
     # the backbone of the entire code
@@ -57,6 +127,7 @@ def randint(lower, upper):
 # They each have a specific task but all take and array and return some of the elements
 # Choose is currently the only one that returns multiple elements
 # (and perhaps will always be)
+
 def choose(array, times=1):
     # Chooses a number of elements from an array
     result = []
@@ -65,7 +136,6 @@ def choose(array, times=1):
         temp = virtual[randint(0, len(virtual) - 1)]
         result.append(temp)
         virtual.remove(temp)
-
     if len(result) == 1:
         return result[0]
     else:
@@ -156,72 +226,6 @@ def approxsyllables(string):
     return total
 
 
-# here is a list of letters split up into categories
-letters = {
-    '1': list('bcdfgjkprstvwz$%'),
-    '2': list('lrj'),
-    '3': list('aeiouy&'),
-    '4': list('lr'),
-    '5': list('bcdfgjklmnprstvxz$%^'),
-    '6': list('bcdfghjklpqrstvwxyz$%^'),
-    '7': list('bcdfghjklprstvwxyz$%^'),
-    '8': ['ae', 'ai', 'ao', 'au', 'ea', 'ee', 'ei', 'ie', 'oe', 'oi', 'ou', 'ue']
-}
-frequencies = {
-    'a': 82,
-    'b': 15,
-    'c': 28,
-    'd': 43,
-    'e': 127,
-    'f': 22,
-    'g': 20,
-    'h': 61,
-    'i': 70,
-    'j': 2,
-    'k': 8,
-    'l': 40,
-    'm': 24,
-    'n': 67,
-    'o': 75,
-    'p': 19,
-    'q': 1,
-    'r': 60,
-    's': 63,
-    't': 91,
-    'u': 28,
-    'v': 10,
-    'w': 24,
-    'wh': 24,
-    'x': 2,
-    'y': 20,
-    'z': 1,
-    '$': 33,
-    '%': 33,
-    '&': 80,
-    '^': 33,
-    '3': 9,
-    '63': 30,
-    '37': 30,
-    '123': 1,
-    '637': 90,
-    '345': 1,
-    '1237': 10,
-    '6345': 13,
-    '12345': 1
-}
-syllables = [
-    '3',
-    '63',
-    '37',
-    '123',
-    '637',
-    '345',
-    '1237',
-    '6345',
-    '12345'
-]
-
-
 def polish(word):
     global seed
     # <polish word:
@@ -256,6 +260,12 @@ def polish(word):
 
 
 def word(word, startseed):
+    # This is the word generation function
+    # It translates words into seed based languages by the power of 
+    # '*.~MATHS~.*'
+    # The commenting here could be improved
+    # (Also perhaps import the larger language module)
+    
     # returns blank requests to prevent it from being junked up
     if word == '':
         return word
@@ -305,6 +315,7 @@ def word(word, startseed):
         word = capitalize(word)
     return word
 
+# Body~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 if __name__ == '__main__':
     seed = 82914372
