@@ -170,12 +170,10 @@ def numbify(string):
         int(string)
         return int(string)
     except ValueError:
-        total = 0
         alphabet = {}
         for x in range(0, 36):
             alphabet.update({list('abcdefghijklmnopqrstuvwxyz0123456789')[x]: x})
-        for letter in range(0, len(string)):
-            total += alphabet[string.lower()[letter]] * (36 ** letter)
+        total = sum(map(lambda x: alphabet[x], string.lower()))
         return total
 
 
