@@ -49,15 +49,6 @@ def loredmetal(startseed):
     seed = startseed
     return choose([specificmetal(startseed), normalmetal(startseed)]) + ' mined from ' + boose(['beneath ','under ']) + mountain(seed)
 
-def blacksmith(startseed, dobject):
-    # fossil function see professional
-    return professional(startseed, 'blacksmith', 'singular', dobject)
-
-
-def blacksmiths(startseed, dobject):
-    # fossil function see professional
-    return professional(startseed, 'blacksmith', 'plural', dobject)
-
 
 def craftsman(startseed):
     # fossil function see professional
@@ -1413,7 +1404,7 @@ def swordlore(startseed):
         tlore += ' from ' + body_metal + boose([
             ' and gilded with ' + gild_metal
         ])
-        tlore += ' by ' + choose([blacksmiths(startseed, 'sword'), blacksmith(startseed, 'sword')])
+        tlore += ' by ' + professional(startseed, 'blacksmith', dobject = 'sword')
         if gocation not in ['in fire', 'in flame', 'in darkness']:
             tlore += ' ' + choose([gocation, time]) + '. '
         else:
