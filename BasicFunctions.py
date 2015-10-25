@@ -1,17 +1,17 @@
 # M V S E V M:
 
-#from random import random
+# from random import random
 
 # This is the line of code that used to import the randint function from the random module.
 # Those were dark days indeed.
 
-# def randint(lower,upper,startseed):
+# def randint(lower, upper, startseed):
 
 # This was the opening line of the code.
 # It is similar to the current opening line but with a startseed.
 # This was from the days before seed was a global variable. *shivers*
 
-# def randint(lower,upper,startseed = None):
+# def randint(lower, upper, startseed=None):
 
 # This is a later version of the opening line of the code.
 # It still takes a startseed for the few lines that still try to give it one,
@@ -92,6 +92,7 @@ syllables = [
 
 # Functions~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+
 def randint(lower, upper):
     # the backbone of the entire code
 
@@ -136,10 +137,8 @@ def choose(array, times=1):
         temp = virtual[randint(0, len(virtual) - 1)]
         result.append(temp)
         virtual.remove(temp)
-    if len(result) == 1:
-        return result[0]
-    else:
-        return result
+
+    return result if len(result) > 1 else result[0]
 
 
 def woose(freqdict, array=None):
