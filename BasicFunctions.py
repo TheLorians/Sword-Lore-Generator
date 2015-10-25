@@ -1,6 +1,6 @@
 # M V S E V M:
 
-# from random import randint
+import random
 
 # This is the line of code that used to import the random module.
 # Those were dark days indeed.
@@ -23,32 +23,33 @@ seed = 0
 
 
 def randint(lower, upper):
-    # the random integer function
     # the backbone of the entire code
 
-    # this allows us to edit the seed so when we call this function agian it yields a different result
+    # this allows us to edit the seed so when we call this function again it yields a different result
     global seed
-    # this checks if I was an idiot and put the number in backwards and fixes them if I was.
+
+    # sanity check
     if lower > upper:
-        temp = upper
-        upper = lower
-        lower = temp
+        lower, upper = upper, lower
+
     # this makes seed a really big and essentially random number
-    # the random ness comes from the two really big numbers which are both primes
-    # it changes the seed globally so that when we call this function again it will yeild a different result
-    seed += (seed) ** 2 % (982451653 * 961748941)
-    # this portion takes the really big number and puts it between the bounds
-    return lower + (seed % (upper - lower + 1))
+    # the randomness comes from the two really big numbers which are both primes
+    # it changes the seed globally so that when we call this function again it will yield a different result
+    # the seed repeats from a fixed number during each run because we want to test the program without randomness
+    seed += seed ** 2 % (982451653 * 961748941)
+    random.seed(seed)
+
+    return random.randint(lower, upper)
 
 
-#def relist(array, freqlist):
-    ## This creates a new list based upon an array and freqlist
-    ## This is used in in the woose function to create weightedness
-    #newarray = []
-    #for index in array:
-        #for x in range(0, freqlist[index]):
-            #newarray.append(index)
-    #return newarray
+# def relist(array, freqlist):
+#  This creates a new list based upon an array and freqlist
+#  This is used in in the woose function to create weightedness
+# newarray = []
+# for index in array:
+# for x in range(0, freqlist[index]):
+# newarray.append(index)
+# return newarray
 
 
 # Below are the ooses.
@@ -56,7 +57,7 @@ def randint(lower, upper):
 # They each have a specific task but all take and array and return some of the elements
 # Choose is currently the only one that returns multiple elements
 # (and perhaps will always be)
-def choose(array, times = 1):
+def choose(array, times=1):
     # Chooses a number of elements from an array
     result = []
     virtual = array[::]
@@ -64,20 +65,21 @@ def choose(array, times = 1):
         temp = virtual[randint(0, len(virtual) - 1)]
         result.append(temp)
         virtual.remove(temp)
+
     if len(result) == 1:
         return result[0]
     else:
         return result
 
 
-def woose(freqdict, array = None):
+def woose(freqdict, array=None):
     # weighted version of choose
-    if array == None:
+    if array is None:
         array = freqdict.keys()
-    majorsum = sum(map(lambda x: freqdict.get(x,0),array))
-    selection = randint(0,majorsum-1)
+    majorsum = sum(map(lambda x: freqdict.get(x, 0), array))
+    selection = randint(0, majorsum - 1)
     for item in array:
-        selection -= freqdict.get(item,0)
+        selection -= freqdict.get(item, 0)
         if selection < 0:
             return item
     else:
@@ -306,5 +308,5 @@ def word(word, startseed):
 
 if __name__ == '__main__':
     seed = 82914372
-    for x in range(0,1000):
+    for x in range(0, 1000):
         print word('hi', seed)
