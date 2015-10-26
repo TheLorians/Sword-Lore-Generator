@@ -45,13 +45,14 @@ def specificmetal(startseed):
 
 def loredmetal(startseed):
     # makes metal with lore
+    # room for improvement
     global seed
     seed = startseed
     return choose([specificmetal(startseed), normalmetal(startseed)]) + ' mined from ' + boose(['beneath ','under ']) + mountain(seed)
 
 
 def professional(startseed, profession, plurality=choose(['singular', 'plural']), dobject='none'):
-    # a combination of the old professsional functions (fossilized above).
+    # a combination of the old professsional functions.
     # It takes a type of profession and creates the name and title of a person of that profession.
     global seed
     seed = startseed
@@ -494,12 +495,56 @@ def age(startseed):
     seed = startseed
     var = choose(['age', 'era'])
     time = choose([
-        choose(['golden', 'silver', 'dark', 'bronze', 'brass', 'stone', 'ancient']) + ' ' + var,
-        var + ' of ' + choose(
-            ['fire', 'iron', 'steel', 'kings', 'lords', 'gods', 'darkness', 'the shadows', 'blood', 'filth',
-             'the ancients', 'monsters', 'conquest', 'empires', 'elves', 'beasts', 'birds', 'magic', 'wizards',
-             word('Ruler', startseed), plural(choose(
-                ['orc', 'woad', 'goblin', 'troll', 'giant', 'cyclops', 'man', 'elf', 'dwarf', cavespawn(startseed)]))])
+        choose([
+            'golden',
+            'silver',
+            'dark',
+            'bronze',
+            'brass',
+            'stone',
+            'ancient',
+            'ice',
+            choose([
+                'dwarven',
+                'elven',
+                'goblin',
+                'woadic'
+            ])
+        ]) + ' ' + var,
+        var + ' of ' + choose([
+            'fire',
+            'iron',
+            'steel',
+            'kings',
+            'lords',
+            'gods',
+            'darkness',
+            'the shadows',
+            'blood',
+            'filth',
+            'the ancients',
+            'monsters',
+            'conquest',
+            'empires',
+            'beasts',
+            'birds',
+            'magic',
+            'wizards',
+            'war',
+             word('Ruler', startseed),
+             plural(choose([
+                 'orc',
+                 'woad',
+                 'goblin',
+                 'troll',
+                 'giant',
+                 'cyclops',
+                 'man',
+                 'elf',
+                 'dwarf',
+                 cavespawn(startseed)
+            ]))
+        ])
     ])
     return time.title()
 
