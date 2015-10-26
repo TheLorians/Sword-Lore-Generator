@@ -83,7 +83,7 @@ def professional(startseed, profession, plurality=choose(['singular', 'plural'])
         ]
     }
     advancedsynonym = {}
-    for key, array in basicsynonym:
+    for key, array in basicsynonym.iteritems():
         for profession in array:
             advancedsynonym.update({profession : array})
     professional_class = ''
