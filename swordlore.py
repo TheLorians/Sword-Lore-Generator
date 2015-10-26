@@ -55,18 +55,45 @@ def professional(startseed, profession, plurality=choose(['singular', 'plural'])
     # It takes a type of profession and creates the name and title of a person of that profession.
     global seed
     seed = startseed
-    synonyms = {'bowyer': ['bowyer'], 'glassmith': ['gaffer', 'glassmith', 'glassblower'], 'craftsman': ['craftsman'],
-                'blacksmith': ['smith', 'blacksmith', 'goldsmith', 'pewtersmith', 'coppersmith', 'silversmith',
-                               dobject + 'smith'], 'wizard': [wizardtype(startseed)]}
+    basicsynonym = {
+        'bowyer': [
+            'bowyer'
+        ],
+        'glassmith': [
+            'gaffer',
+            'glassmith',
+            'glassblower'
+        ],
+        'craftsman': [
+            'craftsman'
+        ],
+        'blacksmith': [
+            'smith',
+            'blacksmith',
+            'goldsmith',
+            'pewtersmith',
+            'coppersmith',
+            'silversmith',
+            dobject + 'smith'
+        ],
+        'wizard': [
+            'wizard',
+            wizardtype(startseed)
+        ]
+    }
+    advancedsynonym = {}
+    for key, array in basicsynonym:
+        for profession in array:
+            advancedsynonym.update({profession : array})
     professional_class = ''
     def single():
         #This is a function created so I can create apprentices without creating the potential for infinite or long loops
         #E.G. Sam the master swordsmith while apprenticed to dave the iron smith while apprenticed to Garett the blacksmith
         #basically allow you to call it only twice
         global professional_class
-        if profession not in synonyms:
-            synonyms.update({profession: [profession]})
-        professional_class = choose(synonyms[profession])
+        if profession not in advancedsynonym:
+            advancedsynonym.update({profession: [profession]})
+        professional_class = choose(advancedsynonym[profession])
         if randint(0, 1) == 1:
             professional_class = 'master ' + professional_class
         name = word(capitalize(profession), startseed)
@@ -85,12 +112,12 @@ def professional(startseed, profession, plurality=choose(['singular', 'plural'])
     if plurality == 'singular':
         return singlular
     else:
-        professional_class = choose(synonyms[profession])
+        professional_class = choose(advancedsynonym[profession])
         template = choose(
             ['the # & of @', 'the & of @', 'the last great & of @', 'the first great & of @', '# & from @', '& from @',
              'the ' + choose(['disciples', 'followers', 'aprentices']) + ' of ' + singlular])
         professional_class = choose([
-            choose(['dwarf', 'elf', 'man', 'gnome'] + synonyms[profession]),
+            choose(['dwarf', 'elf', 'man', 'gnome'] + advancedsynonym[profession]),
             choose(['dwarven', 'elven', 'human', 'gnomish']) + ' ' + professional_class
         ])
         if professional_class.split(' ')[0] not in ['dwarf', 'elf', 'man', 'gnome','dwarven', 'elven', 'human', 'gnomish'] and randint(0, 1) == 1:
