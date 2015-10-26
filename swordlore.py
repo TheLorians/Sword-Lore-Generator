@@ -50,16 +50,6 @@ def loredmetal(startseed):
     return choose([specificmetal(startseed), normalmetal(startseed)]) + ' mined from ' + boose(['beneath ','under ']) + mountain(seed)
 
 
-def craftsman(startseed):
-    # fossil function see professional
-    return professional(startseed, 'craftsman', 'singular')
-
-
-def craftsmen(startseed):
-    # fossil function see professional
-    return professional(startseed, 'craftsman', 'plural')
-
-
 def glassmith(startseed):
     # fossil function see professional
     return professional(startseed, 'glassmith', 'singular')
@@ -1451,7 +1441,7 @@ def swordlore(startseed):
         tlore += choose(['carved', 'crafted'])
         tlore += ' from one solid piece of '
         tlore += choose([biomaterial(startseed, 'large')])
-        tlore += boose([' by ' + choose([craftsman(startseed), craftsmen(startseed)])])
+        tlore += boose([' by ' + professional(startseed,'craftsman')])
         tlore += boose([' ' + time])
         tlore += '. '
         return tlore
