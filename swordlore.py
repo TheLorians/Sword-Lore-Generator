@@ -50,16 +50,6 @@ def loredmetal(startseed):
     return choose([specificmetal(startseed), normalmetal(startseed)]) + ' mined from ' + boose(['beneath ','under ']) + mountain(seed)
 
 
-def glassmith(startseed):
-    # fossil function see professional
-    return professional(startseed, 'glassmith', 'singular')
-
-
-def glassmiths(startseed):
-    # fossil function see professional
-    return professional(startseed, 'glassmith', 'plural')
-
-
 def professional(startseed, profession, plurality=choose(['singular', 'plural']), dobject='none'):
     # a combination of the old professsional functions (fossilized above).
     # It takes a type of profession and creates the name and title of a person of that profession.
@@ -123,6 +113,7 @@ def mountain(startseed):
 
 
 def location(startseed, feature):
+    # This makes a natural location
     global seed
     seed = startseed
     adjectives = ['lonely', 'icey', 'misty', 'red', 'golden', 'silver', 'frozen', 'ancient', 'cold', 'windy', 'cloudy',
@@ -358,6 +349,7 @@ def royalty(startseed):
 
 
 def spirit(startseed):
+    # please comment this
     global seed
     seed = startseed
     Class = choose(['nymph', 'spirit', 'lady'])
@@ -386,6 +378,7 @@ def bone(startseed):
 
 def wood(startseed):
     # makes wood
+    # room for imporvement
     global seed
     seed = startseed
     wsource = choose(
@@ -534,6 +527,8 @@ def moss(startseed):
 
 
 def pattern(startseed):
+    # This makes body patterns for animals (and maybe other things
+    # this is a pretty good function further implementation could benefit the program
     global seed
     seed = startseed
     modifier = ['long', 'short', 'wide', 'thin', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight']
@@ -595,6 +590,7 @@ def normalgem(startseed):
 
 
 def specificgem(startseed):
+    # This makes a gem that may or may not exist
     global seed
     seed = startseed
     adjective = ['mystic', 'cat\'s eye', 'andesine', 'color-change', 'dendritic', 'fire', 'star', 'pyrope', 'rainbow',
@@ -707,6 +703,7 @@ def enscript(startseed):
 
 
 def war(startseed):
+    # This makes the name of a war
     global seed
     seed = startseed
     tempseed = seed
@@ -1409,7 +1406,7 @@ def swordlore(startseed):
             gocation = choose(['beneath', 'under', 'below']) + ' ' + gocation[7:]
         tlore += commission(startseed)
         tlore += 'made from ' + choose([glass(startseed), specificglass(seed)])
-        tlore += boose([' by ' + choose([glassmith(startseed), glassmiths(startseed)]) + ' ' + boose([gocation, time])])
+        tlore += boose([' by ' + professional(startseed, 'glassmith') + ' ' + boose([gocation, time])])
         tlore += '. '
         tlore += boose([choose(['A single ' + color(startseed) + ' ' + choose(['rose', 'flower', 'feather']),
                                 capitalize(precep(boose(['single ']) + bird(startseed) + ' feather')), capitalize(
