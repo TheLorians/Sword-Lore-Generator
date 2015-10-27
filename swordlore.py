@@ -1,6 +1,7 @@
 # coding=utf-8
 
 # Imports~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+import re
 from BasicFunctions import *
 
 # Functions~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1744,6 +1745,16 @@ def swordlore(startseed):
         lore += strangelore(seed)
     return gramcheck(lore)
 
+
+def print_as_sentences(lore):
+    sentences = re.split(r' *[\.\?!][\'"\)\]]* +', lore)
+
+    for sentence in sentences:
+        if sentence[-1] != '.':
+            sentence += '.'
+
+        print sentence
+
 # ASCII art~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 '''
    ▄████████  ▄█     █▄   ▄██████▄     ▄████████ ████████▄        ▄█        ▄██████▄     ▄████████    ▄████████
@@ -1765,9 +1776,10 @@ def swordlore(startseed):
                 ██
                  █
 '''
+
 # Body~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 if __name__ == '__main__':
-    print(swordlore(142668))
+    print_as_sentences(swordlore(142668))
     # print
     # print(loredmetal(30))
     # print
