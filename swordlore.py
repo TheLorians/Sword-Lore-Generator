@@ -228,36 +228,134 @@ def epithet(startseed, dobject, gender='male'):
     else:
         genpronoun = 'daughter'
     if dobject == 'beast':
-        simple_descriptor = choose(
-            ['ghastly', 'undying', 'unspeakable', 'unseen', 'unheard', 'silent', 'ancient', 'relentless', 'hellish',
-             'hundred-eyed', 'thousand-eyed', 'immortal', 'unholy', 'howling', 'undead', 'festering', 'abominable',
-             'formidable', 'wretched', 'grusome', 'blind', 'dreadful', 'great']) + ' '
-        dominion = choose(
-            ['orc', 'goblin', 'skelton', 'skeletal warrior', 'demon', 'man', 'hobgoblin', 'demon', 'cyclops', 'giant',
-             'troll', 'knight', 'undead', 'ice giant', 'ghost', cavespawn(startseed)])
+        simple_descriptor = choose([
+            'ghastly',
+            'undying',
+            'unspeakable',
+            'unseen',
+            'unheard',
+            'silent',
+            'ancient',
+            'relentless',
+            'hellish',
+            'hundred-eyed',
+            'thousand-eyed',
+            'immortal',
+            'unholy',
+            'howling',
+            'undead',
+            'festering',
+            'abominable',
+            'formidable',
+            'wretched',
+            'grusome',
+            'blind',
+            'dreadful',
+            'great'
+        ]) + ' '
+        dominion = choose([
+            'orc',
+            'goblin',
+            'skelton',
+            'skeletal warrior',
+            'demon',
+            'man',
+            'hobgoblin',
+            'demon',
+            'cyclops',
+            'giant',
+            'troll',
+            'knight',
+            'undead',
+            'ice giant',
+            'ghost',
+            cavespawn(startseed)
+        ])
         Epithet = choose([
-            choose(['reaper', 'eater', 'harvester', 'swallower', 'corrupter', 'defiler', 'reckoner', 'render',
-                    'digester']) + ' of ' + choose(['souls', 'minds', 'flesh', 'bone', 'the damned', 'blood']),
-
-            'the ' + simple_descriptor + choose(
-                ['mind', 'overmind', 'beast', 'horror', 'terror', 'monster', 'evil', 'abomination', 'seer', 'overseer',
-                 'priest', 'gatekeeper']),
-
             choose([
-                choose(['keeper', 'king', 'god', 'ruler', 'prince', 'master']) + ' of ' + choose(
-                    ['worms', 'maggots', 'the dead', 'the undead', 'bones', 'blood', 'souls', 'minds', 'snakes', 'fire',
-                     'darkness', 'gold']),
-
-                'the ' + boose([simple_descriptor]) + choose(['worm', 'maggot', 'snake', 'soul']) + ' ' + choose(
-                    ['keeper', 'eater', 'lord', 'god']),
-
-                choose(['king', 'god', 'ruler', 'prince', 'master']) + ' of the ' + plural(dominion).replace('undeads',
-                                                                                                             'undead'),
-
-                'the ' + boose([simple_descriptor]) + dominion + ' ' + choose(
-                    ['king', 'god', 'ruler', 'prince', 'master'])
+                'reaper',
+                'eater',
+                'harvester',
+                'swallower',
+                'corrupter',
+                'defiler',
+                'reckoner',
+                'render',
+                'digester'
+            ]) + ' of ' + choose([
+                'souls',
+                'minds',
+                'flesh',
+                'bone',
+                'the damned',
+                'blood'
+            ]),
+            'the ' + simple_descriptor + choose([
+                'mind',
+                'overmind',
+                'beast',
+                'horror',
+                'terror',
+                'monster',
+                'evil',
+                'abomination',
+                'seer',
+                'overseer',
+                'priest',
+                'gatekeeper'
+            ]),
+            choose([
+                choose([
+                    'keeper',
+                    'king',
+                    'god',
+                    'ruler',
+                    'prince',
+                    'master'
+                ]) + ' of ' + choose([
+                    'worms',
+                    'maggots',
+                    'the dead',
+                    'the undead',
+                    'bones',
+                    'blood',
+                    'souls',
+                    'minds',
+                    'snakes',
+                    'fire',
+                    'darkness',
+                    'gold'
+                ]),'the ' + boose([
+                    simple_descriptor
+                ]) + choose([
+                    'worm',
+                    'maggot',
+                    'snake',
+                    'soul'
+                ]) + ' ' + choose([
+                    'keeper',
+                    'eater',
+                    'lord',
+                    'god'
+                ]),
+                choose([
+                    'king',
+                    'god',
+                    'ruler',
+                    'prince',
+                    'master'
+                ]) + ' of the ' + plural(dominion).replace('undeads','undead'),
+                'the ' + boose([
+                    simple_descriptor
+                ]) + dominion + ' ' + choose([
+                    'king',
+                    'god',
+                    'ruler',
+                    'prince',
+                    'master'
+                ])
             ])
-        ]).replace('  ', ' ')
+            ]).replace('  ', ' ')
     elif dobject == 'hero':
         # room for improvement
         Epithet = choose(['the ' + choose(
