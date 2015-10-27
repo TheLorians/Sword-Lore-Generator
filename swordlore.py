@@ -44,9 +44,11 @@ def loredmetal():
     return choose([specificmetal(), normalmetal()]) + ' mined from ' + boose(['beneath ', 'under ']) + mountain()
 
 
-def professional(profession, plurality=choose(['singular', 'plural']), dobject='none'):
+def professional(profession, plurality=None, dobject='none'):
     # a combination of the old professional functions.
     # It takes a type of profession and creates the name and title of a person of that profession.
+    if plurality is None:
+        plurality = choose(['singular', 'plural'])
     basicsynonym = {
         'bowyer': [
             'bowyer'

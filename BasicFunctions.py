@@ -89,17 +89,24 @@ syllables = [
     '12345'
 ]
 
+seeded = False
+
 # Functions~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
 def seed(newSeed):
     random.seed(newSeed)
+    global seeded
+    seeded = True
 
 
 def randint(lower, upper):
     # the backbone of the entire code
 
-    # sanity check
+    # sanity checks
+    global seeded
+    if not seeded:
+        raise RuntimeError("Call to randint before seed has been set")
     if lower > upper:
         lower, upper = upper, lower
 
