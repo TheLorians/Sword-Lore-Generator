@@ -145,8 +145,8 @@ def woose(freqdict, array=None):
     # weighted version of choose
     if array is None:
         array = freqdict.keys()
-    majorsum = sum(map(lambda x: freqdict.get(x, 0), array))
-    selection = randint(0, majorsum - 1)
+    major_sum = sum(map(lambda x: freqdict.get(x, 0), array))
+    selection = randint(0, major_sum - 1)
     for item in array:
         selection -= freqdict.get(item, 0)
         if selection < 0:
@@ -187,9 +187,9 @@ def capitalize(word):
 
 def plural(string):
     # makes a word plural
-    keylist = {'human': 'humans', 'ox': 'oxen', 'goose': 'geese', 'moose': 'moose', 'deer': 'deer'}
+    key_list = {'human': 'humans', 'ox': 'oxen', 'goose': 'geese', 'moose': 'moose', 'deer': 'deer'}
     if string.lower() in ['human', 'ox', 'goose', 'moose', 'deer']:
-        return keylist[string.lower()]
+        return key_list[string.lower()]
     elif string.lower()[-3:] == 'man':
         return string[:-2] + 'en'
     elif string.lower()[-2:] in ['lf', 'rf']:
