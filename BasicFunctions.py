@@ -25,7 +25,6 @@ import random
 
 # Variables~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-seed = 0
 letters = {
     '1': list('bcdfgjkprstvwz$%'),
     '2': list('lrj'),
@@ -90,25 +89,26 @@ syllables = [
     '12345'
 ]
 
+seeded = False
+
 # Functions~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+def seed(newSeed):
+    random.seed(newSeed)
+    global seeded
+    seeded = True
 
 
 def randint(lower, upper):
     # the backbone of the entire code
 
-    # this allows us to edit the seed so when we call this function again it yields a different result
-    global seed
-
-    # sanity check
+    # sanity checks
+    global seeded
+    if not seeded:
+        raise RuntimeError("Call to randint before seed has been set")
     if lower > upper:
         lower, upper = upper, lower
-
-    # this makes seed a really big and essentially random number
-    # the randomness comes from the two really big numbers which are both primes
-    # it changes the seed globally so that when we call this function again it will yield a different result
-    # the seed repeats from a fixed number during each run because we want to test the program without randomness
-    seed += seed ** 2 % (982451653 * 961748941)
-    random.seed(seed)
 
     return random.randint(lower, upper)
 
@@ -164,17 +164,17 @@ def boose(array):
     return choose([choose(array), ''])
 
 
-def numbify(string):
-    # turns a string into a number for seeding purposes
-    try:
-        int(string)
-        return int(string)
-    except ValueError:
-        alphabet = {}
-        for x in range(0, 36):
-            alphabet.update({list('abcdefghijklmnopqrstuvwxyz0123456789')[x]: x})
-        total = sum(map(lambda x: alphabet[x], string.lower()))
-        return total
+#def numbify(string):
+#    # turns a string into a number for seeding purposes
+#    try:
+#        int(string)
+#        return int(string)
+#    except ValueError:
+#        alphabet = {}
+#        for x in range(0, 36):
+#            alphabet.update({list('abcdefghijklmnopqrstuvwxyz0123456789')[x]: x})
+#        total = sum(map(lambda x: alphabet[x], string.lower()))
+#        return total
 
 
 def capitalize(word):
@@ -224,7 +224,6 @@ def approxsyllables(string):
 
 
 def polish(word):
-    global seed
     # <polish word:
     # <Fix q:
     word = word.replace('q', 'qu')
@@ -256,7 +255,7 @@ def polish(word):
     return word
 
 
-def word(word, startseed):
+def word(word):
     # This is the word generation function
     # It translates words into seed based languages by the power of 
     # '*.~MATHS~.*'
@@ -269,8 +268,6 @@ def word(word, startseed):
     # && bypasses translation
     if word[-2:] == '&&':
         return word[:-2]
-    global seed
-    seed = numbify(word) + startseed
     number = approxsyllables(word) + randint(-1, 1)
     if number < 1:
         number = 1
@@ -315,6 +312,6 @@ def word(word, startseed):
 # Body~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 if __name__ == '__main__':
-    seed = 82914372
+    seed(82914372)
     for x in range(0, 1000):
-        print word('hi', seed)
+        print word('hi')
