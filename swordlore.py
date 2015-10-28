@@ -902,12 +902,18 @@ def stringthing():
     return choose([choose(mamsource) + ' ' + choose(['sinew']), spider() + ' silk'])
 
 
+def wool():
+    # This makes types of wool
+    # Possibly room for improvement
+    return boose(['sheep', 'alpaca', 'llama']) + ' ' + choose(['wool', 'cashmere'])
+
+
 def clothlore():
     # provides short lore for cloth
     color_chart = {'purple': ['murex']}
     lore = ''
     lore += choose(['woven', 'spun']) + ' from ' + choose(
-        [spider() + ' silk', 'hemp', 'straw', 'grass', 'sisal', 'cotton', 'wool', 'cashmere', 'qiviut', 'silk',
+        [spider() + ' silk', 'hemp', 'straw', 'grass', 'sisal', 'cotton', wool(), 'qiviut', 'silk',
          choose([specificmetal(), normalmetal()])]) + boose(
         [' by ' + professional('weaver')])
     return lore
@@ -916,7 +922,7 @@ def clothlore():
 def fabric():
     return choose([choose(
         ['raw hide', choose(['cow', 'goat', 'deer', 'elk', 'caribou', 'reindeer', 'ox', 'bison', 'buffalo']) + ' hide',
-         'cloth', color() + ' cloth', color() + ' wool', color() + ' silk', 'fabric',
+         'cloth', color() + ' cloth', color() + wool(), color() + ' silk', 'fabric',
          'velvet', 'silk', 'leather', 'black leather', 'brown leather', 'red leather', 'bat leather', 'fish leather',
          'deerskin', 'human skin', 'goblin skin', 'snakeskin', 'lizard skin', 'dragon skin']),
         boose([color()]) + ' ' + choose(['cloth', 'fabric']) + ' ' + clothlore()])
