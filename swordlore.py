@@ -1309,11 +1309,13 @@ def foodlore():
     # This makes a description of a dish
     # encorporate legendary game
     cooking_meth = ['fried', 'sauteed', 'boiled', 'roasted', 'grilled', 'baked', 'smoked', 'pickeled', 'dried']
-    seasoning = ['pepper', 'garlic', 'paprika', 'salt', 'allspice', 'arrowroot', 'curry', 'bayleaf', 'carraway']
-    vegetable = ['potato', 'aparagus', 'rice']
+    seasoning = ['pepper', 'garlic', 'paprika', 'salt', 'allspice', 'arrowroot', 'curry', 'bayleaf', 'carraway'+boose(['seeds']), 'cayene', 'chili peppers', 'red pepper flakes', 'chives', 'cilantro', 'cinamon']
+    vegetable = ['potato', 'yam', 'aparagus', 'rice', 'celery', 'radish', 'pumpkin']
     # TODO make crustacean generator
     meat = ['pork', 'beef', 'chicken', 'fish', choose(['crab', 'lobster', 'shrimp']), amphibian(), bird(), dog()]
-    return choose(cooking_meth) + ' ' + choose(meat) + boose([' seasoned with '+choose(seasoning)])
+    extra_sentances = [boose([' seasoned with ' + choose(seasoning)]),boose(['served with ' + boose(cooking_meth) + ' ' + choose(vegetable)])]
+    extra_sentances = filter(lambda x: x != '', extra_sentances)
+    return choose(cooking_meth) + ' ' + choose(meat) + read_list(extra_sentances)
 
 
 def strangelore():
