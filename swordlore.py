@@ -1305,17 +1305,42 @@ def scuplpturelore():
     # This makes the lore for a sculpture
     pass
 
+def sauce():
+    # This makes sauces to go on food
+    # https://en.wikipedia.org/wiki/Gravy
+    meat = ['pork', 'beef', 'chicken', 'fish', 'venison', 'veal', 'mutton', 'escargo', 'rabbit', 'duck', choose(['crab', 'lobster', 'shrimp']), amphibian(), bird(), dog()]
+    gravy = choose(meat + ['mushroom', 'vegetable']) + ' gravy'
+    # TODO make fruit function
+    fruits = ['apple', 'pineapple', 'pear', 'cranberry', 'mango', 'peach', 'plum']
+    defaults = ['duck sauce','tomato sauce', 'mushroom sauce', choose(fruits)+' sauce']
+    return choose([gravy, choose(defaults)])
+
+
 def foodlore():
     # This makes a description of a dish
+    # https://en.wikipedia.org/wiki/List_of_cooking_techniques
     # encorporate legendary game
-    cooking_meth = ['fried', 'sauteed', 'boiled', 'roasted', 'grilled', 'baked', 'smoked', 'pickeled', 'dried']
-    seasoning = ['pepper', 'garlic', 'paprika', 'salt', 'allspice', 'arrowroot', 'curry', 'bayleaf', 'carraway'+boose(['seeds']), 'cayene', 'chili peppers', 'red pepper flakes', 'chives', 'cilantro', 'cinamon']
-    vegetable = ['potato', 'yam', 'aparagus', 'rice', 'celery', 'radish', 'pumpkin']
+    cooking_meth = ['fried', 'sauteed', 'boiled', 'roasted', 'grilled', 'baked', 'smoked', 'pickeled', 'dried', 'stuffed', 'broiled', 'carmelized', 'charbroiled']
+    seasoning = ['pepper', 'garlic', 'paprika', 'salt', 'seasalt', 'allspice', 'arrowroot', 'curry', 'bayleaf', 'carraway'+boose(['seeds']), 'cayene', 'chili peppers', 'red pepper flakes', 'chives', 'cilantro', 'cinamon', 'cloves', 'cumin', 'dill', 'peppercorn', 'ginger', 'juniper berries', 'mustard', 'nutmeg', 'onion', 'oregano', 'parsley', 'rosemary', 'saffron', 'thyme', 'vanilla']
+    vegetable = ['potato', 'yam', 'aparagus', 'rice', 'celery', 'radish', 'pumpkin', 'apple', 'onion', 'lemon', 'pineapple', 'mushroom']
     # TODO make crustacean generator
-    meat = ['pork', 'beef', 'chicken', 'fish', choose(['crab', 'lobster', 'shrimp']), amphibian(), bird(), dog()]
-    extra_sentances = [boose([' seasoned with ' + choose(seasoning)]),boose(['served with ' + boose(cooking_meth) + ' ' + choose(vegetable)])]
+    meat = ['egg', 'pork', 'beef', 'chicken', 'fish', 'venison', 'veal', 'mutton', 'escargo', 'rabbit', 'duck', choose(['crab', 'lobster', 'shrimp']), amphibian(), bird(), bird()+' egg', dog()]
+    extra_sentances = [
+        boose([
+            ' seasoned with ' + choose([
+                read_list(choose(seasoning,randint(2,3))),
+                choose(seasoning)
+                ])
+            ]),
+        boose([
+            ' served with ' + boose(cooking_meth) + ' ' + choose(vegetable)
+        ]),
+        boose([
+            ' covered in ' + sauce()
+        ])
+    ]
     extra_sentances = filter(lambda x: x != '', extra_sentances)
-    return choose(cooking_meth) + ' ' + choose(meat) + read_list(extra_sentances)
+    return gramcheck(choose(cooking_meth) + ' ' + choose(meat) + read_list(extra_sentances))
 
 
 def strangelore():
@@ -1640,7 +1665,7 @@ def print_as_sentences(lore):
 
 # Body~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 if __name__ == '__main__':
-    seed(142729)
+    seed(142747)
     print swordlore()
     print 
     print foodlore()
