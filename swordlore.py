@@ -1309,10 +1309,11 @@ def foodlore():
     # This makes a description of a dish
     # encorporate legendary game
     cooking_meth = ['fried', 'sauteed', 'boiled', 'roasted', 'grilled', 'baked', 'smoked', 'pickeled', 'dried']
-    seasonings = ['pepper', 'garlic', 'paprika', 'salt', 'allspice', 'arrowroot', 'curry', 'bayleaf', 'carraway']
+    seasoning = ['pepper', 'garlic', 'paprika', 'salt', 'allspice', 'arrowroot', 'curry', 'bayleaf', 'carraway']
+    vegetable = ['potato', 'aparagus', 'rice']
     # TODO make crustacean generator
     meat = ['pork', 'beef', 'chicken', 'fish', choose(['crab', 'lobster', 'shrimp']), amphibian(), bird(), dog()]
-    return choose(cooking_meth) + ' ' + choose(meat) + boose([' seasoned with '+choose(seasonings)])
+    return choose(cooking_meth) + ' ' + choose(meat) + boose([' seasoned with '+choose(seasoning)])
 
 
 def strangelore():
