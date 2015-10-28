@@ -1305,6 +1305,15 @@ def scuplpturelore():
     # This makes the lore for a sculpture
     pass
 
+def foodlore():
+    # This makes a description of a dish
+    # encorporate legendary game
+    cooking_meth = ['fried', 'sauteed', 'boiled', 'roasted', 'grilled', 'baked', 'smoked', 'pickeled', 'dried']
+    seasonings = ['pepper', 'garlic', 'paprika', 'salt', 'allspice', 'arrowroot', 'curry', 'bayleaf', 'carraway']
+    # TODO make crustacean generator
+    meat = ['pork', 'beef', 'chicken', 'fish', choose(['crab', 'lobster', 'shrimp']), amphibian(), bird(), dog()]
+    return choose(cooking_meth) + ' ' + choose(meat) + boose([' seasoned with '+choose(seasonings)])
+
 
 def strangelore():
     # This was originally contained within the swordlore generator
@@ -1572,7 +1581,7 @@ def swordlore():
                      'was ' + choose(['filled', 'repaired']) + ' by ' + professional('blacksmith', dobject='sword')]),
                 'Originally destroyed ' + choose(['during', 'in']) + ' the ' + choose(
                     [age(), war()]) + ', it was repaired by ' + professional('blacksmith', dobject='sword') + boose(
-                    [choose([' in' + ' during']) + ' the ' + age(seed)])
+                    [choose([' in' + ' during']) + ' the ' + age()])
             ])
         else:
             lore += 'A crack in the blade has been filled with ' + choose(
@@ -1628,8 +1637,10 @@ def print_as_sentences(lore):
 
 # Body~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 if __name__ == '__main__':
-    seed(142669)
-    print_as_sentences(swordlore())
+    seed(142729)
+    print swordlore()
+    print 
+    print foodlore()
     # print
     # seed(30)
     # print(loredmetal())
