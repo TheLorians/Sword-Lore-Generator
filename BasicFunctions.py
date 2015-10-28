@@ -309,9 +309,16 @@ def word(word):
         word = capitalize(word)
     return word
 
+def read_list(array, oxford=True):
+    if len(array) == 1:
+        return array[0]
+    elif len(array) == 0:
+        return ''
+    return ', '.join(array[:-1]) + ',' * int(oxford) + ' and ' + array[-1]
+
 # Body~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 if __name__ == '__main__':
     seed(82914372)
-    for x in range(0, 1000):
-        print word('hi')
+    print read_list(['three'])
+    
