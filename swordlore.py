@@ -623,13 +623,11 @@ def moss():
 
     secondary_adjective = ['pygmy', 'dwarf', 'hump', 'feather', 'yoke', 'fork', 'wood', 'beard', 'beardless', 'rock',
                            'thread', 'silver', 'earth', 'carrion', 'groove', 'apple', 'shield', 'spear', 'bow',
-                           'rabbit',
-                           'lattice', 'tree', 'helmet', 'hook', 'comb', 'cave', 'forklet', 'nut', 'flag', 'fox',
-                           'extinguisher', 'cord', 'pocket', 'water', 'tufa', 'hoar', 'screw', 'brook', 'plait', 'silk',
-                           'thatch', 'copper', 'thyme', 'flood', 'spur', 'bristle', 'fen', 'crisp', 'scorpion',
-                           'fringe',
-                           'streak', 'rose', 'ghost', 'turf', 'shaggy', 'dew', 'bark', 'club', 'ganite', 'umbrella',
-                           'dung']
+                           'rabbit', 'lattice', 'tree', 'helmet', 'hook', 'comb', 'cave', 'forklet', 'nut', 'flag',
+                           'fox', 'extinguisher', 'cord', 'pocket', 'water', 'tufa', 'hoar', 'screw', 'brook', 'plait',
+                           'silk', 'thatch', 'copper', 'thyme', 'flood', 'spur', 'bristle', 'fen', 'crisp', 'scorpion',
+                           'fringe', 'streak', 'rose', 'ghost', 'turf', 'shaggy', 'dew', 'bark', 'club', 'ganite',
+                           'umbrella', 'dung']
 
     variety = woose({'moss': 8, 'peatmoss': 1, 'smoothcap': 1, 'bryum': 1, 'ditrichum': 1, 'grimmia': 1, 'pottia': 1,
                      'pincusion': 1, 'redshank': 1, 'quillwort': 1})
@@ -933,7 +931,7 @@ def bird():
     """Makes Birds"""
     genera_count = 0
 
-    def bird_genera():
+    def bird_genus():
         # this makes formulaic bird genera names
         global genera_count
         prefixes = ['ant', 'eas', 'sun', 'humming', 'snow', 'wes', 'bell', 'bower', 'fairy', 'black', 'mocking',
@@ -952,7 +950,7 @@ def bird():
         return choose(prefixes) + choose(suffixes)
 
     # TODO wat @ next line
-    voriabel = bird_genera()
+    voriabel = bird_genus()
     common_genera = ['sparrow', 'owl', 'woodpecker', 'flycatcher', 'warbler', 'eagle', 'parrot', 'goose', 'oriole',
                      'penguin', 'duck', 'kingfisher', 'hawk', 'pigeon', 'finch', 'cuckoo', 'petrel', 'robin', 'dove',
                      'vulture', 'thrush', 'gull', 'plover', 'heron', 'quetzal']
@@ -1072,7 +1070,7 @@ def bird():
     # +60)*len(body_part)+60)
     return choose([choose(prefix), choose([color(), choose(body_adjective)]) + choose(body_part), color(),
                    word('Bird') + '\'s', land('demonym')]) + ' ' + choose(
-        [choose(common_genera), choose(uncommon_genera), choose(rare_genera), bird_genera()])
+        [choose(common_genera), choose(uncommon_genera), choose(rare_genera), bird_genus()])
 
 
 def blood():
