@@ -343,15 +343,26 @@ def epithet(dobject, gender='male'):
         ]).replace('  ', ' ')
     elif dobject == 'hero':
         # room for improvement
-        epithet_name = choose(['the ' + choose(
-            ['brave', 'strong', 'great', 'stoic', 'elder', 'younger', 'tall', 'short', 'powerful', 'adored', 'ox',
-             'boar', 'bull', 'mountain', 'rock', 'stoic', 'wise', 'peaceful', 'calm', 'fast', 'bear', 'wolf', 'fox',
-             'lion', 'thirsty', 'hungry', 'tired', 'gentle', 'giant', 'last', 'holy', 'divine', 'fearless', 'steadfast',
-             'enlightened', 'exalted']), choose(['lion', 'bear', 'wolf', 'kind', 'soft']) + '-hearted',
-                               genpronoun + ' of ' + word('Father'), choose(
-                ['dragon', 'minotaur', 'cyclops', 'ogre', 'ghast', 'beast', 'serpent', 'wolf', 'lion', 'bear', 'wyvern',
-                 'worm', 'lindworm', cavespawn(), choose(['the ', '']) + dragon()]) + ' ' + choose(
-                ['slayer', 'killer'])])
+        epithet_name = choose([
+            'the ' + choose([
+                'brave', 'strong', 'great', 'stoic', 'elder', 'younger', 'tall', 'short', 'powerful', 'adored', 'ox',
+                'boar', 'bull', 'mountain', 'rock', 'stoic', 'wise', 'peaceful', 'calm', 'fast', 'bear', 'wolf', 
+                'fox','lion', 'thirsty', 'hungry', 'tired', 'gentle', 'giant', 'last', 'holy', 'divine', 'fearless', 
+                'steadfast','enlightened', 'exalted'
+            ]),
+            choose([
+                'lion', 'bear', 'wolf', 'kind', 'soft'
+            ]) + '-hearted',genpronoun + ' of ' + word('Father'),
+            choose([
+                'ogre', 'undead', 'ghast', 'skeleton', 'serpent', cavespawn(), 'demon', 'bear', 'beast', 'lion', 
+                'wyvern', 'goblin', 'orc', 'man', 'troll', 'giant', 'hobgoblin', 'lindworm', 'knight', 'worm', 
+                'frost giant', 'dragon', 'cyclops', 'skeletal warrior', 'wolf', 'minotaur', choose(['the ', '']) + 
+                dragon()
+                ]) + ' ' + choose(['slayer', 'killer']),
+            'bane of '+plural(choose([
+                'ogre', 'undead', 'ghast', 'skeleton', 'serpent', cavespawn(), 'demon', 'bear', 'beast', 'lion', 'wyvern', 'goblin', 'orc', 'man', 'troll', 'giant', 'hobgoblin', 'lindworm', 'knight', 'worm', 'frost giant', 'dragon', 'cyclops', 'skeletal warrior', 'wolf', 'minotaur', 'arthropod'
+            ]))
+        ])
     elif dobject == 'noble':
         # room for improvement
         romannumeral = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X']
@@ -418,11 +429,17 @@ def beast():
 
 
 def horde():
-    return choose(['a horde of', 'an army of', choose(
-        ['one thousand', 'ten thousand', 'five hundred', 'one hundred', 'fifty', 'forty', 'thirty'])]) + ' ' + boose(
-        ['angry', 'unholy', 'demonic', 'ravenous', 'ghastly']) + ' ' + choose(
-        ['orcs', 'goblins', 'skeletons', 'skeletal warriors', 'demons', 'men', 'hobgoblins', 'demons', 'cyclopes',
-         'giants', 'trolls', 'knights', 'undead', 'frost giants', plural(cavespawn())])  #  TODO use plural function
+    return choose([
+        'a horde of', 'an army of', choose([
+            'one thousand', 'ten thousand', 'five hundred', 'one hundred', 'fifty', 'forty', 'thirty'
+        ])
+    ]) + ' ' + boose([
+        'angry', 'unholy', 'demonic', 'ravenous', 'ghastly'
+    ]) + ' ' + plural(choose([
+        'ogre', 'undead', 'ghast', 'skeleton', 'serpent', cavespawn(), 'demon', 'bear', 'beast', 'lion', 'wyvern', 
+        'goblin', 'orc', 'man', 'troll', 'giant', 'hobgoblin', 'lindworm', 'knight', 'worm', 'frost giant', 'dragon',
+        'cyclops', 'skeletal warrior', 'wolf', 'minotaur'
+    ]))
 
 
 def hero():

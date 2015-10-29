@@ -187,8 +187,10 @@ def capitalize(word):
 
 def plural(string):
     # makes a word plural
-    key_list = {'human': 'humans', 'ox': 'oxen', 'goose': 'geese', 'moose': 'moose', 'deer': 'deer'}
-    if string.lower() in ['human', 'ox', 'goose', 'moose', 'deer']:
+    key_list = {
+        'human': 'humans', 'ox': 'oxen', 'goose': 'geese', 'moose': 'moose', 'deer': 'deer', 'cyclops': 'cyclopes'
+    }
+    if string.lower() in key_list:
         return key_list[string.lower()]
     elif string.lower()[-3:] == 'man':
         return string[:-2] + 'en'
@@ -308,6 +310,7 @@ def word(word):
     if oldword[0] == oldword[0].upper():
         word = capitalize(word)
     return word
+
 
 def read_list(array, oxford=True):
     if len(array) == 1:
