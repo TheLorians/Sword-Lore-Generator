@@ -925,6 +925,7 @@ def wool():
 
 def clothlore():
     # provides short lore for cloth
+    # TODO use color chart
     color_chart = {'purple': ['murex']}
     lore = ''
     lore += choose(['woven', 'spun']) + ' from ' + choose(
@@ -946,6 +947,7 @@ def fabric():
 def bird():
     # this makes bird names
     """Makes Birds"""
+    # birds are made here
     genera_count = 0
 
     def bird_genus():
@@ -1191,7 +1193,7 @@ def seige():
 
 
 def gramcheck(string):
-    '''Checks for common errors/basic grammar'''
+    # Checks for common errors/basic grammar
     local_string = string
     local_string = local_string.replace(' .', '.').replace('  ', ' ').replace(',.', '.').replace('..', '.').replace(
         'the the', 'the')
@@ -1322,10 +1324,11 @@ def scuplpturelore():
     # This makes the lore for a sculpture
     pass
 
+
 def sauce():
     # This makes sauces to go on food
     # https://en.wikipedia.org/wiki/Gravy
-    meat = ['pork', 'beef', 'chicken', 'fish', 'venison', 'veal', 'mutton', 'escargo', 'rabbit', 'duck', choose(['crab', 'lobster', 'shrimp']), amphibian(), bird(), dog()]
+    meat = ['pork', 'beef', 'chicken', 'fish', 'venison', 'veal', 'mutton', 'escargot', 'rabbit', 'duck', choose(['crab', 'lobster', 'shrimp']), amphibian(), bird(), dog()]
     gravy = choose(meat + ['mushroom', 'vegetable']) + ' gravy'
     # TODO make fruit function
     fruits = ['apple', 'pineapple', 'pear', 'cranberry', 'mango', 'peach', 'plum']
@@ -1341,7 +1344,7 @@ def foodlore():
     seasoning = ['pepper', 'garlic', 'paprika', 'salt', 'seasalt', 'allspice', 'arrowroot', 'curry', 'bayleaf', 'carraway'+boose(['seeds']), 'cayene', 'chili peppers', 'red pepper flakes', 'chives', 'cilantro', 'cinamon', 'cloves', 'cumin', 'dill', 'peppercorn', 'ginger', 'juniper berries', 'mustard', 'nutmeg', 'onion', 'oregano', 'parsley', 'rosemary', 'saffron', 'thyme', 'vanilla']
     vegetable = ['potato', 'yam', 'aparagus', 'rice', 'celery', 'radish', 'pumpkin', 'apple', 'onion', 'lemon', 'pineapple', 'mushroom']
     # TODO make crustacean generator
-    meat = ['egg', 'pork', 'beef', 'chicken', 'fish', 'venison', 'veal', 'mutton', 'escargo', 'rabbit', 'duck', choose(['crab', 'lobster', 'shrimp']), amphibian(), bird(), bird()+' egg', dog()]
+    meat = ['egg', 'pork', 'beef', 'chicken', 'fish', 'venison', 'veal', 'mutton', 'escargot', 'rabbit', 'duck', choose(['crab', 'lobster', 'shrimp']), amphibian(), bird(), bird()+' egg', dog()]
     extra_sentances = [
         boose([
             ' seasoned with ' + choose([
