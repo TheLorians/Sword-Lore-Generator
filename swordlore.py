@@ -44,6 +44,18 @@ def loredmetal():
     return choose([specificmetal(), normalmetal()]) + ' mined from ' + boose(['beneath ', 'under ']) + mountain()
 
 
+def alloy():
+    #makes an alloy of two metals
+    metal1 = choose([element(), normalmetal(), specificmetal(), loredmetal()])
+    metal2 = choose([element(), normalmetal(), specificmetal(), loredmetal()])
+    return 'an alloy of ' + metal1 + ' and ' + metal2
+
+
+def metal():
+    #This combines the above functions into one function
+    return choose([element(), normalmetal(), specificmetal(), loredmetal(), alloy()])
+
+
 def professional(profession, plurality=None, dobject='none'):
     # a combination of the old professional functions.
     # It takes a type of profession and creates the name and title of a person of that profession.
@@ -928,10 +940,23 @@ def clothlore():
     # TODO use color chart
     color_chart = {'purple': ['murex']}
     lore = ''
-    lore += choose(['woven', 'spun']) + ' from ' + choose(
-        [spider() + ' silk', 'hemp', 'straw', 'grass', 'sisal', 'cotton', wool(), 'qiviut', 'silk',
-         choose([specificmetal(), normalmetal()])]) + boose(
-        [' by ' + professional('weaver')])
+    lore += choose([
+        'woven',
+        'spun'
+    ]) + ' from ' + choose([
+        spider() + ' silk',
+        'hemp',
+        'straw',
+        'grass',
+        'sisal',
+        'cotton',
+        wool(),
+        'qiviut',
+        'silk',
+        metal()
+    ]) + boose([
+        ' by ' + professional('weaver')
+    ])
     return lore
 
 
@@ -1475,18 +1500,8 @@ def swordlore():
             gocation = 'in ' + gocation
         else:
             gocation = choose(['beneath', 'under', 'below']) + ' ' + gocation[7:]
-        body_metal = choose([
-            specificmetal(),
-            normalmetal(),
-            element(),
-            loredmetal()
-        ])
-        gild_metal = choose([
-            specificmetal(),
-            normalmetal(),
-            element(),
-            loredmetal()
-        ])
+        body_metal = metal()
+        gild_metal = metal()
         tlore += commission()
         tlore += choose(['forged', 'wrought', 'cast', 'conceived'])
         if gocation in ['in fire', 'in flame', 'in darkness', 'in the shadows']:
@@ -1632,8 +1647,7 @@ def swordlore():
                     [choose([' in' + ' during']) + ' the ' + age()])
             ])
         else:
-            lore += 'A crack in the blade has been filled with ' + choose(
-                [specificmetal(), normalmetal(), element()])
+            lore += 'A crack in the blade has been filled with ' + metal()
         lore += '. '
     else:
         lore += capitalize(enscription)
