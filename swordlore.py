@@ -59,6 +59,7 @@ def metal():
 def professional(profession, plurality=None, dobject='none'):
     # a combination of the old professional functions.
     # It takes a type of profession and creates the name and title of a person of that profession.
+    # rewrite all of this
     if plurality is None:
         plurality = choose(['singular', 'plural'])
     basicsynonym = {
@@ -564,7 +565,7 @@ def council():
     # creates the name of a council
     variety = ['council', 'aldermen', 'senate', 'congress']
     place_of_origin = land()
-    return 'the' + choose([' high', ' grand', '']) + ' ' + choose(variety) + ' of ' + place_of_origin
+    return 'the' + boose([' high', ' grand']) + ' ' + choose(variety) + ' of ' + place_of_origin
 
 
 def age():
@@ -734,7 +735,12 @@ def specificgem():
     return choose(adjective) + ' ' + normalgem()
 
 
-def glass():
+def gem():
+    # makes gems from the above functions
+    return choose([normalgem(), specificgem(), element()])
+
+
+def normalglass():
     # a generator for real types of glasses
     # https://en.wikipedia.org/wiki/Category:Glass_types
     # http://www.cmog.org/article/types-glass
@@ -752,9 +758,12 @@ def glass():
 
 def specificglass():
     # makes the name of a non-real type of glass
-    # room for progress
+    # room for improvement
     return color() + ' glass'
 
+def glass():
+    # makes glass from the above functions
+    return choose([noramlglass(),specificglass()])
 
 def dog():
     # makes the name for a type of dog
@@ -1523,7 +1532,7 @@ def swordlore():
         else:
             gocation = choose(['beneath', 'under', 'below']) + ' ' + gocation[7:]
         tlore += commission()
-        tlore += 'made from ' + choose([glass(), specificglass()])
+        tlore += 'made from ' + glass()
         tlore += boose([' by ' + professional('glassmith') + ' ' + boose([gocation, time])])
         tlore += '. '
         tlore += boose([choose(['A single ' + color() + ' ' + choose(['rose', 'flower', 'feather']),
@@ -1615,7 +1624,7 @@ def swordlore():
     ]) + '. '
     if randint(0, 2) == 0:
         wrapping = fabric()
-        encrusting = choose([normalgem(), specificgem(), element()])
+        encrusting = gem()
         if randint(0, 1) == 0:
             lore += choose([
                 'Its hilt is ' + boose(['made of ' + material() + ' ']) + 'encrusted with ' + encrusting,
@@ -1640,7 +1649,7 @@ def swordlore():
         if known:
             lore += choose([
                 'A crack in the blade ' + choose(
-                    ['has been filled with ' + choose([specificmetal(), normalmetal(), element()]),
+                    ['has been filled with ' + metal(),
                      'was ' + choose(['filled', 'repaired']) + ' by ' + professional('blacksmith', dobject='sword')]),
                 'Originally destroyed ' + choose(['during', 'in']) + ' the ' + choose(
                     [age(), war()]) + ', it was repaired by ' + professional('blacksmith', dobject='sword') + boose(
