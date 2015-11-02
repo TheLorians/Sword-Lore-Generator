@@ -57,24 +57,22 @@ def metal():
 
 
 def professional(profession, plurality=None, dobject='none'):
-    # a combination of the old professional functions.
-    # It takes a type of profession and creates the name and title of a person of that profession.
-    # rewrite all of this
+    # This makes a worker of a certain profession
     if plurality is None:
-        plurality = choose(['singular', 'plural'])
-    basicsynonym = {
-        'bowyer': [
+        plurality = choose(['singular','plural'])
+    basic_synonym = [
+        [
             'bowyer'
         ],
-        'glassmith': [
+        [
             'gaffer',
             'glassmith',
             'glassblower'
         ],
-        'craftsman': [
+        [
             'craftsman'
         ],
-        'blacksmith': [
+        [
             'smith',
             'blacksmith',
             'goldsmith',
@@ -83,58 +81,50 @@ def professional(profession, plurality=None, dobject='none'):
             'silversmith',
             dobject + 'smith'
         ],
-        'wizard': [
+        [
             'wizard',
             wizardtype()
         ]
-    }
-    advanced_synonym = {}
-    for key, array in basicsynonym.iteritems():
-        for profession in array:
-            advanced_synonym.update({profession: array})
-    professional_class = ''
-
-    def single():
-        # This is a function created so I can create apprentices without creating the potential for infinite or long loops
-        # E.G. Sam the master swordsmith while apprenticed to dave the iron smith while apprenticed to Garett the blacksmith
-        # basically allow you to call it only twice
-        global professional_class
-        if profession not in advanced_synonym:
-            advanced_synonym.update({profession: [profession]})
-        professional_class = choose(advanced_synonym[profession])
-        if randint(0, 1) == 1:
-            professional_class = 'master ' + professional_class
-        name = word(capitalize(profession))
-        # RIP Akteerg the painter
-        epithettype = 'maker'
-        if profession == 'wizard': epithettype = 'wizard'
-        singular = choose([professional_class + ' ' + name, name + ' the ' + professional_class, name + ', '
-                           + epithet(epithettype)])
-        return singular
-
-    singular = single()
-    if randint(0, 1) == 0:
-        # when guilds are complete add to this
-        singular += boose([' while apprenticed to ' + single(), ' while he was an apprentice',
-                           ' while he was working to join a guild'])
+    ]
+    if any(profession not in group for group in basic_synonym):
+        basic_synonym.append([profession])
+    profession_class = choose(choose([group for group in basic_synonym if profession in group]))
+    if randint(0,1) == 0:
+        profession_class = 'master ' + profession_class
+    name = word(capitalize(profession))
+    # RIP Akteerg the painter
+    epithettype = 'maker'
+    if profession == 'wizard':
+        epithettype = 'wizard'
+    singular = choose([
+        profession_class + ' ' + name,
+        name + ' the ' + profession_class,
+        name + ', '+ epithet(epithettype)
+    ])
+    # TODO add aprenticeships
     if plurality == 'singular':
         return singular
-    else:
-        professional_class = choose(advanced_synonym[profession])
-        template = choose(
-            ['the # & of @', 'the & of @', 'the last great & of @', 'the first great & of @', '# & from @', '& from @',
-             'the ' + choose(['disciples', 'followers', 'apprentices']) + ' of ' + singular])
-        professional_class = choose([
-            choose(['dwarf', 'elf', 'man', 'gnome'] + advanced_synonym[profession]),
-            choose(['dwarven', 'elven', 'human', 'gnomish']) + ' ' + professional_class
-        ])
-        if professional_class.split(' ')[0] not in ['dwarf', 'elf', 'man', 'gnome', 'dwarven', 'elven', 'human',
-                                                    'gnomish'] and randint(0, 1) == 1:
-            professional_class = 'master ' + professional_class
-        temp = template.replace('#', str(randint(2, 9)))
-        temp = temp.replace('&', plural(professional_class))
-        temp = temp.replace('@', capitalize(word('place')))
-        return temp
+    template = choose([
+        'the # & of @',
+        'the & of @',
+        'the last great & of @',
+        'the first great & of @',
+        '# & from @',
+        '& from @',
+        'the ' + choose([
+            'disciples',
+            'followers',
+            'apprentices'
+        ]) + ' of ' + singular
+    ])
+    professional_class = choose([
+        choose(['dwarf', 'elf', 'man', 'gnome']),
+        choose(['dwarven', 'elven', 'human', 'gnomish']) + ' ' + profession_class
+    ])
+    temp = template.replace('#', str(randint(2, 9)))
+    temp = temp.replace('&', plural(professional_class))
+    temp = temp.replace('@', capitalize(word('place')))
+    return temp
 
 
 def mountain():
@@ -1827,14 +1817,14 @@ def print_as_sentences(lore):
 
 # Body~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 if __name__ == '__main__':
-    seed(142747)
+    seed(142755)
     print swordlore()
     print 
     print foodlore()
     print 
-    for x in range(0,30):
-        print clothlore()
-        print
+    for x in ['blacksmith','glassblower','weaver','hunter','wizard']:
+        for y in ['singular','plural']:
+            print professional(x, y, 'sword')
     # print
     # seed(30)
     # print(loredmetal())
