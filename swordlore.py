@@ -941,13 +941,130 @@ def stringthing():
 def wool():
     # This makes types of wool
     # Possibly room for improvement
-    return boose(['sheep', 'alpaca', 'llama']) + ' ' + choose(['wool', 'cashmere'])
+    return boose(['sheep', 'alpaca', 'llama', 'churro']) + ' ' + choose(['wool', 'cashmere'])
 
+
+def dye(coloration=None):
+    # this creates a natural dye mixture for a given color
+    # add black, brown, grey, and white
+    # http://pioneerthinking.com/crafts/natural-dyes
+    # https://en.wikipedia.org/wiki/Natural_dye#Greys_and_blacks
+    if coloration == None:
+        coloration = choose(['red','orange','yellow','green','blue','purple','brown'])
+    color_sources = {
+            'purple': [
+                'murex',
+                'mulberries',
+                'elderberries',
+                'red cedar roots',
+                'black berries'
+                ],
+            'orange': [
+                'alder bark',
+                'madder',
+                'juniper',
+                'king bolete',
+                'chicken mushroom',
+                'chicken of the woods',
+                'sulphur shelf',
+                'barberry',
+                'bloodroot',
+                'butternut tree bark',
+                'carrot',
+                'eucalyptus',
+                'giant coreopsis',
+                'lichen',
+                'lilac',
+                'onion',
+                'tumeric',
+                'dyer\'s polypore cooked with ammonia'
+                ],
+            'red': [
+                'fermented prickly pears',
+                'sumac',
+                'cochineal',
+                'lobster mushroom',
+                'giant puffball',
+                'sycamore bark',
+                'bedstraw root'
+                'pokeweed perries',
+                'dyer\'s madder',
+                'dyer\'s polypore cooked with ammonia in an iron pot'
+            ],
+            'blue': [
+                'indigo',
+                'woad',
+                'dogwood bark',
+                'dyer\'s knotweed'
+            ],
+            'green': [
+                'algae',
+                'lichen',
+                'horse mushroom',
+                'meadow mushroom',
+                'shaggy mane',
+                'oyster mushroom',
+                'blewit',
+                'green foxglove',
+                'red pine needles',
+                'dyer\'s polypore cooked with ammonia in a copper pot'
+            ],
+            'yellow': [
+                'alfalfa seeds',
+                'chanterelle',
+                'saffron',
+                'weld',
+                'pomegranate rind',
+                'turmeric',
+                'safflower',
+                'quercitron',
+                'waxen woad',
+                'larkspur',
+                'old fustic',
+                'young fustic',
+                'maitake',
+                'dyer\'s mulberry',
+                'dyer\'s greenweed',
+                'dyer\'s broom',
+                'dyer\'s whin',
+                'dyer\'s polypore cooked with salt water'
+            ],
+            'brown': [
+                'artist\'s conk',
+                'reishi mushroom',
+                'boiled acorn',
+                'beetroot',
+                'birch bark',
+                'broom bark',
+                'broom sedge',
+                'coffee grinds',
+                'coneflower',
+                'goldenrod shoots',
+                'oak bark',
+                'walnut'
+            ],
+            'black': [
+                'ink',
+                'iris',
+                'oak galls'
+            ]
+        }
+    color_chart = {
+        'purple': [['red', 'blue']],
+        'orange': [['red', 'yellow']],
+        'green' : [['blue', 'yellow']],
+        'brown' : [['orange', 'black'], ['yellow', 'red', 'black']]
+    }
+    if coloration in color_chart:
+        color_mix = choose(color_chart[coloration])
+    else:
+        color_mix = [coloration]
+    ingredients = map(lambda x: choose(color_sources[x]), color_mix)
+    return read_list(ingredients)
 
 def clothlore():
     # provides short lore for cloth
-    # TODO use color chart
-    color_chart = {'purple': ['murex']}
+    coloration = choose(['red','orange','yellow','green','blue','purple','brown'])
     lore = ''
     lore += choose([
         'woven',
@@ -964,8 +1081,10 @@ def clothlore():
         'silk',
         metal()
     ]) + boose([
-        ' by ' + professional('weaver')
-    ])
+            ' by ' + professional('weaver')
+        ]) + boose([
+            ' and dyed ' + coloration + ' with ' + dye(coloration)
+        ])
     return lore
 
 
@@ -1712,6 +1831,10 @@ if __name__ == '__main__':
     print swordlore()
     print 
     print foodlore()
+    print 
+    for x in range(0,30):
+        print clothlore()
+        print
     # print
     # seed(30)
     # print(loredmetal())

@@ -313,6 +313,11 @@ def word(word):
 
 
 def read_list(array, oxford=True):
+    array = list(array)
+    while '' in array:
+        array.remove('')
+    if len(array) == 2:
+        oxford = False
     if len(array) == 1:
         return array[0]
     elif len(array) == 0:
