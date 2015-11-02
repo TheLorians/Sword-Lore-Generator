@@ -763,7 +763,7 @@ def specificglass():
 
 def glass():
     # makes glass from the above functions
-    return choose([noramlglass(),specificglass()])
+    return choose([normalglass(),specificglass()])
 
 def dog():
     # makes the name for a type of dog
