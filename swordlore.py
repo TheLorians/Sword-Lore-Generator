@@ -1675,7 +1675,6 @@ def swordlore():
         return tlore
 
     def giftsword():
-        tlore = ''
         tlore = 'It was '
         tlore += choose(['given to ', 'gifted to ', 'presented to '])
         tlore += hero()
@@ -1690,11 +1689,10 @@ def swordlore():
         return tlore
 
     def craftsword(time):
-        tlore = ''
         tlore = 'It was '
         tlore += choose(['painstakingly ', 'meticulously ', ''])
         tlore += choose(['carved', 'crafted'])
-        tlore += ' from one solid piece of '
+        tlore += ' from ' + boose(['one ' + boose(['solid']) + 'piece of '])
         tlore += choose([biomaterial('large')])
         tlore += boose([' by ' + professional('craftsman')])
         tlore += boose([' ' + time])
@@ -1702,8 +1700,7 @@ def swordlore():
         return tlore
 
     def unknownsword():
-        tlore = 'The sword is '
-        tlore += 'of '
+        tlore = 'The sword is of '
         tlore += choose([
             choose([
                 'dwarven',
@@ -1732,9 +1729,14 @@ def swordlore():
     def warsword():
         pass
 
-    lore += choose(
-        [glasssword(gocation, time), wroughtsword(gocation, time), giftsword(), craftsword(time), unknownsword(),
-         strangesword()])
+    lore += choose([
+        glasssword(gocation, time),
+        wroughtsword(gocation, time),
+        giftsword(),
+        craftsword(time),
+        unknownsword(),
+        strangesword()
+    ])
     if lore[:3] == 'The':
         known = False
     enscription = ' ' + boose([
