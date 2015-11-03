@@ -62,9 +62,6 @@ def professional(profession, plurality=None, dobject='none'):
         plurality = choose(['singular','plural'])
     basic_synonym = [
         [
-            'bowyer'
-        ],
-        [
             'gaffer',
             'glassmith',
             'glassblower'
@@ -84,6 +81,10 @@ def professional(profession, plurality=None, dobject='none'):
         [
             'wizard',
             wizardtype()
+        ],
+        [
+            'hunter',
+            dobject + ' hunter'
         ]
     ]
     if any(profession not in group for group in basic_synonym):
@@ -611,6 +612,28 @@ def age():
                 'dwarf',
                 cavespawn()
             ]))
+        ]),
+        choose([
+            'early',
+            'mid',
+            'late'
+        ]) + ' ' + choose([ #TODO make this a function
+            '1st',
+            '2nd',
+            '3rd',
+            '4th',
+            '5th',
+            '6th',
+            '7th',
+            '8th',
+            '9th',
+            '10th',
+            '11th',
+            '12th',
+            '13th',
+            '14th',
+            '15th',
+            '16th'
         ])
     ])
     return time.title()
@@ -904,7 +927,7 @@ def carving(epithets=True):
             'dogs',
             plural(dog()),
             'a ' + dog(),
-            professional('hunter')
+            professional('hunter', prey)
         ]) + ' ' + choose([
             'hunting',
             'chasing'
@@ -1681,10 +1704,24 @@ def swordlore():
     def unknownsword():
         tlore = 'The sword is '
         tlore += 'of '
-        tlore += choose(
-            [choose(['dwarven', 'elvish', 'goblin', cavespawn()]), 'unknown', land('demonym')])
+        tlore += choose([
+            choose([
+                'dwarven',
+                'elvish',
+                'goblin',
+                cavespawn()
+            ]),
+            'unknown',
+            land('demonym')
+        ])
         tlore += ' origin. '
-        return choose(['The sword is ' + land('demonym') + '. ', tlore])
+        return choose([
+            'The sword is ' + choose([
+                land('demonym'),
+                'made in the style of ' + land('demonym') + ' swords from the ' + age()
+            ]) + '. ',
+            tlore
+        ])
 
     def strangesword():
         tlore = ''
@@ -1795,37 +1832,28 @@ def print_as_sentences(lore):
 
 # ASCII art~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 '''
-   ▄████████  ▄█     █▄   ▄██████▄     ▄████████ ████████▄        ▄█        ▄██████▄     ▄████████    ▄████████
-  ███    ███ ███     ███ ███    ███   ███    ███ ███   ▀███      ███       ███    ███   ███    ███   ███    ███
-  ███    █▀  ███     ███ ███    ███   ███    ███ ███    ███      ███       ███    ███   ███    ███   ███    █▀
-  ███        ███     ███ ███    ███  ▄███▄▄▄▄██▀ ███    ███      ███       ███    ███  ▄███▄▄▄▄██▀  ▄███▄▄▄
-▀███████████ ███     ███ ███    ███ ▀▀███▀▀▀▀▀   ███    ███      ███       ███    ███ ▀▀███▀▀▀▀▀   ▀▀███▀▀▀
-         ███ ███     ███ ███    ███ ▀███████████ ███    ███      ███       ███    ███ ▀███████████   ███    █▄
-   ▄█    ███ ███ ▄█▄ ███ ███    ███   ███    ███ ███   ▄███      ███▌    ▄ ███    ███   ███    ███   ███    ███
- ▄████████▀   ▀███▀███▀   ▀██████▀    ███    ███ ████████▀       █████▄▄██  ▀██████▀    ███    ███   ██████████
-                                      ███    ███                 ▀                      ███    ███
-                 █
-                ██
-                ██
-                ████████████████████████████████████████████████████████████████████
-       ████████████████████████                                             █████████████
-                █████████████████████████████████████████████████████████████████████
-                ██
-                ██
-                 █
+
+           █▀
+      ▄███ █ ██   ▄█      █▄   ▄██████▄     ▄████████ ████████▄        ▄█        ▄██████▄     ▄████████    ▄████████
+      ███ ██ █▀█  ▀▀▀     ███ ███    ▀▀▀   ███    ███ ███   ▀▀▀▀      ███       ▀▀▀    ███   ███    ▀▀▀   ▀██    ███
+ ▄    ███ ▀▀ ▀▀ ▄████████ ███ ███ ████████ ███ ██ ███ ███ ███████████ ███ ████████████ ███ █ ███ █████████▄▄▄     ▀█
+ ████ ▀████████▄ ██████▄▄ ███ ███ ▄▄▄▄▄▄▄ ▄███▄▄▄▄██▀ ███ ▄▄▄▄▄▄▄▄▄▄▄ ███ ▄▄▄▄▄▄▄▄▄▄▄▄ ███ ▄ ███ ▄▄▄████████████▀
+ ▀        ▄▄ ███ ████████ ███ ███ ██████ ▀▀███▀▀▀▀▀ ▀ ███ ███████████ ███ ████████████ ███ █ ███ ██████████▀▀▀
+          ██ ███  ▄▄▄     ███ ███    ▄▄▄ ▀███████████ ███    ▄▄▄      ███       ▄▄▄    ███  ▄███▄▄▄▄▄▄    ▄▄▄    █▄
+        ▄▄ █ ███  ███ ▄█▄ ███ ███    ███   ███    ███ ███   ▄███      ███▌    ▄ ███    ███ ▀▀███▀▀▀▀▀     ███    ███
+    ▄▄████ █▄ █▀   ▀███▀███▀   ▀██████▀    ███    ███ ████████▀       █████▄▄██  ▀██████▀  ▀██████████▄   ██████████
+                                           ███    ███                 ▀                      ███    ███
+                                             ▀      ▀                                        ▀██    ███
+                                                                                               ▀    ▀██
+                                                                                                      ▀
 '''
 
 # Body~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 if __name__ == '__main__':
-    seed(142755)
+    seed(142764)
     print swordlore()
     print 
     print foodlore()
-    print 
-    for x in ['blacksmith','glassblower','weaver','hunter','wizard']:
-        for y in ['singular','plural']:
-            print professional(x, y, 'sword')
-    # print
     # seed(30)
     # print(loredmetal())
     # print
