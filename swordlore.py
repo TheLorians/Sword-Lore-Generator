@@ -48,24 +48,32 @@ def loredmetal():
     return choose([specificmetal(), normalmetal()]) + ' mined from ' + boose(['beneath ', 'under ']) + mountain()
 
 
+def alloy():
+    #makes an alloy of two metals
+    metal1 = choose([element(), normalmetal(), specificmetal(), loredmetal()])
+    metal2 = choose([element(), normalmetal(), specificmetal(), loredmetal()])
+    return 'an alloy of ' + metal1 + ' and ' + metal2
+
+
+def metal():
+    #This combines the above functions into one function
+    return choose([element(), normalmetal(), specificmetal(), loredmetal(), alloy()])
+
+
 def professional(profession, plurality=None, dobject='none'):
-    # a combination of the old professional functions.
-    # It takes a type of profession and creates the name and title of a person of that profession.
+    # This makes a worker of a certain profession
     if plurality is None:
-        plurality = choose(['singular', 'plural'])
-    basicsynonym = {
-        'bowyer': [
-            'bowyer'
-        ],
-        'glassmith': [
+        plurality = choose(['singular','plural'])
+    basic_synonym = [
+        [
             'gaffer',
             'glassmith',
             'glassblower'
         ],
-        'craftsman': [
+        [
             'craftsman'
         ],
-        'blacksmith': [
+        [
             'smith',
             'blacksmith',
             'goldsmith',
@@ -74,59 +82,54 @@ def professional(profession, plurality=None, dobject='none'):
             'silversmith',
             dobject + 'smith'
         ],
-        'wizard': [
+        [
             'wizard',
             wizardtype()
+        ],
+        [
+            'hunter',
+            dobject + ' hunter'
         ]
-    }
-    advanced_synonym = {}
-    for key, array in basicsynonym.iteritems():
-        for profession in array:
-            advanced_synonym.update({profession: array})
-    professional_class = ''
-
-    def single():
-        # This is a function created so I can create apprentices without creating the potential for infinite or long loops
-        # E.G. Sam the master swordsmith while apprenticed to dave the iron smith while apprenticed to Garett the blacksmith
-        # basically allow you to call it only twice
-        global professional_class
-        if profession not in advanced_synonym:
-            advanced_synonym.update({profession: [profession]})
-        professional_class = choose(advanced_synonym[profession])
-        if randint(0, 1) == 1:
-            professional_class = 'master ' + professional_class
-        name = word(capitalize(profession))
-        # RIP Akteerg the painter
-        epithettype = 'maker'
-        if profession == 'wizard':
-            epithettype = 'wizard'
-        singular = choose([professional_class + ' ' + name, name + ' the ' +
-                           professional_class, name + ', ' + epithet(epithettype)])
-        return singular
-
-    singular = single()
-    if randint(0, 1) == 0:
-        # when guilds are complete add to this
-        singular += boose([' while apprenticed to ' + single(), ' while he was an apprentice',
-                           ' while he was working to join a guild'])
+    ]
+    if any(profession not in group for group in basic_synonym):
+        basic_synonym.append([profession])
+    profession_class = choose(choose([group for group in basic_synonym if profession in group]))
+    if randint(0,1) == 0:
+        profession_class = 'master ' + profession_class
+    name = word(capitalize(profession))
+    # RIP Akteerg the painter
+    epithettype = 'maker'
+    if profession == 'wizard':
+        epithettype = 'wizard'
+    singular = choose([
+        profession_class + ' ' + name,
+        name + ' the ' + profession_class,
+        name + ', '+ epithet(epithettype)
+    ])
+    # TODO add aprenticeships
     if plurality == 'singular':
         return singular
-    else:
-        professional_class = choose(advanced_synonym[profession])
-        template = choose(
-            ['the # & of @', 'the & of @', 'the last great & of @', 'the first great & of @', '# & from @', '& from @',
-             'the ' + choose(['disciples', 'followers', 'apprentices']) + ' of ' + singular])
-        professional_class = choose([
-            choose(['dwarf', 'elf', 'man', 'gnome'] + advanced_synonym[profession]),
-            choose(['dwarven', 'elven', 'human', 'gnomish']) + ' ' + professional_class
-        ])
-        if professional_class.split(' ')[0] not in ['dwarf', 'elf', 'man', 'gnome', 'dwarven', 'elven', 'human',
-                                                    'gnomish'] and randint(0, 1) == 1:
-            professional_class = 'master ' + professional_class
-        temp = template.replace('#', str(randint(2, 9)))
-        temp = temp.replace('&', plural(professional_class))
-        temp = temp.replace('@', capitalize(word('place')))
-        return temp
+    template = choose([
+        'the # & of @',
+        'the & of @',
+        'the last great & of @',
+        'the first great & of @',
+        '# & from @',
+        '& from @',
+        'the ' + choose([
+            'disciples',
+            'followers',
+            'apprentices'
+        ]) + ' of ' + singular
+    ])
+    professional_class = choose([
+        choose(['dwarf', 'elf', 'man', 'gnome']),
+        choose(['dwarven', 'elven', 'human', 'gnomish']) + ' ' + profession_class
+    ])
+    temp = template.replace('#', str(randint(2, 9)))
+    temp = temp.replace('&', plural(professional_class))
+    temp = temp.replace('@', capitalize(word('place')))
+    return temp
 
 
 def mountain():
@@ -348,15 +351,26 @@ def epithet(dobject, gender='male'):
         ]).replace('  ', ' ')
     elif dobject == 'hero':
         # room for improvement
-        epithet_name = choose(['the ' + choose(
-            ['brave', 'strong', 'great', 'stoic', 'elder', 'younger', 'tall', 'short', 'powerful', 'adored', 'ox',
-             'boar', 'bull', 'mountain', 'rock', 'stoic', 'wise', 'peaceful', 'calm', 'fast', 'bear', 'wolf', 'fox',
-             'lion', 'thirsty', 'hungry', 'tired', 'gentle', 'giant', 'last', 'holy', 'divine', 'fearless', 'steadfast',
-             'enlightened', 'exalted']), choose(['lion', 'bear', 'wolf', 'kind', 'soft']) + '-hearted',
-                               genpronoun + ' of ' + word('Father'), choose(
-                ['dragon', 'minotaur', 'cyclops', 'ogre', 'ghast', 'beast', 'serpent', 'wolf', 'lion', 'bear', 'wyvern',
-                 'worm', 'lindworm', cavespawn(), choose(['the ', '']) + dragon()]) + ' ' + choose(
-                ['slayer', 'killer'])])
+        epithet_name = choose([
+            'the ' + choose([
+                'brave', 'strong', 'great', 'stoic', 'elder', 'younger', 'tall', 'short', 'powerful', 'adored', 'ox',
+                'boar', 'bull', 'mountain', 'rock', 'stoic', 'wise', 'peaceful', 'calm', 'fast', 'bear', 'wolf', 
+                'fox','lion', 'thirsty', 'hungry', 'tired', 'gentle', 'giant', 'last', 'holy', 'divine', 'fearless', 
+                'steadfast','enlightened', 'exalted'
+            ]),
+            choose([
+                'lion', 'bear', 'wolf', 'kind', 'soft'
+            ]) + '-hearted',genpronoun + ' of ' + word('Father'),
+            choose([
+                'ogre', 'undead', 'ghast', 'skeleton', 'serpent', cavespawn(), 'demon', 'bear', 'beast', 'lion', 
+                'wyvern', 'goblin', 'orc', 'man', 'troll', 'giant', 'hobgoblin', 'lindworm', 'knight', 'worm', 
+                'frost giant', 'dragon', 'cyclops', 'skeletal warrior', 'wolf', 'minotaur', choose(['the ', '']) + 
+                dragon()
+                ]) + ' ' + choose(['slayer', 'killer']),
+            'bane of '+plural(choose([
+                'ogre', 'undead', 'ghast', 'skeleton', 'serpent', cavespawn(), 'demon', 'bear', 'beast', 'lion', 'wyvern', 'goblin', 'orc', 'man', 'troll', 'giant', 'hobgoblin', 'lindworm', 'knight', 'worm', 'frost giant', 'dragon', 'cyclops', 'skeletal warrior', 'wolf', 'minotaur', 'arthropod'
+            ]))
+        ])
     elif dobject == 'noble':
         # room for improvement
         romannumeral = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X']
@@ -423,11 +437,17 @@ def beast():
 
 
 def horde():
-    return choose(['a horde of', 'an army of', choose(
-        ['one thousand', 'ten thousand', 'five hundred', 'one hundred', 'fifty', 'forty', 'thirty'])]) + ' ' + boose(
-        ['angry', 'unholy', 'demonic', 'ravenous', 'ghastly']) + ' ' + choose(
-        ['orcs', 'goblins', 'skeletons', 'skeletal warriors', 'demons', 'men', 'hobgoblins', 'demons', 'cyclopes',
-         'giants', 'trolls', 'knights', 'undead', 'frost giants', plural(cavespawn())])  # TODO use plural function
+    return choose([
+        'a horde of', 'an army of', choose([
+            'one thousand', 'ten thousand', 'five hundred', 'one hundred', 'fifty', 'forty', 'thirty'
+        ])
+    ]) + ' ' + boose([
+        'angry', 'unholy', 'demonic', 'ravenous', 'ghastly'
+    ]) + ' ' + plural(choose([
+        'ogre', 'undead', 'ghast', 'skeleton', 'serpent', cavespawn(), 'demon', 'bear', 'beast', 'lion', 'wyvern', 
+        'goblin', 'orc', 'man', 'troll', 'giant', 'hobgoblin', 'lindworm', 'knight', 'worm', 'frost giant', 'dragon',
+        'cyclops', 'skeletal warrior', 'wolf', 'minotaur'
+    ]))
 
 
 def hero():
@@ -540,7 +560,7 @@ def council():
     # creates the name of a council
     variety = ['council', 'aldermen', 'senate', 'congress']
     place_of_origin = land()
-    return 'the' + choose([' high', ' grand', '']) + ' ' + choose(variety) + ' of ' + place_of_origin
+    return 'the' + boose([' high', ' grand']) + ' ' + choose(variety) + ' of ' + place_of_origin
 
 
 def age():
@@ -596,6 +616,28 @@ def age():
                 'dwarf',
                 cavespawn()
             ]))
+        ]),
+        choose([
+            'early',
+            'mid',
+            'late'
+        ]) + ' ' + choose([ #TODO make this a function
+            '1st',
+            '2nd',
+            '3rd',
+            '4th',
+            '5th',
+            '6th',
+            '7th',
+            '8th',
+            '9th',
+            '10th',
+            '11th',
+            '12th',
+            '13th',
+            '14th',
+            '15th',
+            '16th'
         ])
     ])
     return time.title()
@@ -710,7 +752,12 @@ def specificgem():
     return choose(adjective) + ' ' + normalgem()
 
 
-def glass():
+def gem():
+    # makes gems from the above functions
+    return choose([normalgem(), specificgem(), element()])
+
+
+def normalglass():
     # a generator for real types of glasses
     # https://en.wikipedia.org/wiki/Category:Glass_types
     # http://www.cmog.org/article/types-glass
@@ -728,9 +775,12 @@ def glass():
 
 def specificglass():
     # makes the name of a non-real type of glass
-    # room for progress
+    # room for improvement
     return color() + ' glass'
 
+def glass():
+    # makes glass from the above functions
+    return choose([normalglass(),specificglass()])
 
 def dog():
     # makes the name for a type of dog
@@ -824,26 +874,14 @@ def war():
     ])
 
 
-def salamander():
-    # makes salamanders
-    # http://www.californiaherps.com/allsalamanders.html
-    # THIS GENERATOR IS NOW OBSOLETE
-    # (no longer in use not actually obsolete)
-    # See amphibian instead
-    bodyadject = ['long', 'short', 'slender', color()]
-    bodypart = ['toed', 'legged', 'tailed']
-    adject = ['western', 'southern', 'eastern', 'northern', 'spotted', 'lesser', 'greater', land('demonym')]
-    denom = ['Tiger', 'cloud', 'aboreal', 'wandering', 'mountain', 'garden', 'alpine', 'desert', 'river', 'brook',
-             'spring', 'dusky', 'pygmy', 'giant', 'slimy']
-    return choose([choose(bodyadject) + '-' + choose(bodypart), choose(adject)]) + ' ' + boose(denom) + choose(
-        ['salamander', 'newt', 'eft', 'olm'])
-
-
-def amphibian():
+def amphibian(genus=None):
     # makes amphibians
     # https://en.wikipedia.org/wiki/List_of_amphibians_of_Europe
     # http://www.californiaherps.com/allsalamanders.
     # http://www.californiaherps.com/allfrogs.html
+    if genus is None:
+        genus = choose(['frog', 'salamander', 'toad', 'newt', 'spadefoot', 'bullfrog', 'eft', 'olm', 'axolotl',
+                         'treefrog'])
     bodymodifier = ['long', 'feather', 'star', 'greater', 'fire', 'straight', 'flame', 'stripe', 'curved', 'hammer',
                     'thick', 'thin', 'slender', 'round']
     bodypart = ['legged', 'headed', 'bellied', 'kneed', 'toed', 'footed', 'backed', 'mouth', 'shouldered']
@@ -854,7 +892,7 @@ def amphibian():
          'dusky', 'pygmy', 'giant', 'slimy', 'boreal', 'spectal', 'king', 'queen', 'leopard', 'chorus', 'clawed'])
     genera = ['frog', 'salamander', 'toad', 'newt', 'spadefoot', 'bullfrog', 'eft', 'olm', 'axolotl', 'treefrog']
     subvar = choose([subvar, pattern()])
-    tempor = choose(['$', '%', '&', '$ %', '$ &', '% &', '$ % &']) + ' ' + choose(genera)
+    tempor = choose(['$', '%', '&', '$ %', '$ &', '% &', '$ % &']) + ' ' + genus
     return tempor.replace('$', color()).replace('%', land('demonym')).replace('&', subvar)
 
 
@@ -881,7 +919,7 @@ def carving(epithets=True):
             'dogs',
             plural(dog()),
             'a ' + dog(),
-            professional('hunter')
+            professional('hunter', prey)
         ]) + ' ' + choose([
             'hunting',
             'chasing'
@@ -908,17 +946,150 @@ def stringthing():
 def wool():
     # This makes types of wool
     # Possibly room for improvement
-    return boose(['sheep', 'alpaca', 'llama']) + ' ' + choose(['wool', 'cashmere'])
+    return boose(['sheep', 'alpaca', 'llama', 'churro']) + ' ' + choose(['wool', 'cashmere'])
 
+
+def dye(coloration=None):
+    # this creates a natural dye mixture for a given color
+    # add black, brown, grey, and white
+    # http://pioneerthinking.com/crafts/natural-dyes
+    # https://en.wikipedia.org/wiki/Natural_dye#Greys_and_blacks
+    if coloration == None:
+        coloration = choose(['red','orange','yellow','green','blue','purple','brown'])
+    color_sources = {
+            'purple': [
+                'murex',
+                'mulberries',
+                'elderberries',
+                'red cedar roots',
+                'black berries'
+                ],
+            'orange': [
+                'alder bark',
+                'madder',
+                'juniper',
+                'king bolete',
+                'chicken mushroom',
+                'chicken of the woods',
+                'sulphur shelf',
+                'barberry',
+                'bloodroot',
+                'butternut tree bark',
+                'carrot',
+                'eucalyptus',
+                'giant coreopsis',
+                'lichen',
+                'lilac',
+                'onion',
+                'tumeric',
+                'dyer\'s polypore cooked with ammonia'
+                ],
+            'red': [
+                'fermented prickly pears',
+                'sumac',
+                'cochineal',
+                'lobster mushroom',
+                'giant puffball',
+                'sycamore bark',
+                'bedstraw root'
+                'pokeweed perries',
+                'dyer\'s madder',
+                'dyer\'s polypore cooked with ammonia in an iron pot'
+            ],
+            'blue': [
+                'indigo',
+                'woad',
+                'dogwood bark',
+                'dyer\'s knotweed'
+            ],
+            'green': [
+                'algae',
+                'lichen',
+                'horse mushroom',
+                'meadow mushroom',
+                'shaggy mane',
+                'oyster mushroom',
+                'blewit',
+                'green foxglove',
+                'red pine needles',
+                'dyer\'s polypore cooked with ammonia in a copper pot'
+            ],
+            'yellow': [
+                'alfalfa seeds',
+                'chanterelle',
+                'saffron',
+                'weld',
+                'pomegranate rind',
+                'turmeric',
+                'safflower',
+                'quercitron',
+                'waxen woad',
+                'larkspur',
+                'old fustic',
+                'young fustic',
+                'maitake',
+                'dyer\'s mulberry',
+                'dyer\'s greenweed',
+                'dyer\'s broom',
+                'dyer\'s whin',
+                'dyer\'s polypore cooked with salt water'
+            ],
+            'brown': [
+                'artist\'s conk',
+                'reishi mushroom',
+                'boiled acorn',
+                'beetroot',
+                'birch bark',
+                'broom bark',
+                'broom sedge',
+                'coffee grinds',
+                'coneflower',
+                'goldenrod shoots',
+                'oak bark',
+                'walnut'
+            ],
+            'black': [
+                'ink',
+                'iris',
+                'oak galls'
+            ]
+        }
+    color_chart = {
+        'purple': [['red', 'blue']],
+        'orange': [['red', 'yellow']],
+        'green' : [['blue', 'yellow']],
+        'brown' : [['orange', 'black'], ['yellow', 'red', 'black']]
+    }
+    if coloration in color_chart:
+        color_mix = choose(color_chart[coloration])
+    else:
+        color_mix = [coloration]
+    ingredients = map(lambda x: choose(color_sources[x]), color_mix)
+    return read_list(ingredients)
 
 def clothlore():
     # provides short lore for cloth
-    color_chart = {'purple': ['murex']}
+    coloration = choose(['red','orange','yellow','green','blue','purple','brown'])
     lore = ''
-    lore += choose(['woven', 'spun']) + ' from ' + choose(
-        [spider() + ' silk', 'hemp', 'straw', 'grass', 'sisal', 'cotton', wool(), 'qiviut', 'silk',
-         choose([specificmetal(), normalmetal()])]) + boose(
-        [' by ' + professional('weaver')])
+    lore += choose([
+        'woven',
+        'spun'
+    ]) + ' from ' + choose([
+        spider() + ' silk',
+        'hemp',
+        'straw',
+        'grass',
+        'sisal',
+        'cotton',
+        wool(),
+        'qiviut',
+        'silk',
+        metal()
+    ]) + boose([
+            ' by ' + professional('weaver')
+        ]) + boose([
+            ' and dyed ' + coloration + ' with ' + dye(coloration)
+        ])
     return lore
 
 
@@ -934,6 +1105,7 @@ def fabric():
 def bird():
     # this makes bird names
     """Makes Birds"""
+    # birds are made here
     genera_count = 0
 
     def bird_genus():
@@ -1180,7 +1352,7 @@ def seige():
 
 
 def gramcheck(string):
-    '''Checks for common errors/basic grammar'''
+    # Checks for common errors/basic grammar
     local_string = string
     local_string = local_string.replace(' .', '.').replace('  ', ' ').replace(',.', '.').replace('..', '.').replace(
         'the the', 'the')
@@ -1311,15 +1483,54 @@ def scuplpturelore():
     # This makes the lore for a sculpture
     pass
 
+
 def sauce():
     # This makes sauces to go on food
     # https://en.wikipedia.org/wiki/Gravy
-    meat = ['pork', 'beef', 'chicken', 'fish', 'venison', 'veal', 'mutton', 'escargo', 'rabbit', 'duck', choose(['crab', 'lobster', 'shrimp']), amphibian(), bird(), dog()]
+    meat = ['pork', 'beef', 'chicken', 'fish', 'venison', 'veal', 'mutton', 'escargot', 'rabbit', 'duck', choose(['crab', 'lobster', 'shrimp']), amphibian(), bird(), dog()]
     gravy = choose(meat + ['mushroom', 'vegetable']) + ' gravy'
     # TODO make fruit function
     fruits = ['apple', 'pineapple', 'pear', 'cranberry', 'mango', 'peach', 'plum']
     defaults = ['duck sauce','tomato sauce', 'mushroom sauce', choose(fruits)+' sauce']
     return choose([gravy, choose(defaults)])
+
+
+def tavern():
+    # Makes the names of taverns
+    def tavern_synonym():
+        descriptor = ['tap', 'grog', 'mead', 'ale', 'lager', 'stout', 'malt']
+        place = ['room', 'house', 'shop', 'hall']
+        return choose(descriptor) + choose(place)
+    person_adj = ['drunken', 'sleeping', 'wandering', 'lost', 'crying', 'greedy', 'jolly', 'cheerful', 'happy', 'sly', 'old', 'charming', 'lazy', 'hungry', 'thirsty', 'laughing', 'dancing', 'singing', 'friendly', 'poor', 'rich', 'one-eyed', 'three-eyed']
+    person = ['fool', 'king', 'priest', 'monk', 'maiden', 'barmaid', 'bartender', 'barkeep' 'robber', 'thief', 'minister', 'angel', 'traveler', 'trader', 'scribe', 'bard', 'dwarf', 'elf', 'gnome', 'goblin', 'woad', 'leprechaun', 'sheperd', 'ghost', 'hermit', 'companion', 'wizard', cavespawn()]
+    tavern_synonyms = ['tavern', 'pub', 'bar', 'meadhall', 'inn', 'barroom', 'alehouse']
+    thing_adj = ['golden', 'brass', 'glass', 'ivory', 'iron', 'seeing', 'cursed', 'shaking', 'burning', 'poisoned', 'magic', 'fiery', 'rotten', 'lucky', color()]
+    thing = ['hand', 'foot', 'toad', 'frog', 'mushroom', 'toadstool', 'bone', 'salamander', 'apple', 'eye', 'barstool', 'mug', str(choose(range(1,16)+['cue']))+'-ball']
+    building_adj = ['golden', 'brass', 'glass', 'ivory', 'iron', 'crooked', 'crumbling', 'shady', 'burning', 'old', color()]
+    building = ['tower', 'wall', 'castle', 'church', 'well', tavern_synonym()]
+    return choose([
+        'the ' + choose(person_adj) + ' ' + choose(person),
+        'the ' + choose(person) + '\'s ' + choose([
+            choose(tavern_synonyms),
+            tavern_synonym()
+        ]),
+        'the ' + choose([
+            choose(thing_adj),
+            choose(person) + '\'s'
+        ]) + ' ' + choose(thing),
+        'the ' + choose([
+            choose(building_adj),
+            choose(person)+'\'s'
+        ]) + ' ' + choose(building),
+        'the ' + choose([
+            choose(tavern_synonyms),
+            tavern_synonym()
+        ]) + choose([
+            ' on ' + location('hill'),
+            ' over ' + location(choose(['river', 'ravine', 'canyon'])),
+            ' in ' + location(choose(['valley', 'forest', 'woods']))
+        ])
+    ])
 
 
 def foodlore():
@@ -1330,7 +1541,7 @@ def foodlore():
     seasoning = ['pepper', 'garlic', 'paprika', 'salt', 'seasalt', 'allspice', 'arrowroot', 'curry', 'bayleaf', 'carraway'+boose(['seeds']), 'cayene', 'chili peppers', 'red pepper flakes', 'chives', 'cilantro', 'cinamon', 'cloves', 'cumin', 'dill', 'peppercorn', 'ginger', 'juniper berries', 'mustard', 'nutmeg', 'onion', 'oregano', 'parsley', 'rosemary', 'saffron', 'thyme', 'vanilla']
     vegetable = ['potato', 'yam', 'aparagus', 'rice', 'celery', 'radish', 'pumpkin', 'apple', 'onion', 'lemon', 'pineapple', 'mushroom']
     # TODO make crustacean generator
-    meat = ['egg', 'pork', 'beef', 'chicken', 'fish', 'venison', 'veal', 'mutton', 'escargo', 'rabbit', 'duck', choose(['crab', 'lobster', 'shrimp']), amphibian(), bird(), bird()+' egg', dog()]
+    meat = ['egg', 'pork', 'beef', 'chicken', 'fish', 'venison', 'veal', 'mutton', 'escargot', 'rabbit', 'duck', choose(['crab', 'lobster', 'shrimp']), amphibian(), bird(), bird()+' egg', dog()]
     extra_sentances = [
         boose([
             ' seasoned with ' + choose([
@@ -1461,18 +1672,8 @@ def swordlore():
             gocation = 'in ' + gocation
         else:
             gocation = choose(['beneath', 'under', 'below']) + ' ' + gocation[7:]
-        body_metal = choose([
-            specificmetal(),
-            normalmetal(),
-            element(),
-            loredmetal()
-        ])
-        gild_metal = choose([
-            specificmetal(),
-            normalmetal(),
-            element(),
-            loredmetal()
-        ])
+        body_metal = metal()
+        gild_metal = metal()
         tlore += commission()
         tlore += choose(['forged', 'wrought', 'cast', 'conceived'])
         if gocation in ['in fire', 'in flame', 'in darkness', 'in the shadows']:
@@ -1494,7 +1695,7 @@ def swordlore():
         else:
             gocation = choose(['beneath', 'under', 'below']) + ' ' + gocation[7:]
         tlore += commission()
-        tlore += 'made from ' + choose([glass(), specificglass()])
+        tlore += 'made from ' + glass()
         tlore += boose([' by ' + professional('glassmith') + ' ' + boose([gocation, time])])
         tlore += '. '
         tlore += boose([choose(['A single ' + color() + ' ' + choose(['rose', 'flower', 'feather']),
@@ -1505,7 +1706,6 @@ def swordlore():
         return tlore
 
     def giftsword():
-        tlore = ''
         tlore = 'It was '
         tlore += choose(['given to ', 'gifted to ', 'presented to '])
         tlore += hero()
@@ -1522,11 +1722,10 @@ def swordlore():
         return tlore
 
     def craftsword(time):
-        tlore = ''
         tlore = 'It was '
         tlore += choose(['painstakingly ', 'meticulously ', ''])
         tlore += choose(['carved', 'crafted'])
-        tlore += ' from one solid piece of '
+        tlore += ' from ' + boose(['one ' + boose(['solid']) + 'piece of '])
         tlore += choose([biomaterial('large')])
         tlore += boose([' by ' + professional('craftsman')])
         tlore += boose([' ' + time])
@@ -1534,12 +1733,25 @@ def swordlore():
         return tlore
 
     def unknownsword():
-        tlore = 'The sword is '
-        tlore += 'of '
-        tlore += choose(
-            [choose(['dwarven', 'elvish', 'goblin', cavespawn()]), 'unknown', land('demonym')])
+        tlore = 'The sword is of '
+        tlore += choose([
+            choose([
+                'dwarven',
+                'elvish',
+                'goblin',
+                cavespawn()
+            ]),
+            'unknown',
+            land('demonym')
+        ])
         tlore += ' origin. '
-        return choose(['The sword is ' + land('demonym') + '. ', tlore])
+        return choose([
+            'The sword is ' + choose([
+                land('demonym'),
+                'made in the style of ' + land('demonym') + ' swords from the ' + age()
+            ]) + '. ',
+            tlore
+        ])
 
     def strangesword():
         tlore = ''
@@ -1550,9 +1762,14 @@ def swordlore():
     def warsword():
         pass
 
-    lore += choose(
-        [glasssword(gocation, time), wroughtsword(gocation, time), giftsword(), craftsword(time), unknownsword(),
-         strangesword()])
+    lore += choose([
+        glasssword(gocation, time),
+        wroughtsword(gocation, time),
+        giftsword(),
+        craftsword(time),
+        unknownsword(),
+        strangesword()
+    ])
     if lore[:3] == 'The':
         known = False
     enscription = ' ' + boose([
@@ -1588,7 +1805,7 @@ def swordlore():
     ]) + '. '
     if randint(0, 2) == 0:
         wrapping = fabric()
-        encrusting = choose([normalgem(), specificgem(), element()])
+        encrusting = gem()
         if randint(0, 1) == 0:
             lore += choose([
                 'Its hilt is ' + boose(['made of ' + material() + ' ']) + 'encrusted with ' + encrusting,
@@ -1613,15 +1830,14 @@ def swordlore():
         if known:
             lore += choose([
                 'A crack in the blade ' + choose(
-                    ['has been filled with ' + choose([specificmetal(), normalmetal(), element()]),
+                    ['has been filled with ' + metal(),
                      'was ' + choose(['filled', 'repaired']) + ' by ' + professional('blacksmith', dobject='sword')]),
                 'Originally destroyed ' + choose(['during', 'in']) + ' the ' + choose(
                     [age(), war()]) + ', it was repaired by ' + professional('blacksmith', dobject='sword') + boose(
                     [choose([' in' + ' during']) + ' the ' + age()])
             ])
         else:
-            lore += 'A crack in the blade has been filled with ' + choose(
-                [specificmetal(), normalmetal(), element()])
+            lore += 'A crack in the blade has been filled with ' + metal()
         lore += '. '
     else:
         lore += capitalize(enscription)
@@ -1651,35 +1867,33 @@ def print_as_sentences(lore):
 
 # ASCII art~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 '''
-   ▄████████  ▄█     █▄   ▄██████▄     ▄████████ ████████▄        ▄█        ▄██████▄     ▄████████    ▄████████
-  ███    ███ ███     ███ ███    ███   ███    ███ ███   ▀███      ███       ███    ███   ███    ███   ███    ███
-  ███    █▀  ███     ███ ███    ███   ███    ███ ███    ███      ███       ███    ███   ███    ███   ███    █▀
-  ███        ███     ███ ███    ███  ▄███▄▄▄▄██▀ ███    ███      ███       ███    ███  ▄███▄▄▄▄██▀  ▄███▄▄▄
-▀███████████ ███     ███ ███    ███ ▀▀███▀▀▀▀▀   ███    ███      ███       ███    ███ ▀▀███▀▀▀▀▀   ▀▀███▀▀▀
-         ███ ███     ███ ███    ███ ▀███████████ ███    ███      ███       ███    ███ ▀███████████   ███    █▄
-   ▄█    ███ ███ ▄█▄ ███ ███    ███   ███    ███ ███   ▄███      ███▌    ▄ ███    ███   ███    ███   ███    ███
- ▄████████▀   ▀███▀███▀   ▀██████▀    ███    ███ ████████▀       █████▄▄██  ▀██████▀    ███    ███   ██████████
-                                      ███    ███                 ▀                      ███    ███
-                 █
-                ██
-                ██
-                ████████████████████████████████████████████████████████████████████
-       ████████████████████████                                             █████████████
-                █████████████████████████████████████████████████████████████████████
-                ██
-                ██
-                 █
+
+           █▀
+      ▄███ █ ██   ▄█      █▄   ▄██████▄     ▄████████ ████████▄        ▄█        ▄██████▄     ▄████████    ▄████████
+      ███ ██ █▀█  ▀▀▀     ███ ███    ▀▀▀   ███    ███ ███   ▀▀▀▀      ███       ▀▀▀    ███   ███    ▀▀▀   ▀██    ███
+ ▄    ███ ▀▀ ▀▀ ▄████████ ███ ███ ████████ ███ ██ ███ ███ ███████████ ███ ████████████ ███ █ ███ █████████▄▄▄     ▀█
+ ████ ▀████████▄ ██████▄▄ ███ ███ ▄▄▄▄▄▄▄ ▄███▄▄▄▄██▀ ███ ▄▄▄▄▄▄▄▄▄▄▄ ███ ▄▄▄▄▄▄▄▄▄▄▄▄ ███ ▄ ███ ▄▄▄████████████▀
+ ▀        ▄▄ ███ ████████ ███ ███ ██████ ▀▀███▀▀▀▀▀ ▀ ███ ███████████ ███ ████████████ ███ █ ███ ██████████▀▀▀
+          ██ ███  ▄▄▄     ███ ███    ▄▄▄ ▀███████████ ███    ▄▄▄      ███       ▄▄▄    ███  ▄███▄▄▄▄▄▄    ▄▄▄    █▄
+        ▄▄ █ ███  ███ ▄█▄ ███ ███    ███   ███    ███ ███   ▄███      ███▌    ▄ ███    ███ ▀▀███▀▀▀▀▀     ███    ███
+    ▄▄████ █▄ █▀   ▀███▀███▀   ▀██████▀    ███    ███ ████████▀       █████▄▄██  ▀██████▀  ▀██████████▄   ██████████
+                                           ███    ███                 ▀                      ███    ███
+                                             ▀      ▀                                        ▀██    ███
+                                                                                               ▀    ▀██
+                                                                                                      ▀
 '''
 
 # Body~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 if __name__ == '__main__':
-    seed(142747)
+    seed(142770)
     print swordlore()
     print 
     print foodlore()
-    # print
-    # seed(30)
-    # print(loredmetal())
+    print
+    gnomingularity = set()
+    for x in range(0,500):
+        gnomingularity.add(tavern())
+    print len(gnomingularity)
     # print
     # seed(352)
     # print(paintinglore())
