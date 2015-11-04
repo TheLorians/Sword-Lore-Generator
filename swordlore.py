@@ -870,26 +870,14 @@ def war():
     ])
 
 
-def salamander():
-    # makes salamanders
-    # http://www.californiaherps.com/allsalamanders.html
-    # THIS GENERATOR IS NOW OBSOLETE
-    # (no longer in use not actually obsolete)
-    # See amphibian instead
-    bodyadject = ['long', 'short', 'slender', color()]
-    bodypart = ['toed', 'legged', 'tailed']
-    adject = ['western', 'southern', 'eastern', 'northern', 'spotted', 'lesser', 'greater', land('demonym')]
-    denom = ['Tiger', 'cloud', 'aboreal', 'wandering', 'mountain', 'garden', 'alpine', 'desert', 'river', 'brook',
-             'spring', 'dusky', 'pygmy', 'giant', 'slimy']
-    return choose([choose(bodyadject) + '-' + choose(bodypart), choose(adject)]) + ' ' + boose(denom) + choose(
-        ['salamander', 'newt', 'eft', 'olm'])
-
-
-def amphibian():
+def amphibian(genus=None):
     # makes amphibians
     # https://en.wikipedia.org/wiki/List_of_amphibians_of_Europe
     # http://www.californiaherps.com/allsalamanders.
     # http://www.californiaherps.com/allfrogs.html
+    if genus is None:
+        genus = choose(['frog', 'salamander', 'toad', 'newt', 'spadefoot', 'bullfrog', 'eft', 'olm', 'axolotl',
+                         'treefrog'])
     bodymodifier = ['long', 'feather', 'star', 'greater', 'fire', 'straight', 'flame', 'stripe', 'curved', 'hammer',
                     'thick', 'thin', 'slender', 'round']
     bodypart = ['legged', 'headed', 'bellied', 'kneed', 'toed', 'footed', 'backed', 'mouth', 'shouldered']
@@ -900,7 +888,7 @@ def amphibian():
          'dusky', 'pygmy', 'giant', 'slimy', 'boreal', 'spectal', 'king', 'queen', 'leopard', 'chorus', 'clawed'])
     genera = ['frog', 'salamander', 'toad', 'newt', 'spadefoot', 'bullfrog', 'eft', 'olm', 'axolotl', 'treefrog']
     subvar = choose([subvar, pattern()])
-    tempor = choose(['$', '%', '&', '$ %', '$ &', '% &', '$ % &']) + ' ' + choose(genera)
+    tempor = choose(['$', '%', '&', '$ %', '$ &', '% &', '$ % &']) + ' ' + genus
     return tempor.replace('$', color()).replace('%', land('demonym')).replace('&', subvar)
 
 
@@ -1502,6 +1490,44 @@ def sauce():
     return choose([gravy, choose(defaults)])
 
 
+def tavern():
+    # Makes the names of taverns
+    def tavern_synonym():
+        descriptor = ['tap', 'grog', 'mead', 'ale', 'lager', 'stout', 'malt']
+        place = ['room', 'house', 'shop', 'hall']
+        return choose(descriptor) + choose(place)
+    person_adj = ['drunken', 'sleeping', 'wandering', 'lost', 'crying', 'greedy', 'jolly', 'cheerful', 'happy', 'sly', 'old', 'charming', 'lazy', 'hungry', 'thirsty', 'laughing', 'dancing', 'singing', 'friendly', 'poor', 'rich', 'one-eyed', 'three-eyed']
+    person = ['fool', 'king', 'priest', 'monk', 'maiden', 'barmaid', 'bartender', 'barkeep' 'robber', 'thief', 'minister', 'angel', 'traveler', 'trader', 'scribe', 'bard', 'dwarf', 'elf', 'gnome', 'goblin', 'woad', 'leprechaun', 'sheperd', 'ghost', 'hermit', 'companion', 'wizard', cavespawn()]
+    tavern_synonyms = ['tavern', 'pub', 'bar', 'meadhall', 'inn', 'barroom', 'alehouse']
+    thing_adj = ['golden', 'brass', 'glass', 'ivory', 'iron', 'seeing', 'cursed', 'shaking', 'burning', 'poisoned', 'magic', 'fiery', 'rotten', 'lucky', color()]
+    thing = ['hand', 'foot', 'toad', 'frog', 'mushroom', 'toadstool', 'bone', 'salamander', 'apple', 'eye', 'barstool', 'mug', str(choose(range(1,16)+['cue']))+'-ball']
+    building_adj = ['golden', 'brass', 'glass', 'ivory', 'iron', 'crooked', 'crumbling', 'shady', 'burning', 'old', color()]
+    building = ['tower', 'wall', 'castle', 'church', 'well', tavern_synonym()]
+    return choose([
+        'the ' + choose(person_adj) + ' ' + choose(person),
+        'the ' + choose(person) + '\'s ' + choose([
+            choose(tavern_synonyms),
+            tavern_synonym()
+        ]),
+        'the ' + choose([
+            choose(thing_adj),
+            choose(person) + '\'s'
+        ]) + ' ' + choose(thing),
+        'the ' + choose([
+            choose(building_adj),
+            choose(person)+'\'s'
+        ]) + ' ' + choose(building),
+        'the ' + choose([
+            choose(tavern_synonyms),
+            tavern_synonym()
+        ]) + choose([
+            ' on ' + location('hill'),
+            ' over ' + location(choose(['river', 'ravine', 'canyon'])),
+            ' in ' + location(choose(['valley', 'forest', 'woods']))
+        ])
+    ])
+
+
 def foodlore():
     # This makes a description of a dish
     # https://en.wikipedia.org/wiki/List_of_cooking_techniques
@@ -1852,12 +1878,15 @@ def print_as_sentences(lore):
 
 # Body~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 if __name__ == '__main__':
-    seed(142764)
+    seed(142770)
     print swordlore()
     print 
     print foodlore()
-    # seed(30)
-    # print(loredmetal())
+    print
+    gnomingularity = set()
+    for x in range(0,500):
+        gnomingularity.add(tavern())
+    print len(gnomingularity)
     # print
     # seed(352)
     # print(paintinglore())
