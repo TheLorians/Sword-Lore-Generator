@@ -1,10 +1,14 @@
 # coding=utf-8
-
 # Imports~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 import re
+
 from BasicFunctions import *
 
+
 # Functions~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
 def color():
     # this makes colors
     def ish(color):
@@ -376,8 +380,8 @@ def epithet(dobject, gender='male'):
     elif dobject == 'maker':
         # room for improvement
         epithet_name = choose(['the steady handed', 'the steady of hand', 'the craftsman', 'the fireproof',
-                               'the iron ' + choose(['thumbed', 'fingered', 'skinned']), 'the careful', 'the sharp-eyed',
-                               'fire bellied', 'the bloodless', 'the dirty', 'the soot covered'])
+                               'the iron ' + choose(['thumbed', 'fingered', 'skinned']), 'the careful',
+                               'the sharp-eyed', 'fire bellied', 'the bloodless', 'the dirty', 'the soot covered'])
     elif dobject == 'game':
         # this generates epithets for use in the legendry_game function
         # room for improvement
@@ -420,7 +424,7 @@ def worm():
 
 def beast():
     # creates the name of an evil beast or creature
-    Class = choose(
+    class_type = choose(
         ['dragon', 'minotaur', 'cyclops', 'ogre', 'ghast', 'beast', 'serpent', 'wolf', 'lion', 'bear', 'wyvern', 'worm',
          'lindworm', 'frost giant', dragon()])
     # TODO this was copy pasted from line 395, move outside functions
@@ -429,7 +433,7 @@ def beast():
          'forest', 'canyon', 'ravine', 'chasm', 'hollow']))
     name = capitalize(word('beast'))
     Epithet = epithet('beast')
-    return choose([choose(['', name + ', ']) + 'the ' + Class + ' of ' + origin, name + ', ' + Epithet])
+    return choose([choose(['', name + ', ']) + 'the ' + class_type + ' of ' + origin, name + ', ' + Epithet])
 
 
 def horde():
@@ -677,7 +681,7 @@ def moss():
 
     moss_name = (boose(primary_adjective) + ' ' + variety).replace(' moss', ' ' + boose(secondary_adjective) + '-moss')
     moss_name = moss_name.replace(' -', ' ')
-    if moss_name[0] == ' ' and not '-' in list(moss_name):
+    if not (not (moss_name[0] == ' ') or '-' in list(moss_name)):  # DeMorgan's law
         moss_name = choose(primary_adjective) + moss_name
     elif moss_name[0] == ' ':
         moss_name = moss_name[1:]
@@ -854,7 +858,7 @@ def enscript():
 def war():
     state = random.getstate()
     participant1 = land('demonym')
-    random.setstate(state);
+    random.setstate(state)
     participant1l = land()
     participant2 = participant1
     participant2l = participant1l
@@ -902,8 +906,8 @@ def carving(epithets=True):
         hero() + ', ' + choose([
             'fighting',
             'slaying',
-            'defeating'
-            , 'vanquishing'
+            'defeating',
+            'vanquishing'
         ]) + ' ' + choose([
             beast(),
             horde()
@@ -1310,13 +1314,14 @@ def antlore():
         antname.capitalize()) + ' often attack small animals and can kill them. '
 
     tempant = ant()
-    template3 = 'The ' + antname + ' is one of about a dozen species of ' + plural(
-        tempant) + ' in the family ' + choose(family) + ', found from ' + land() + ' to ' + land(
-        ) + '. This species is one of the ' + choose(['largest',
-                                                          'smallest']) + ' ' + tempant + \
-                ' species, and can be recognized by the smooth and shining ' + choose(
-        bodypart) + ' of the ' + choose(['largest', 'smallest']) + ' ' + choose(
-        [choose(antrole), plural(choose(antrole))]) + ' in a colony. '
+    template3 = 'The ' + antname + ' is one of about a dozen species of ' + \
+                plural(tempant) + ' in the family ' + choose(family) + \
+                ', found from ' + land() + ' to ' + land() + \
+                '. This species is one of the ' + choose(['largest', 'smallest']) + ' ' + \
+                tempant + ' species, and can be recognized by the smooth and shining ' + choose(bodypart) + \
+                ' of the ' + choose(['largest', 'smallest']) + ' ' + \
+                choose([choose(antrole), plural(choose(antrole))]) + \
+                ' in a colony. '
 
     temprole = choose(antrole)
     extra1 = capitalize(plural(antname)) + ' have two sizes of ' + plural(temprole) + ' -- major ' + plural(
@@ -1327,7 +1332,7 @@ def antlore():
 
     extra3 = ' These ants are ' + relsize + ', ranging from ' + str(size) + ' mm to ' + str(
         size) + '.5 mm in length. The ' + plural(choose(antrole)) + ' are ' + color() + ' to ' + color(
-        ) + ', while the winged reproductives are ' + color() + '.'
+    ) + ', while the winged reproductives are ' + color() + '.'
 
     return choose([template1, template2, template3]) + boose([extra1, extra2, extra3])
 
@@ -1707,8 +1712,10 @@ def swordlore():
         tlore += ', by ' + choose([spirit(), royalty() + ','])
         if randint(0, 1) == 1:
             tlore += ' for his ' + choose(['victory at ' + battle(),
-                                           choose(['defeating', 'killing', 'slaying', 'vanquishing']) + ' ' + beast(), choose(
-                    ['valor', 'honesty', 'bravery', 'kindness', 'skill', 'fairness', 'gentle spirit'])])
+                                           choose(['defeating', 'killing', 'slaying', 'vanquishing']) + ' ' + beast(),
+                                           choose(
+                                               ['valor', 'honesty', 'bravery', 'kindness', 'skill', 'fairness',
+                                                'gentle spirit'])])
         tlore += '. '
         if lore[-3:] == ',. ':
             tlore = lore[:-3] + '. '
