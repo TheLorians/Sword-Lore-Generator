@@ -1592,7 +1592,7 @@ def sauce():
     meat = ['pork', 'beef', 'chicken', 'fish', 'venison', 'veal', 'mutton', 'escargot', 'rabbit', 'duck', choose(['crab', 'lobster', 'shrimp']), amphibian(), bird(), dog()]
     gravy = choose(meat + ['mushroom', 'vegetable']) + ' gravy'
     # TODO make fruit function
-    fruits = ['apple', 'pineapple', 'pear', 'cranberry', 'mango', 'peach', 'plum']
+    fruits = ['apple', 'cranberry', fruit()]
     defaults = ['duck sauce','tomato sauce', 'mushroom sauce', choose(fruits)+' sauce']
     return choose([gravy, choose(defaults)])
 
@@ -1635,6 +1635,16 @@ def tavern():
     ])
 
 
+def fruit(archetype=None):
+    # makes the name of a fruit
+    # room for improvement
+    if archetype is None:
+        archetype =  choose(['apple', 'fruit', 'peach', 'berry'])
+    flavor = ['sour', 'sweet', 'tangy', 'tart']
+    descriptor = ['crab', 'cloud', 'blood', 'rock', 'stone', 'pine', 'oak', 'frost', 'elder', 'wood', 'bone', 'jewel', 'box', 'star', 'dragon', 'ghost', color(), choose(flavor), land('demonnym')]
+    return choose(descriptor) + ' ' + archetype
+
+
 def foodlore():
     # This makes a description of a dish
     # https://en.wikipedia.org/wiki/List_of_cooking_techniques
@@ -1669,9 +1679,17 @@ def strangelore():
 
     def smell():
         # describes the smell of the sword
-        smell = ['metal', blood(), 'sulfur', 'brimstone', 'smoke', 'bile', 'sweat', 'the sea']
-        smells = choose(smell, 2)
-        return 'smells ' + boose(['strongly ', 'faintly ']) + 'of ' + smells[0] + boose([' and ' + smells[1]])
+        # http://grammar.yourdictionary.com/style-and-usage/descriptive-words-for-scents.html#VrGLY7AqDbAPBGlv.99
+        smell = ['metal', blood(), 'sulfur', 'brimstone', 'smoke', 'bile', 'sweat', 'the sea', 'loam', fruit()]
+        smells = choose(smell, randint(1,2))
+        smell_descriptor = ['acrid', 'airy', 'clean', 'crisp', 'dirty', 'earthy', 'faint', 'fetid', 'fishy', 'fresh','floral', 'flowery', 'light', 'loamy', 'musty', 'nauseating', 'perfumed', 'pungent', 'putrid', 'rancid', 'redolent', 'repulsive', 'rotten', 'sharp', 'sour', 'stale', 'stinking', 'sweet']
+        return 'smells ' + boose([
+            'strongly ',
+            'faintly '
+        ]) + choose([
+            'of ' + readlist(smells),
+            choose(smell_descriptor)
+        ])
 
     def detection():
         # swords that react to a certain situation
@@ -1995,7 +2013,7 @@ if __name__ == '__main__':
     print 
     print foodlore()
     print
-    print fabric()
+    print fruit()
     #print
     #seed(352)
     #print(paintinglore())
