@@ -4,6 +4,7 @@
 import re
 
 from BasicFunctions import *
+from Language import *
 
 
 # Functions~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -546,7 +547,7 @@ def material(size='small'):
 def script():
     # creates the name for a form of writing or alphabet
     preprefix = choose([land('demonym') + ' ', choose(
-        ['proto-', 'elvish ', 'goblin ', 'dwarven ', cavespawn() + ' ', 'rudimentary ', 'ancient '])])
+        ['proto-', 'elvish ', 'goblin ', 'dwarven ', 'gnomish', 'demonic', cavespawn() + ' ', 'rudimentary ', 'ancient '])])
     prefix = choose(['rune', 'glyph', 'old', 'stone', 'bone', 'dark', 'death', 'cipher ', 'cryptic ', 'sand'])
     suffix = choose(['script', 'rune', 'glyph', 'scratch', 'form'])
     if prefix == suffix:
@@ -603,6 +604,7 @@ def age():
             'magic',
             'wizards',
             'war',
+            'sand',
             word('Ruler'),
             plural(choose([
                 'orc',
@@ -614,6 +616,7 @@ def age():
                 'man',
                 'elf',
                 'dwarf',
+                'demon',
                 cavespawn()
             ]))
         ]),
@@ -939,14 +942,24 @@ def carving(epithets=True):
 def stringthing():
     # makes literal strings.
     # like for bows and such.
-    mamsource = ['elk', 'deer', 'moose', 'pig', 'cow']
+    mamsource = ['elk', 'deer', 'bison', 'moose', 'pig', 'cow']
     return choose([choose(mamsource) + ' ' + choose(['sinew']), spider() + ' silk'])
 
 
 def wool():
     # This makes types of wool
     # Possibly room for improvement
-    return boose(['sheep', 'alpaca', 'llama', 'churro']) + ' ' + choose(['wool', 'cashmere'])
+    return (boose(['sheep', 'alpaca', 'llama', 'churro']) + ' ' + choose(['wool', 'cashmere'])).strip(' ')
+
+
+def velvet():
+    # makes velvets & velveteen
+    materials_master_list = ['silk', 'cotton', 'chiffon', 'rayon', wool()]
+    materials = choose([
+        choose(materials_master_list),
+        read_list(choose(materials_master_list,randint(2,3)))
+    ])
+    return materials + ' ' + choose(['velvet', 'velveteen', 'velveret'])
 
 
 def dye(coloration=None):
@@ -992,7 +1005,7 @@ def dye(coloration=None):
                 'giant puffball',
                 'sycamore bark',
                 'bedstraw root'
-                'pokeweed perries',
+                'pokeweed berries',
                 'dyer\'s madder',
                 'dyer\'s polypore cooked with ammonia in an iron pot'
             ],
@@ -1055,10 +1068,35 @@ def dye(coloration=None):
             ]
         }
     color_chart = {
-        'purple': [['red', 'blue']],
-        'orange': [['red', 'yellow']],
-        'green' : [['blue', 'yellow']],
-        'brown' : [['orange', 'black'], ['yellow', 'red', 'black']]
+        'purple': [
+            [
+                'red',
+                'blue'
+            ]
+        ],
+        'orange': [
+            [
+                'red',
+                'yellow'
+            ]
+        ],
+        'green' : [
+            [
+                'blue',
+                'yellow'
+            ]
+        ],
+        'brown' : [
+            [
+                'orange',
+                'black'
+            ],
+            [
+                'yellow',
+                'red',
+                'black'
+            ]
+        ]
     }
     if coloration in color_chart:
         color_mix = choose(color_chart[coloration])
@@ -1094,12 +1132,48 @@ def clothlore():
 
 
 def fabric():
-    return choose([choose(
-        ['raw hide', choose(['cow', 'goat', 'deer', 'elk', 'caribou', 'reindeer', 'ox', 'bison', 'buffalo']) + ' hide',
-         'cloth', color() + ' cloth', color() + wool(), color() + ' silk', 'fabric',
-         'velvet', 'silk', 'leather', 'black leather', 'brown leather', 'red leather', 'bat leather', 'fish leather',
-         'deerskin', 'human skin', 'goblin skin', 'snakeskin', 'lizard skin', 'dragon skin']),
-        boose([color()]) + ' ' + choose(['cloth', 'fabric']) + ' ' + clothlore()])
+    return choose([
+        choose([
+            'raw hide',
+            choose([
+                'cow',
+                'goat',
+                'deer',
+                'elk',
+                'caribou',
+                'reindeer',
+                'ox',
+                'bison',
+                'buffalo'
+            ]) + ' hide',
+            'cloth',
+            color() + ' cloth',
+            color() + ' ' + wool(),
+            color() + ' silk',
+            'fabric',
+            velvet(),
+            'silk',
+            'chiffon',
+            'leather',
+            'black leather',
+            'brown leather',
+            'red leather',
+            'bat leather',
+            'fish leather',
+            'deerskin',
+            'human skin',
+            'goblin skin',
+            'snakeskin',
+            'lizard skin',
+            'dragon skin'
+        ]),
+        boose([
+            color() + ' '
+        ]) + choose([
+            'cloth',
+            'fabric'
+        ]) + ' ' + clothlore()
+    ])
 
 
 def bird():
@@ -1466,12 +1540,40 @@ def paintinglore():
 
 def potterylore():
     # This makes pottery lore
-    pass
+    material = choose(['clay', 'ceramic', 'porcelain'])
+    archetype = choose(['pot', 'vase', 'bowl'])
+    return 'a '+boose([material + ' ']) + archetype + ' made by ' + professional('potter',dobject=material)
 
 
 def musiclore():
     # This makes the lore for a piece of music
-    pass
+    mood = choose(['somber', 'joyful', 'forboding', 'eerie'])
+    instrument = choose(['piano', 'organ', 'harpsicord', 'harp', 'flute', 'violin', 'viola', 'xylophone'])
+    composer = professional('composer')
+    return 'It is ' + boose([
+        precep(mood)+' '
+    ]) + 'piece' + boose([
+        ' composed by ' + composer
+    ]) + '. ' + boose([
+        'It is intended to be played on ' + precep(instrument) + '. '
+    ]) + boose([
+        'It is one of ' + composer + '\'s ' + choose([
+            'best',
+            'better',
+            'later',
+            'last',
+            'earlier',
+            'earliest',
+            'better known'
+            'best known',
+            'lesser known',
+            'least known'
+        ]) + choose([
+            ' works',
+            ' pieces',
+            ' compositions'
+        ]) + '. '
+    ])
 
 
 def music():
@@ -1501,11 +1603,11 @@ def tavern():
         descriptor = ['tap', 'grog', 'mead', 'ale', 'lager', 'stout', 'malt']
         place = ['room', 'house', 'shop', 'hall']
         return choose(descriptor) + choose(place)
-    person_adj = ['drunken', 'sleeping', 'wandering', 'lost', 'crying', 'greedy', 'jolly', 'cheerful', 'happy', 'sly', 'old', 'charming', 'lazy', 'hungry', 'thirsty', 'laughing', 'dancing', 'singing', 'friendly', 'poor', 'rich', 'one-eyed', 'three-eyed']
-    person = ['fool', 'king', 'priest', 'monk', 'maiden', 'barmaid', 'bartender', 'barkeep' 'robber', 'thief', 'minister', 'angel', 'traveler', 'trader', 'scribe', 'bard', 'dwarf', 'elf', 'gnome', 'goblin', 'woad', 'leprechaun', 'sheperd', 'ghost', 'hermit', 'companion', 'wizard', cavespawn()]
+    person_adj = ['drunken', 'sleeping', 'wandering', 'lost', 'crying', 'greedy', 'jolly', 'cheerful', 'happy', 'sly', 'old', 'charming', 'lazy', 'hungry', 'thirsty', 'laughing', 'dancing', 'singing', 'friendly', 'poor', 'rich', 'one-eyed', 'three-eyed', 'blind']
+    person = ['fool', 'king', 'priest', 'monk', 'maiden', 'barmaid', 'bartender', 'barkeep', 'robber', 'thief', 'minister', 'angel', 'traveler', 'trader', 'scribe', 'bard', 'dwarf', 'elf', 'gnome', 'goblin', 'woad', 'leprechaun', 'sheperd', 'ghost', 'hermit', 'companion', 'wizard', cavespawn()]
     tavern_synonyms = ['tavern', 'pub', 'bar', 'meadhall', 'inn', 'barroom', 'alehouse']
     thing_adj = ['golden', 'brass', 'glass', 'ivory', 'iron', 'seeing', 'cursed', 'shaking', 'burning', 'poisoned', 'magic', 'fiery', 'rotten', 'lucky', color()]
-    thing = ['hand', 'foot', 'toad', 'frog', 'mushroom', 'toadstool', 'bone', 'salamander', 'apple', 'eye', 'barstool', 'mug', str(choose(range(1,16)+['cue']))+'-ball']
+    thing = ['hand', 'foot', 'toad', 'frog', 'mushroom', 'toadstool', 'bone', 'salamander', 'apple', 'eye', 'barstool', 'mug', 'cross', str(choose(range(1,16)+['cue']))+'-ball']
     building_adj = ['golden', 'brass', 'glass', 'ivory', 'iron', 'crooked', 'crumbling', 'shady', 'burning', 'old', color()]
     building = ['tower', 'wall', 'castle', 'church', 'well', tavern_synonym()]
     return choose([
@@ -1590,6 +1692,9 @@ def strangelore():
                              ) + ', to this ' + choose(['sword', 'blade'])])
         return haunts
 
+    def maddening():
+        # swords that have lead their owners to ill fate
+        madness = 'has driven ' + boose(['all of ']) + 'its owners to '+choose(['madness', 'insanity', 'suicide'])
     def useless():
         # currently houses anything that I can't fit into any of the other generators above.
         # I don't think is large enough to warrant its own generator.
@@ -1885,20 +1990,18 @@ def print_as_sentences(lore):
 
 # Body~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 if __name__ == '__main__':
-    seed(142770)
+    seed(142809)
     print swordlore()
     print 
     print foodlore()
     print
-    gnomingularity = set()
-    for x in range(0,500):
-        gnomingularity.add(tavern())
-    print len(gnomingularity)
-    # print
-    # seed(352)
-    # print(paintinglore())
-    # print
-    # baseSeed = 0
-    # for x in range(baseSeed, baseSeed + 30):
-    #     seed(x)
-    #     print epithet('noble','male')
+    print fabric()
+    #print
+    #seed(352)
+    #print(paintinglore())
+    #print
+    #baseSeed = 0
+    #for x in range(baseSeed, baseSeed + 30):
+        #seed(x)
+        #print epithet('noble','male')
+
