@@ -1,3 +1,6 @@
+'''
+This is a module with useful tools for creating generators
+'''
 # M V S E V M:
 
 # from random import random
@@ -95,12 +98,14 @@ seeded = False
 
 
 def seed(newSeed):
+    '''Changes the seed to a set amount'''
     random.seed(newSeed)
     global seeded
     seeded = True
 
 
 def randint(lower, upper):
+    '''Selects a random interger between the upper and lower values'''
     # the backbone of the entire code
 
     # sanity checks
@@ -130,7 +135,7 @@ def randint(lower, upper):
 # (and perhaps will always be)
 
 def choose(array, times=1):
-    # Chooses a number of elements from an array
+    '''Chooses a number of elements from an array'''
     result = []
     virtual = array[::]
     for x in range(0, times):
@@ -142,7 +147,7 @@ def choose(array, times=1):
 
 
 def woose(freqdict, array=None):
-    # weighted version of choose
+    '''Weighted version of choose'''
     if array is None:
         array = freqdict.keys()
     major_sum = sum(map(lambda x: freqdict.get(x, 0), array))
@@ -159,7 +164,7 @@ def woose(freqdict, array=None):
 
 
 def boose(array):
-    # Either chooses or does not
+    '''Either chooses or returns an empty string'''
     # (I cannot remember why I called it boose)
     return choose([choose(array), ''])
 
@@ -178,7 +183,7 @@ def boose(array):
 
 
 def capitalize(word):
-    # similar to .capitalize except it leaves all the rest of the word in the same case it was
+    '''Similar to .capitalize except it leaves all the rest of the word in the same case it was'''
     # Example:
     # fOo BaR.capitalize() = Foo bar
     # fOo BaR.capitalize() = FOo BaR
@@ -186,7 +191,7 @@ def capitalize(word):
 
 
 def plural(string):
-    # makes a word plural
+    '''makes a word plural'''
     key_list = {
         'human': 'humans', 'ox': 'oxen', 'goose': 'geese', 'moose': 'moose', 'deer': 'deer', 'cyclops': 'cyclopes'
     }
@@ -205,7 +210,7 @@ def plural(string):
 
 
 def precep(word):
-    # adds the correct version of either a or an before the input
+    '''Adds the correct version of either a or an before the input'''
     # because I was doing this individually before and it was a pain in the butt
     # (I don't remember why I called it preceps but the name is stuck now)
     if word[0].lower() in 'aeiou':
@@ -215,7 +220,7 @@ def precep(word):
 
 
 def approxsyllables(string):
-    # approximates the number of syllables based on the number of vowels
+    '''approximates the number of syllables based on the number of vowels'''
     total = 0
     for letter in list(string):
         if letter in list('aeiou'):
@@ -226,6 +231,7 @@ def approxsyllables(string):
 
 
 def polish(word):
+    '''Fixes issues that might arise with word generation'''
     # <polish word:
     # <Fix q:
     word = word.replace('q', 'qu')
@@ -258,12 +264,13 @@ def polish(word):
 
 
 def word(word):
-    # This is the word generation function
+    '''
+    This is the word generation function
     # It translates words into seed based languages by the power of 
     # '*.~MATHS~.*'
+    '''
     # The commenting here could be improved
     # (Also perhaps import the larger language module)
-    
     # returns blank requests to prevent it from being junked up
     if word == '':
         return word
@@ -313,6 +320,7 @@ def word(word):
 
 
 def read_list(array, oxford=True):
+    '''Translates list objects into writen lists'''
     array = list(array)
     while '' in array:
         array.remove('')
@@ -329,4 +337,7 @@ def read_list(array, oxford=True):
 if __name__ == '__main__':
     seed(82914372)
     print read_list(['three'])
-    
+    seed(3)
+    print(word('hi'))
+    seed(3)
+    print(word('go'))
