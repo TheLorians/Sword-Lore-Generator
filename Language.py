@@ -1,11 +1,15 @@
 # coding=utf-8
-
+'''
+This is a language module.  It is used in language based computations.  It can translate to a variety of languages
+'''
+#Imports~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 from BasicFunctions import *
+import re
 
-conjugated = False
-
+#Functions~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 def polish(word):
-    global seed
+    # Fixes any errors that might exist with the raw output of the word() function
+    #TODO: rewrite with regex
     #Fix q:
     word = word.replace('q','qu')
     word = word.replace('quy','qui')
@@ -28,6 +32,7 @@ def polish(word):
 
 
 def word(word):
+    # Makes words
     #returns blank requests to prevent it from being junked up
     if word == '':
         return word
@@ -68,7 +73,6 @@ def word(word):
         # Fix duplicate liquid:
         syllable = syllable.replace('rr','r')
         syllable = syllable.replace('ll','l')
-        
         # commit the syllable to word
         word += syllable
         skeleton += syllable_skeleton
@@ -81,29 +85,27 @@ def word(word):
 def translate(string,conjugated=False):
     origin_state = random.getstate()
     work = string
-    for forbiddenchar in list('.,:;?!'):
+    for forbiddenchar in '.,:;?!':
         work = work.replace(forbiddenchar,'')
     work = work.replace('-',' ')
     array = work.split(' ')
-    array.sort(key=len)
-    array = array[::-1]
-    for x in range(0,len(array)):
-        string = string.replace(array[x],str(x))
-    transarray = []
-    for item in array:
-        random.setstate(origin_state)
-        if not conjugated:
-            transarray.append(word(item))
-        else:
-            transarray.append(conjugatedword(item))
-    for x in range(0,len(array)):
+    array.sort(key=len, reverse=True)
+    for x, item in enumerate(array):
+        string = string.replace(item,str(x))
+    random.setstate(origin_state)
+    if conjugated:
+        f = lambda item: conjugatedword(item)
+    else:
+        f = lambda item: word(item)
+    transarray = map(f, array)
+    for x, item in enumerate(array):
         y = len(array)-x-1
         string = string.replace(str(y),transarray[y])
     return string
 
 
 def compute(number):
-    if number in list('12345678'):
+    if number in '12345678':
         return choose(letters[number])
     else:
         if number == '9':
@@ -121,7 +123,7 @@ def ending(piece):
     template = choose(['393A','3A'])
     #fill in template
     output =  ''
-    for component in list(template):
+    for component in template:
         output += compute(component)
     #preliminary custom polish
     output = output.replace('wl','w')
@@ -132,23 +134,24 @@ def ending(piece):
 def conjugatedword(worde):
     if worde == '':
         return ''
+    origin_state = random.getstate()
     # parse into two pieces
     splite = worde.split('|')
     # reseed here
     seed(hash(splite[0].lower()) + hash(randint(0,9999999999)))
-    origin_state = random.getstate()
-    #render body
+    # render body
     body = word(splite[0])
-    #render ending
+    # render ending
+    random.setstate(origin_state)
+    seed(hash(splite[1].lower()) + hash(randint(0,9999999999)))
     suffix = ending(splite[1])
-    #combine
+    # combine
     return body+suffix
 
-
+#Body~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 if __name__ == '__main__':
+    conjugated = True
     language = raw_input('Language seed: ')
     seed(hash(language.lower()))
     text = raw_input('Text: ')
     print(translate(text,conjugated))
-    
-    #elhersifauf elhersifezjild elhersifauf outauf outezjild
