@@ -2,14 +2,11 @@
 # Imports~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 import re
-
 from BasicFunctions import *
 from Language import *
 
 
 # Functions~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-
 def color():
     # this makes colors
     def ish(color):
@@ -641,7 +638,7 @@ def age():
             '14th',
             '15th',
             '16th'
-        ])
+        ]) + ' centure'
     ])
     return time.title()
 
@@ -1181,10 +1178,8 @@ def bird():
     """Makes Birds"""
     # birds are made here
     genera_count = 0
-
     def bird_genus():
         # this makes formulaic bird genera names
-        global genera_count
         prefixes = ['ant', 'eas', 'sun', 'humming', 'snow', 'wes', 'bell', 'bower', 'fairy', 'black', 'mocking',
                     'cuckoo', 'grass', 'jungle', 'puff', 'love', 'gold', 'wren', 'rifle', 'bush', 'tropic', 'bit',
                     'king', 'frigate', 'shrike-', 'cat', 'mouse', 'blue', 'guinea', 'bristle', 'pea', 'scrub', 'cow',
@@ -1196,8 +1191,6 @@ def bird():
                     'tree', 'fish', 'cloud', 'humming']
         suffixes = ['tern', 'bird', 'hen', 'duck', 'lark', 'tit', 'fowl', 'shrike', 'finch', 'thrush', 'wren',
                     'warbler', 'dove']
-        genera_count = len(prefixes) * len(suffixes)
-        # print genera_count
         return choose(prefixes) + choose(suffixes)
 
     # TODO wat @ next line
@@ -1316,9 +1309,6 @@ def bird():
               'zapata', 'antenna', 'java', 'cave', 'polar', 'variegated', 'kori', 'rufescent', 'hazel', 'victoria',
               'ocellated', 'variable', 'leaf', 'red-and-yellow', 'guanay', 'moustached', 'cloud', 'ghost', 'steppe',
               'tricolored']
-    genera_count = 1144
-    # print (len(common_genera)+len(uncommon_genera)+len(rare_genera)+genera_count+2)*(len(prefix)+(len(body_adjective)
-    # +60)*len(body_part)+60)
     return choose([choose(prefix), choose([color(), choose(body_adjective)]) + choose(body_part), color(),
                    word('Bird') + '\'s', land('demonym')]) + ' ' + choose(
         [choose(common_genera), choose(uncommon_genera), choose(rare_genera), bird_genus()])
@@ -2008,18 +1998,9 @@ def print_as_sentences(lore):
 
 # Body~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 if __name__ == '__main__':
-    seed(142809)
+    seed(142811)
     print swordlore()
     print 
     print foodlore()
     print
     print fruit()
-    #print
-    #seed(352)
-    #print(paintinglore())
-    #print
-    #baseSeed = 0
-    #for x in range(baseSeed, baseSeed + 30):
-        #seed(x)
-        #print epithet('noble','male')
-
