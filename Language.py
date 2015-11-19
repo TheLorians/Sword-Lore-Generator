@@ -11,23 +11,26 @@ def polish(word):
     # Fixes any errors that might exist with the raw output of the word() function
     #TODO: rewrite with regex
     #Fix q:
-    word = word.replace('q','qu')
-    word = word.replace('quy','qui')
+    word = re.sub('q', 'qu', word)
+    word = re.sub('quy', 'qui', word)
     #Add multi-character letters:
-    word = word.replace('$','sh')
-    word = word.replace('%','th')
-    word = word.replace('^','ch')
-    word = word.replace('&',choose(letters['8']))
+    word = re.sub('\$', 'sh', word)
+    word = re.sub('%', 'th', word)
+    word = re.sub('\^', 'ch', word)
+    word = re.sub('&', choose(letters['8']), word)
     #Fix hh:
-    word = word.replace('hh','h')
+    word = re.sub('hh', 'h', word)
     #Fix double multi:
-    word = word.replace('thth','th')
-    word = word.replace('shsh','sh')
+    word = re.sub('thth', 'th', word)
+    word = re.sub('shsh', 'sh', word)
     #Enhance double vowel:
     for vowel in list('aiu'):
-        word = word.replace(2*vowel,vowel+"'"+vowel)
+        word = re.sub(2*vowel, vowel+"'"+vowel, word)
     #Fix misc.:
-    word = word.replace('iy','ey')
+    word = re.sub('iy', 'ey', word)
+    # Fix excessive liquid:
+    word = re.sub('r{3,4}', 'rr', word)
+    word = re.sub('l{3,4}', 'll', word)
     return word
 
 
@@ -56,23 +59,17 @@ def word(word):
         for letter in syllable_skeleton:
             syllable += woose(frequencies,letters[letter])
         # Fixe 'yy'
-        if 'y' == syllable[0]:
-            syllable = syllable.replace('yy','yi')
-        else:
-            syllable = syllable.replace('yy','ey')
+        syllable = re.sub('yy$', 'yi$', syllable)
+        syllable = re.sub('yy', 'ey', syllable)
         # Fix iw:
         syllable = syllable.replace('iw','ew')
         # Fix (letter)l:
-        for letter in ['d','t','r','$','%']:
-            syllable = syllable.replace(letter+'l',letter+woose(frequencies, letters['3'])+'l')
+        for letter in ['d','t','r','\$','%']:
+            syllable = re.sub(letter+'l', letter+woose(frequencies, letters['3'])+'l', syllable)
         # Fix lr:
-        syllable = syllable.replace('lr','l'+woose(frequencies, letters['3'])+'r')
+        syllable = re.sub('lr', 'l'+woose(frequencies, letters['3'])+'r', syllable)
         # Fix wl:
-        if syllable[:2] == 'wl':
-            syllable = 'wr' + syllable[2:]
-        # Fix duplicate liquid:
-        syllable = syllable.replace('rr','r')
-        syllable = syllable.replace('ll','l')
+        syllable = re.sub('^wl' , '^wr', syllable)
         # commit the syllable to word
         word += syllable
         skeleton += syllable_skeleton
@@ -82,7 +79,7 @@ def word(word):
     return word
 
 
-def translate(string,conjugated=False):
+def translate(string, conjugated=False):
     origin_state = random.getstate()
     work = string
     for forbiddenchar in '.,:;?!':
@@ -150,7 +147,7 @@ def conjugatedword(worde):
 
 #Body~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 if __name__ == '__main__':
-    conjugated = True
+    conjugated = False
     language = raw_input('Language seed: ')
     seed(hash(language.lower()))
     text = raw_input('Text: ')

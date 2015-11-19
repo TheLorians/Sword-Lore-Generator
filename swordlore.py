@@ -5,6 +5,27 @@ import re
 from BasicFunctions import *
 from Language import *
 
+# Classes~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+class WeaponPart(object):
+    def __init__(self, name, archetype):
+        self.name = name
+        self.archetype = archetype
+        if archetype == 'handle':
+            self.wrappable = True
+            self.material = 'standard'
+        elif archetype == 'string':
+            self.wrappable = False
+            self.material = 'string'
+        else:
+            self.wrappable = False
+            self.material = 'standard'
+
+
+class Weapon(object):
+    def __init__(self, archetype, parts):
+        self.archetype = archetype
+        self.parts = parts
 
 # Functions~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 def color():
@@ -1630,9 +1651,12 @@ def fruit(archetype=None):
     # room for improvement
     if archetype is None:
         archetype =  choose(['apple', 'fruit', 'peach', 'berry'])
+    if archetype == 'orange':
+        archetype = choose(['orange', 'clementine', 'tangerine', 'mandarin'])
     flavor = ['sour', 'sweet', 'tangy', 'tart']
-    descriptor = ['crab', 'cloud', 'blood', 'rock', 'stone', 'pine', 'oak', 'frost', 'elder', 'wood', 'bone', 'jewel', 'box', 'star', 'dragon', 'ghost', color(), choose(flavor), land('demonnym')]
+    descriptor = ['crab', 'cloud', 'blood', 'rock', 'stone', 'pine', 'oak', 'frost', 'elder', 'wood', 'bone', 'jewel', 'box', 'star', 'dragon', 'ghost', color(), choose(flavor), land('demonnym'), word('fruit')]
     return choose(descriptor) + ' ' + archetype
+
 
 
 def foodlore():
@@ -1641,7 +1665,7 @@ def foodlore():
     # encorporate legendary game
     cooking_meth = ['fried', 'sauteed', 'boiled', 'roasted', 'grilled', 'baked', 'smoked', 'pickeled', 'dried', 'stuffed', 'broiled', 'carmelized', 'charbroiled']
     seasoning = ['pepper', 'garlic', 'paprika', 'salt', 'seasalt', 'allspice', 'arrowroot', 'curry', 'bayleaf', 'carraway'+boose(['seeds']), 'cayene', 'chili peppers', 'red pepper flakes', 'chives', 'cilantro', 'cinamon', 'cloves', 'cumin', 'dill', 'peppercorn', 'ginger', 'juniper berries', 'mustard', 'nutmeg', 'onion', 'oregano', 'parsley', 'rosemary', 'saffron', 'thyme', 'vanilla']
-    vegetable = ['potato', 'yam', 'aparagus', 'rice', 'celery', 'radish', 'pumpkin', 'apple', 'onion', 'lemon', 'pineapple', 'mushroom']
+    vegetable = ['potato', 'yam', 'aparagus', 'rice', 'celery', 'radish', 'pumpkin', 'onion', 'mushroom', fruit(), fruit(choose(['lemon', 'orange']))]
     # TODO make crustacean generator
     meat = ['egg', 'pork', 'beef', 'chicken', 'fish', 'venison', 'veal', 'mutton', 'escargot', 'rabbit', 'duck', choose(['crab', 'lobster', 'shrimp']), amphibian(), bird(), bird()+' egg', dog()]
     extra_sentances = [
@@ -1750,6 +1774,7 @@ def swordlore():
     # This is the heart and soul of this program
     # This makes the lore for a particular sword
     # I will comment this better in the future
+    dobject = Weapon('sword', [WeaponPart('blade', 'main'), WeaponPart('hilt', 'handle')])
     known = True
     lore = ''
     gocation = choose(['the ' + choose(['depths', 'flames', 'hearth', 'fires']) + ' of Hell', 'fire', 'flame',
@@ -2001,6 +2026,8 @@ if __name__ == '__main__':
     seed(142811)
     print swordlore()
     print 
+    seed(1)
     print foodlore()
     print
+    seed(1)
     print fruit()

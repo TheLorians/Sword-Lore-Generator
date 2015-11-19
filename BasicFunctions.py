@@ -169,19 +169,6 @@ def boose(array):
     return choose([choose(array), ''])
 
 
-#def numbify(string):
-#    # turns a string into a number for seeding purposes
-#    try:
-#        int(string)
-#        return int(string)
-#    except ValueError:
-#        alphabet = {}
-#        for x in range(0, 36):
-#            alphabet.update({list('abcdefghijklmnopqrstuvwxyz0123456789')[x]: x})
-#        total = sum(map(lambda x: alphabet[x], string.lower()))
-#        return total
-
-
 def capitalize(word):
     '''Similar to .capitalize except it leaves all the rest of the word in the same case it was'''
     # Example:
