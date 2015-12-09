@@ -1,7 +1,8 @@
 # Sword-Lore-Generator
 This makes sword lore
 
-Eamon's to do list:
+Eamon's old to do list:
+(I'll get to this stuff someday)
 * guilds
 * written engravings
 * warswords
@@ -9,10 +10,15 @@ Eamon's to do list:
 * enchanted swords
 * fix startseed variance
 * lost swords
-* rewrite language engine
+* rewrite language engine (markov chains?)
 * Add painters who are upset with their profession
 * beetles
 * bugs
+
+Eamon's new to do list:
+* make a general animal function
+* generalize swordlore to work for all weapons
+* create more class based general functions
 
 Louis' to do list:
 * Epithets

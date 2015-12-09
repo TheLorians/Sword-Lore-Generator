@@ -25,6 +25,7 @@ This is a module with useful tools for creating generators
 # Imports~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 import random
+import re
 
 # Variables~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -166,20 +167,14 @@ def woose(freqdict, array=None):
 def boose(array):
     '''Either chooses or returns an empty string'''
     # (I cannot remember why I called it boose)
-    return choose([choose(array), ''])
-
-
-#def numbify(string):
-#    # turns a string into a number for seeding purposes
-#    try:
-#        int(string)
-#        return int(string)
-#    except ValueError:
-#        alphabet = {}
-#        for x in range(0, 36):
-#            alphabet.update({list('abcdefghijklmnopqrstuvwxyz0123456789')[x]: x})
-#        total = sum(map(lambda x: alphabet[x], string.lower()))
-#        return total
+    # Declare a default value
+    dfault = None
+    typeset = set([type(x) for x in array])
+    if typeset == set([str]):
+        dfault = ''
+    elif typeset == set([bool]):
+        dfault = False
+    return choose([choose(array), dfault])
 
 
 def capitalize(word):
@@ -217,6 +212,20 @@ def precep(word):
         return 'an ' + word
     else:
         return 'a ' + word
+
+
+def addaned(word):
+    # Adds the ed to the end of a word in accordance with english grammar
+    special_cases = {'ear': 'eared'}
+    if word in special_cases:
+        return special_cases[word]
+    if re.search('e$', word):
+        return word + 'd'
+    if re.search('y$', word):
+        return re.sub('y$','ied',word)
+    if re.search('[aeiou][^aeiou]$', word):
+        return word + word[-1] + 'ed'
+    return word + 'ed'
 
 
 def approxsyllables(string):
@@ -336,8 +345,4 @@ def read_list(array, oxford=True):
 
 if __name__ == '__main__':
     seed(82914372)
-    print read_list(['three'])
-    seed(3)
-    print(word('hi'))
-    seed(3)
-    print(word('go'))
+    print ed('hate')
