@@ -7,6 +7,7 @@ from Language import *
 
 # Classes~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+# Weapon Classes~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 class WeaponPart(object):
     def __init__(self, name, archetype):
         self.name = name
@@ -27,7 +28,66 @@ class Weapon(object):
         self.archetype = archetype
         self.parts = parts
 
+# Animal Classes~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+class Animal(object):
+    def __init__(self, name, bodyparts, covering):
+        self.name = name
+        self.bodyparts = bodyparts
+        self.covering = covering
+
+class Bodypart(object):
+    def __init__(self, name, composition, count, shape):
+        self.name = name
+        self.composition = composition
+        self.count = count
+        self.shape = shape
+    def bodmod(self):
+        comp_groups = {
+            'furry' : ['fire', 'straight', 'flame', 'stripe', 'curved', 'fluffy',
+                       'boney', 'soft', 'furry', 'bright', 'dark', color()],
+            'feathery' : ['fire', 'straight', 'flame', 'stripe', 'curved',
+                          'round', 'boney', 'plume', 'bright', 'dark', color()],
+            'organ' : ['fire', 'straight', 'flame', 'wet',
+                       'thick', 'thin', 'slender', color()],
+            'bone' : ['fire', 'straight', 'flame', 'stripe', 'curved', 'sharp',
+                      'boney', 'soft', 'hard', color()]
+        }
+        shape_groups = {
+        #I know these shape names are not descriptive (Its really hard) so I've added examples above each one
+            # legs, necks and arms
+            'connector' : ['long', 'short', 'wide', 'thin', 'thick', 'slender'],
+            # heads, feet, hands
+            'end' : ['hammer', 'round', 'big', 'small'],
+            # belly and back
+            'big' : [],
+            # eyes, tongue and teeth
+            'small' : ['round', 'large', 'small', 'big', 'long', 'short']
+        }
+        return choose(comp_groups[self.composition] + shape_groups[self.shape])
+
 # Functions~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+def animal(animal_class):
+    # Makes animals from an animal class
+    # I'll move this later on\
+    defadj = ['cloud', 'giant', 'dwarf','garden', 'cave', 'ornamental', 'house', 'spotted', 'barn',
+             'canyon', 'marbled', 'cellar', 'cobweb', 'rose', 'common', 'slender', 'false',
+             'bowl', 'huntsman', 'desert', 'goliath', 'skeleton', 'domestic', 'baron', 'king', 'lattice',
+             'goldenrod', 'flower', 'ivory', 'borrowing', 'bold',
+             'water', 'bronze', 'spined', 'ebony', 'trapdoor', 'pike', 'labyrinth', 'robber', 'coffin',
+             'grass', 'elegant', 'orchard', 'crested', 'painted', 'tree', 'midwife', 'brook', 'alpine', 'stream',
+             'agile', 'horned',
+             'fire', 'pool', 'hybrid', 'imperial', 'smooth', 'marsh', 'regal', 'royal',
+              'aboreal', 'wandering', 'mountain', 'garden', 'alpine', 'desert', 'river', 'brook', 'spring',
+             'dusky', 'pygmy', 'boreal', 'spectal', 'queen', 'chorus', pattern(), color()]
+    bodypart = choose(animal_class.bodyparts)
+    return choose([
+        bodypart.bodmod() + ' ' + addaned(bodypart.name),
+        choose(defadj),
+        choose([word('Discov')+ '\'s', land('demonym')])
+    ]) + ' ' + animal_class.name
+
 def color():
     # this makes colors
     def ish(color):
@@ -659,7 +719,7 @@ def age():
             '14th',
             '15th',
             '16th'
-        ]) + ' centure'
+        ]) + ' century'
     ])
     return time.title()
 
@@ -714,7 +774,7 @@ def pattern():
     # this is a pretty good function further implementation could benefit the program
     modifier = ['long', 'short', 'wide', 'thin', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight']
     base = ['band', 'spot', 'stripe']
-    return choose([choose(modifier), color()]) + choose(base)
+    return choose([choose(modifier), color()]) + ' ' + choose(base)
 
 
 def spider():
@@ -758,11 +818,11 @@ def normalgem():
            'turquoise', 'tourmaline', 'variscite', 'vesuviante', 'xenotime', 'zeolite', 'thomsonite', 'zircon',
            'zoisite', 'tanzanite', 'thulite', 'amber', 'ammolite', 'copal', 'coral', 'pearl', 'lapis-lazuliobsidian',
            'maw-sit-sit', 'unakite', 'ametrine', 'apatite', 'carnelian', 'diaspore', 'scapolite', 'opal', 'calcite',
-           'charoite', 'chrysoprase', 'clinohumite', 'enstatite', 'gaspeite', 'goshenite', 'hackmanite', 'hemimorphite',
-           'hiddenite', 'howlite', 'idocrase', 'iolite', 'kunzite', 'kyanite', 'larimar', 'lepidolite', 'melanite',
-           'andradite', 'moldavite', 'tektite', 'chrysolite', 'morganite', 'nuummite', 'orthoclase', 'pietersite',
-           'rhodonite', 'scapolite', 'serphinite', 'clinochlores', 'serpentine', 'smithsonite', 'sodalite',
-           'sphalerite', 'sphene', 'tanzanite', 'verdite']
+           'charoite', 'chrysoprase', 'clinohumite', 'enstatite', 'gaspeite', 'goshenite', 'hackmanite', 
+           'hemimorphite','hiddenite', 'howlite', 'idocrase', 'iolite', 'kunzite', 'kyanite', 'larimar', 
+           'lepidolite', 'melanite', 'andradite', 'moldavite', 'tektite', 'chrysolite', 'morganite', 'nuummite', 
+           'orthoclase', 'pietersite', 'rhodonite', 'scapolite', 'serphinite', 'clinochlores', 'serpentine', 
+           'smithsonite', 'sodalite', 'sphalerite', 'sphene', 'tanzanite', 'verdite']
     return choose(gem)
 
 
@@ -1685,6 +1745,39 @@ def foodlore():
     extra_sentances = filter(lambda x: x != '', extra_sentances)
     return gramcheck(choose(cooking_meth) + ' ' + choose(meat) + read_list(extra_sentances))
 
+def enscript(dobject):
+    enscription = ' ' + choose([
+               'the %s is enscribed with ' + choose([
+                   'a' + choose([
+                       'n ancient',
+                       ' mysterious'
+                   ]) + ' script',
+                   choose([
+                       'ancient',
+                       'mysterious'
+                   ]) + ' ' + choose([
+                       'runes',
+                       'glyphs',
+                       'hieroglyphics'
+                   ]),
+                   script()
+               ]),
+               'the %s is engraved with ' + carving(),
+               'there is ' + precep(choose([
+                   'crudely',
+                   'unskillfully'
+               ])) + ' scratched ' + script() + ' enscription on the %s',
+               'the %s is engraved with a ' + choose([
+                   'geometric',
+                   'floral'
+               ]) + ' pattern',
+               'the %s is engraved with ' + choose([
+                   'an unknown',
+                   'the ' + land('demonym'),
+                   'the ' + word('Famil') + ' family'
+               ]) + ' coat of arms'
+           ]) + '. '
+    return enscription %dobject
 
 def strangelore():
     # This was originally contained within the swordlore generator
@@ -1701,7 +1794,7 @@ def strangelore():
             'strongly ',
             'faintly '
         ]) + choose([
-            'of ' + readlist(smells),
+            'of ' + read_list(smells),
             choose(smell_descriptor)
         ])
 
@@ -1747,27 +1840,204 @@ def strangelore():
     lore = lore.replace('It >>>', '')
     return lore
 
+def mainlore(variation):
+    # Work in progress
+    # Makes the description for the main part of the weapon e.g. blade
+    gocation = choose([
+        'the ' + choose([
+            'depths',
+            'flames',
+            'hearth',
+            'fires'
+        ]) + ' of Hell', 'fire', 'flame',
+        choose([
+            'white',
+            'red'
+        ]) + ' hot ' + choose([
+            'flames',
+            'fire'
+        ]),
+        'darkness',
+        'the ' + forge(choose(['sword', ])), 'beneath ' + mountain()
+    ])
+        #                   add material in here ^
+    time = choose([
+        'during the ' + age(),
+        'during the year ' + str(randint(1, 1500)),
+        'under ' + precep(moonphase()) + ' moon'
+    ])
+    
+    def commission():
+            # this makes the starting description for a sword commissioned
+            # currently in use in both the glass and metal swords
+            tlore = choose([
+                choose([
+                    'The %s was ' %(variation),
+                    'The %s one of %d %ss ' %(variation, randint(2, 11), variation)
+                ]),
+                choose([
+                    'Commissioned',
+                    'One of %d %ss commissioned' %(randint(2, 11), variation)
+                ]) + ' by ' + choose([
+                    royalty(),
+                    council()
+                ]) + ', it was ',
+                'The %s is a decorative %s gifted from %s to %s %s, it was' 
+                %(variation, variation, royalty(), royalty(), boose(['as apeace offering']))
+            ])
+            return tlore
+    
+    def wroughtmain(gocation, time):
+        tlore = ''
+        if gocation[:7] != 'beneath':
+            gocation = 'in ' + gocation
+        else:
+            gocation = choose(['beneath', 'under', 'below']) + ' ' + gocation[7:]
+        body_metal = metal()
+        gild_metal = metal()
+        tlore += commission()
+        tlore += choose(['forged', 'wrought', 'cast', 'conceived'])
+        if gocation in ['in fire', 'in flame', 'in darkness', 'in the shadows']:
+            tlore += ' ' + gocation
+        tlore += ' from ' + body_metal + boose([
+            ' and gilded with ' + gild_metal
+        ])
+        tlore += ' by ' + professional('blacksmith', dobject='%s')
+        if gocation not in ['in fire', 'in flame', 'in darkness']:
+            tlore += ' ' + choose([gocation, time]) + '. '
+        else:
+            tlore += '. '
+        return tlore
+    
+    def craftmain(time):
+        tlore = 'The %s was '%variation
+        tlore += choose(['painstakingly ', 'meticulously ', ''])
+        tlore += choose(['carved', 'crafted'])
+        tlore += ' from ' + boose(['one ' + boose(['solid']) + 'piece of '])
+        tlore += choose([biomaterial('large')])
+        tlore += boose([' by ' + professional('craftsman')])
+        tlore += boose([' ' + time])
+        tlore += '. '
+        return tlore
+    
+    def glassmain(gocation, time):
+        tlore = ''
+        if gocation[:7] != 'beneath':
+            gocation = 'in ' + gocation
+        else:
+            gocation = choose(['beneath', 'under', 'below']) + ' ' + gocation[7:]
+        tlore += commission()
+        tlore += 'made from ' + glass()
+        tlore += boose([' by ' + professional('glassmith') + ' ' + boose([gocation, time])])
+        tlore += '. '
+        tlore += boose([
+            choose([
+                'A single ' + color() + ' ' + choose([
+                    'rose',
+                    'flower',
+                    'feather'
+                ]),
+                capitalize(precep(boose(['single ']) + bird() + ' feather')),
+                capitalize(precep(choose([
+                    'salamander',
+                    'frog',
+                    'toad',
+                    'newt',
+                    'eft',
+                    'olm',
+                    'worm',
+                    amphibian(),
+                    spider(),
+                    worm()
+                    ])))
+                ]) + ' is ' + boose(['perfectly ']) + choose([
+                    'encased',
+                    'preserved'
+                ]) + ' within the glass. '
+        ])
+        return tlore
+    #temporary line change implementation later
+    known = True
+    if boose([True]):
+        # The code below adds swords with repaired cracks
+        if known:
+            lore = choose([
+                'A crack in the %s ' %variation + choose([
+                    'has been filled with ' + metal(),
+                    'was ' + choose(['filled', 'repaired']) + ' by ' + professional('blacksmith', dobject='sword')
+                ]),
+                'Originally destroyed ' + choose([
+                    'during',
+                    'in'
+                ]) + ' the ' + choose([
+                    age(),
+                    war()
+                ]) + ', the %s was repaired by %s' %(variation, professional('blacksmith', dobject='sword')) + boose([
+                    choose([
+                        ' in',
+                        ' during'
+                    ]) + ' the ' + choose([
+                        age(),
+                        war()
+                    ])
+                ])
+            ])
+        else:
+            lore = 'A crack in the %s has been filled with ' + metal()
+        lore += '. '
+    else:
+        lore = capitalize(enscript(variation))
+    lore = lore.replace('  ', ' ')
+    return choose([wroughtmain(gocation, time), glassmain(gocation, time), craftmain(time), lore])
 
-def bowlore():
+def hiltlore():
     lore = ''
-    lore += 'It was ' + boose(['painstakingly ', 'skillfully ', 'artfully ']) + 'carved from ' + biomaterial('large') \
-            + boose([' by ' + professional('bowyer')])
-    lore += '. '
-    enscription = boose(['It is enscribed with ' + choose(['a' + choose(['n ancient', ' mysterious']) + ' script',
-                                                           choose(['ancient', 'mysterious']) + ' ' + choose(
-                                                               ['runes', 'glyphs', 'hieroglyphics']),
-                                                           script()]),
-                         'It is engraved with ' + carving(),
-                         'There is a crudely scratched ' + script() + ' enscription',
-                         'It is engraved with a ' + choose(['geometric', 'floral']) + ' pattern',
-                         'It is engraved with ' + choose(['an unknown', 'the ' + land('demonym'),
-                                                          'the ' + word('Famil') + ' family']) + ' coat of arms'])
-    lore += enscription
-    lore += '. '
-    lore += boose(['Its bowstring is made of ' + stringthing() + '. '])
-    if randint(0, 1) == 0:
-        lore += strangelore()
-    return gramcheck(lore)
+    wrapping = fabric()
+    encrusting = gem()
+    if boose([True]):
+        lore += choose([
+            'Its hilt is ' + boose([
+                'made of ' + material() + ' '
+            ]) + 'encrusted with ' + encrusting,
+            'Its ' + encrusting + ' encrusted hilt is ' + choose([
+                'worn',
+                'smooth'
+            ]) + ' from ' + choose([
+                'battle',
+                'use',
+                'combat'
+            ])
+        ])
+    else:
+        addition = choose([
+            'Its hilt is ' + boose([
+                'made of ' + material() + ' '
+            ]) + boose([
+                boose([
+                    'tightly '
+                ]) + choose([
+                    'wrapped',
+                    'wound'
+                ]) +' in ' + boose([
+                    'worn',
+                    'tattered',
+                    'bloodstained',
+                    'frayed'
+                ]) + ' ' + wrapping
+            ]),
+            'Its hilt is ' + choose([
+                'worn',
+                'smooth'
+            ]) + ' from ' + choose([
+                'battle',
+                'use',
+                'combat'
+            ])
+        ])
+        if addition != 'Its hilt is ':
+            lore += addition
+    lore = lore.replace('ts hilt is and i', '')
+    return lore
 
 
 def swordlore():
@@ -1777,12 +2047,6 @@ def swordlore():
     dobject = Weapon('sword', [WeaponPart('blade', 'main'), WeaponPart('hilt', 'handle')])
     known = True
     lore = ''
-    gocation = choose(['the ' + choose(['depths', 'flames', 'hearth', 'fires']) + ' of Hell', 'fire', 'flame',
-                       choose(['white', 'red']) + ' hot ' + choose(['flames', 'fire']), 'darkness',
-                       'the ' + forge(choose(['sword', ])), 'beneath ' + mountain()])
-    #                                       add material in here ^
-    time = choose(['during the ' + age(), 'during the year ' + str(randint(1, 1500)),
-                   'under a ' + moonphase() + ' moon'])
 
     def commission():
         # this makes the starting description for a sword commissioned
@@ -1804,45 +2068,6 @@ def swordlore():
         ])
         return tlore
 
-    def wroughtsword(gocation, time):
-        tlore = ''
-        if gocation[:7] != 'beneath':
-            gocation = 'in ' + gocation
-        else:
-            gocation = choose(['beneath', 'under', 'below']) + ' ' + gocation[7:]
-        body_metal = metal()
-        gild_metal = metal()
-        tlore += commission()
-        tlore += choose(['forged', 'wrought', 'cast', 'conceived'])
-        if gocation in ['in fire', 'in flame', 'in darkness', 'in the shadows']:
-            tlore += ' ' + gocation
-        tlore += ' from ' + body_metal + boose([
-            ' and gilded with ' + gild_metal
-        ])
-        tlore += ' by ' + professional('blacksmith', dobject='sword')
-        if gocation not in ['in fire', 'in flame', 'in darkness']:
-            tlore += ' ' + choose([gocation, time]) + '. '
-        else:
-            tlore += '. '
-        return tlore
-
-    def glasssword(gocation, time):
-        tlore = ''
-        if gocation[:7] != 'beneath':
-            gocation = 'in ' + gocation
-        else:
-            gocation = choose(['beneath', 'under', 'below']) + ' ' + gocation[7:]
-        tlore += commission()
-        tlore += 'made from ' + glass()
-        tlore += boose([' by ' + professional('glassmith') + ' ' + boose([gocation, time])])
-        tlore += '. '
-        tlore += boose([choose(['A single ' + color() + ' ' + choose(['rose', 'flower', 'feather']),
-                                capitalize(precep(boose(['single ']) + bird() + ' feather')), capitalize(
-                precep(choose(['salamander', 'frog', 'toad', 'newt', 'eft', 'olm', 'worm', amphibian(),
-                               spider(), worm()])))]) + ' is ' + boose(['perfectly ']) + choose(
-            ['encased', 'preserved']) + ' within the glass. '])
-        return tlore
-
     def giftsword():
         tlore = 'It was '
         tlore += choose(['given to ', 'gifted to ', 'presented to '])
@@ -1857,17 +2082,6 @@ def swordlore():
         tlore += '. '
         if lore[-3:] == ',. ':
             tlore = lore[:-3] + '. '
-        return tlore
-
-    def craftsword(time):
-        tlore = 'It was '
-        tlore += choose(['painstakingly ', 'meticulously ', ''])
-        tlore += choose(['carved', 'crafted'])
-        tlore += ' from ' + boose(['one ' + boose(['solid']) + 'piece of '])
-        tlore += choose([biomaterial('large')])
-        tlore += boose([' by ' + professional('craftsman')])
-        tlore += boose([' ' + time])
-        tlore += '. '
         return tlore
 
     def unknownsword():
@@ -1901,90 +2115,16 @@ def swordlore():
         pass
 
     lore += choose([
-        glasssword(gocation, time),
-        wroughtsword(gocation, time),
         giftsword(),
-        craftsword(time),
         unknownsword(),
         strangesword()
     ])
     if lore[:3] == 'The':
         known = False
-    enscription = ' ' + boose([
-        'its blade is enscribed with ' + choose([
-            'a' + choose([
-                'n ancient',
-                ' mysterious'
-            ]) + ' script',
-            choose([
-                'ancient',
-                'mysterious'
-            ]) + ' ' + choose([
-                'runes',
-                'glyphs',
-                'hieroglyphics'
-            ]),
-            script()
-        ]),
-        'its blade is engraved with ' + carving(),
-        'there is ' + precep(choose([
-            'crudely',
-            'unskillfully'
-        ])) + ' scratched ' + script() + ' enscription on its blade',
-        'its blade is engraved with a ' + choose([
-            'geometric',
-            'floral'
-        ]) + ' pattern',
-        'its blade is engraved with ' + choose([
-            'an unknown',
-            'the ' + land('demonym'),
-            'the ' + word('Famil') + ' family'
-        ]) + ' coat of arms'
-    ]) + '. '
-    if randint(0, 2) == 0:
-        wrapping = fabric()
-        encrusting = gem()
-        if randint(0, 1) == 0:
-            lore += choose([
-                'Its hilt is ' + boose(['made of ' + material() + ' ']) + 'encrusted with ' + encrusting,
-                'Its ' + encrusting + ' encrusted hilt is ' + choose(['worn', 'smooth']) + ' from ' + choose(
-                    ['battle', 'use', 'combat'])
-            ])
-        else:
-            addition = choose([
-                'Its hilt is ' + boose(['made of ' + material() + ' ']) + boose([boose(['tightly ']) + choose(
-                    ['wrapped in ', 'wound with ']) + boose(
-                    ['worn', 'tattered', 'bloodstained', 'frayed']) + ' ' + wrapping]),
-                'Its hilt is ' + choose(['worn', 'smooth']) + ' from ' + choose(['battle', 'use', 'combat'])
-            ])
-            if addition != 'Its hilt is ':
-                lore += addition
-        if enscription.strip(' ') != '.' and lore[-2:] != '. ':
-            lore += ' and ' + enscription
-        else:
-            lore += enscription
-    elif randint(0, 1) == 0:
-        # The code below adds swords with repaired cracks
-        if known:
-            lore += choose([
-                'A crack in the blade ' + choose(
-                    ['has been filled with ' + metal(),
-                     'was ' + choose(['filled', 'repaired']) + ' by ' + professional('blacksmith', dobject='sword')]),
-                'Originally destroyed ' + choose(['during', 'in']) + ' the ' + choose(
-                    [age(), war()]) + ', it was repaired by ' + professional('blacksmith', dobject='sword') + boose(
-                    [choose([' in' + ' during']) + ' the ' + age()])
-            ])
-        else:
-            lore += 'A crack in the blade has been filled with ' + metal()
-        lore += '. '
-    else:
-        lore += capitalize(enscription)
-    lore = lore.replace('  ', ' ')
-    lore = lore.replace('ts hilt is and i', '')
     if randint(0, 2) == 0 and known:
         lore += choose(['Wielded by ', 'In the hands of ', 'Held by ']) + choose(
             [hero().split(',')[0], hero()]) + ', it ' + choose(['once ']) + choose(
-            ['slew ', 'defeated ', 'killed ', 'vanquished ']) + choose([horde(), beast()]) + '.'
+            ['slew ', 'defeated ', 'killed ', 'vanquished ', 'struck down']) + choose([horde(), beast()]) + '.'
     elif randint(0, 1) == 0 and known:
         lore += 'It was ' + choose(['wielded by ', 'held by ']) + choose(
             [hero().split(',')[0], hero() + ',']) + choose([' in ', ' during ']) + battle() + ' ' + choose(
@@ -2007,18 +2147,60 @@ def print_as_sentences(lore):
 '''
 
            █▀
-      ▄███ █ ██   ▄█      █▄   ▄██████▄     ▄████████ ████████▄        ▄█        ▄██████▄     ▄████████    ▄████████
-      ███ ██ █▀█  ▀▀▀     ███ ███    ▀▀▀   ███    ███ ███   ▀▀▀▀      ███       ▀▀▀    ███   ███    ▀▀▀   ▀██    ███
- ▄    ███ ▀▀ ▀▀ ▄████████ ███ ███ ████████ ███ ██ ███ ███ ███████████ ███ ████████████ ███ █ ███ █████████▄▄▄     ▀█
- ████ ▀████████▄ ██████▄▄ ███ ███ ▄▄▄▄▄▄▄ ▄███▄▄▄▄██▀ ███ ▄▄▄▄▄▄▄▄▄▄▄ ███ ▄▄▄▄▄▄▄▄▄▄▄▄ ███ ▄ ███ ▄▄▄████████████▀
- ▀        ▄▄ ███ ████████ ███ ███ ██████ ▀▀███▀▀▀▀▀ ▀ ███ ███████████ ███ ████████████ ███ █ ███ ██████████▀▀▀
-          ██ ███  ▄▄▄     ███ ███    ▄▄▄ ▀███████████ ███    ▄▄▄      ███       ▄▄▄    ███  ▄███▄▄▄▄▄▄    ▄▄▄    █▄
-        ▄▄ █ ███  ███ ▄█▄ ███ ███    ███   ███    ███ ███   ▄███      ███▌    ▄ ███    ███ ▀▀███▀▀▀▀▀     ███    ███
-    ▄▄████ █▄ █▀   ▀███▀███▀   ▀██████▀    ███    ███ ████████▀       █████▄▄██  ▀██████▀  ▀██████████▄   ██████████
-                                           ███    ███                 ▀                      ███    ███
-                                             ▀      ▀                                        ▀██    ███
-                                                                                               ▀    ▀██
-                                                                                                      ▀
+      ▄███ █▐█▄   ▄█      █▄   ▄██████▄   ▄██████▄  ████████▄        ▄█  ▄██████▄     ▄██████▄     ▄███████▄
+     ▐███ ▐█▐█▪█  ▀▀▀     ███ ███    ▀▀▀ ███    ███ ▀▀▀   ▀███      ███ ▀▀▀▀  ▀███   ███▀   ▀▀▀   ▀██▀   ▀███
+ ▄   ▐███▄▀▀ ▀▀ ▄███▌████ ███ ███ ██████ ███▐██▌███ ███▌██ ███ ████ ███ ██████ ███ █ ███ ██████▐▐█▄▄▄     ▐██
+▐████▌▀████████▄▐████▄▄▄▄ ███ ███ ▄▄▄▄▄ ▄███▄▄▄▄███ ▄▄▄▄▄▄ ███ ▄▄▄▄ ███ ▄▄▄▄▄▄ ███ ▄ ███ ▄▄▄████▐███████▀ ▐██
+ ▀        ▄▄▀███ █▐▐█████ ███ ███ █▐▐█ ▀▀███▀▀▀▀▀▀▀ ██████ ███ ████ ███ ██▌███ ███ █ ███ ██████████▀▀▀   ▄██▀
+          ▐█ ▐██▌ ▄▄▄     ███ ███    ▄▄▀█████████▄  ▄▄▄    ███      ███ ▄▄▄    ███  ▄███▄▄▄▄▄▄    ▄▄██████▀
+     ▄▄███ █ ███  ███ ▄█▄ ███ ███    ███ ███   ▀███ ███   ▄███      ███ ███▄  ▄███ ▀▀███▀▀▀▀▀     ███▄     ▄█
+   ▄███▀▀▀ █▄ ▀    ▀███▀███▀   ▀██████▀   ███   ███ ████████▀       ███  ▀██████▀  ▀████████▄▄     ▀███████▀
+   ███                                   ███     ██▄                ████▄▄▄▄▄▄▄▄▄█   ███  ▀▀███
+   ███▄  ▄█                              ▀█       ▀▀▀              ▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀    ▀██  ▄███
+    ▀▀███▀▀                                                                           ▀▀   ▀██
+                                                                                              ▀
+
+
+
+
+                                ▄▄▄██████▄▄▄▄
+                             ██▀▀▀     ▀▀▀▀▀██████▄▄
+                              \                 ▀▀▀██
+                               \                    ██
+                                \                    ██
+                                 \                   ██
+                                  \                  ██
+                                   \                 ██
+                                    \                ▀█▄
+                                     \                ▀█▄
+                                      \                 ██▄
+                                       \                  ▀██▄
+                                        \                   ▀██
+                                         \                    ██
+                                          \                   ██
+                                           \                 ▄██
+                                            \               ▄██▀
+                                             \             ██▀
+                                              \          ▄██▀
+                                               \       ▄██▀
+                                                \    ▄██▀
+                                                 \▄███▀
+                                                  █▀
+
+
+███▄▄▄▄    ▄██████▄   ▄█     █▄       ▄█     █▄   ▄█      ███      ▄█    █▄      ▀█████████▄   ▄██████▄   ▄█     █▄   ▄███████▄            
+███▀▀▀██▄ ███    ███ ███     ███   >-███     ███ ███  ▀█████████▄ ███    ███     >-███   ▀███ ███    ███ ███     ███ ███    ▀███           
+███   ███ ███    ███ ███     ███     ███   >-███ ███▌    ▀███▀▀██ ███    ███       ███    ███ ███    ███ ███     ███ ███    ▀▀▀            
+███~~~~~~~~~~~~~~███~~~~~~~~~███~~~~~~~~~~~~~███~~~~~~~~~~███~~~▀~~~~~~~~███~~~~~~~~~~~~~~███ ~~~~~~~███~~~~~~~~~███~███~~~~~~~~~~~~~~>-->
+███   ███ ███    ███ ███     ███     ███     ███ ███▌     ███    ▄███▄▄▄▄███▄▄    ▄███▄▄▄██▀  ███    ███ ███     ███ ▀██████████▄          
+███   ███ ███    ███ ███     ███     ███     ███ ███      ███   ▀▀███▀▀▀▀███▀    ▀▀███▀▀▀██▄  ███  >-███ ███     ███        ▀▀███          
+███   ███ ███▄  ▄███ ███ ▄█▄ ███     ███ ▄█▄ ███ ███    >-███     ███    ███       ███    ███ ███▄  ▄███ ███ ▄█▄ ███   ▄█    ▄███          
+ ▀█   █▀   ▀██████▀   ▀███▀███▀       ▀███▀███▀  █▀      ▄████▀   ███    █▀      ▄█████████▀   ▀██████▀   ▀███▀███▀  ▄█████████▀           
+                                                                                                                                           
+                                                                                                                                           
+                                                                                                                                           
+
+
 '''
 
 # Body~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -2027,7 +2209,21 @@ if __name__ == '__main__':
     print swordlore()
     print 
     seed(1)
-    print foodlore()
+    print mainlore('garudle')
     print
-    seed(1)
-    print fruit()
+    print hiltlore()
+    print
+    for x in range(0,50):
+        seed(x)
+        print animal(Animal(choose(['llama','alpaca']), [
+            Bodypart('head','furry',[1], 'end'),
+            Bodypart('leg','furry',[4], 'connector'),
+            Bodypart('neck','furry',[1], 'connector'),
+            Bodypart('belly','furry',[1], 'big'),
+            Bodypart('back','furry',[1], 'big'),
+            Bodypart('ear','furry',[2], 'small'),
+            Bodypart('eye','organ',[2], 'small'),
+            Bodypart('tongue','organ',[1], 'small'),
+            Bodypart('tooth','bone',range(16,32,2), 'small'),
+            Bodypart('toe','bone',range(2,4), 'end')
+            ], 'furry'))
