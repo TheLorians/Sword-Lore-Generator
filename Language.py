@@ -3,8 +3,16 @@
 This is a language module.  It is used in language based computations.  It can translate to a variety of languages
 '''
 #Imports~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 from BasicFunctions import *
 import re
+import json
+
+#Files~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+f = open('markov.txt')
+markov_bank = json.loads(f.read())
+f.close()
 
 #Functions~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 def polish(word):
@@ -14,9 +22,9 @@ def polish(word):
     word = re.sub('q', 'qu', word)
     word = re.sub('quy', 'qui', word)
     #Add multi-character letters:
-    word = re.sub('\$', 'sh', word)
+    word = re.sub('<', 'sh', word)
     word = re.sub('%', 'th', word)
-    word = re.sub('\^', 'ch', word)
+    word = re.sub('>', 'ch', word)
     word = re.sub('&', choose(letters['8']), word)
     #Fix hh:
     word = re.sub('hh', 'h', word)
@@ -54,10 +62,10 @@ def word(word):
     word = ''
     
     for x in range(0,number):
-        syllable = ''
+        syllable = '^'
         syllable_skeleton = woose(frequencies,syllables)
         for letter in syllable_skeleton:
-            syllable += woose(frequencies,letters[letter])
+            syllable += woose(markov_bank[syllable[-1]],letters[letter])
         # Fixe 'yy'
         syllable = re.sub('yy$', 'yi$', syllable)
         syllable = re.sub('yy', 'ey', syllable)
@@ -73,7 +81,7 @@ def word(word):
         # commit the syllable to word
         word += syllable
         skeleton += syllable_skeleton
-    word = polish(word)
+    word = polish(word.replace('^',''))
     if oldword[0] == oldword[0].upper():
         word = capitalize(word)
     return word
@@ -151,4 +159,4 @@ if __name__ == '__main__':
     language = raw_input('Language seed: ')
     seed(hash(language.lower()))
     text = raw_input('Text: ')
-    print(translate(text,conjugated))
+    print(translate(text))
