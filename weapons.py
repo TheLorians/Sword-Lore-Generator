@@ -6,6 +6,13 @@ from swordlore import *
 
 # Weapon Classes~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+class WeaponCustom(object):
+    # Work in progress
+    def __init__(self, name, material, wrappable):
+        self.name = name
+        self.wrappable = wrappable
+        self.material = material
+
 class WeaponHandle(object):
     def __init__(self, name):
         self.name = name
@@ -100,7 +107,7 @@ class WeaponMain(object):
                 tlore = choose([
                     choose([
                         'The %s was ' %(variation),
-                        'The %s one of %d %ss ' %(variation, randint(2, 11), variation)
+                        'The %s is one of %d %ss ' %(variation, randint(2, 11), variation)
                     ]),
                     choose([
                         'Commissioned',
@@ -109,7 +116,7 @@ class WeaponMain(object):
                         royalty(),
                         council()
                     ]) + ', it was ',
-                    'The %s is a decorative %s gifted from %s to %s %s, it was' 
+                    'The %s is a decorative %s gifted from %s to %s %s, it was ' 
                     %(variation, variation, royalty(), royalty(), boose(['as apeace offering']))
                 ])
                 return tlore
@@ -217,6 +224,13 @@ class WeaponMain(object):
         lore = lore.replace('  ', ' ')
         return choose([wroughtmain(gocation, time), glassmain(gocation, time), craftmain(time), lore])
 
+class WeaponString(object):
+    def __init__(self, name):
+            self.name = name
+            self.wrappable = False
+            self.material = 'string'
+    def lore(self):
+        return 'the %s is made of %s. ' %(self.name,stringthing())
 
 class Weapon(object):
     def __init__(self, archetype, parts):
@@ -225,21 +239,6 @@ class Weapon(object):
     # These lore functions are not constant
     # They depend on the current state
     # (i.e. the result of these lore functions depends on the order in which they are called)
-    def commission(self):
-        # this makes the starting description for a weapon commissioned
-        tlore = choose([
-            'It is one of ' + str(randint(2, 11)) + ' %ss, ' %self.archetype,
-            choose([
-                'Commissioned',
-                'One of ' + str(randint(2, 11)) + ' %ss commissioned' %self.archetype
-            ]) + ' by ' + choose([
-                royalty(),
-                council()
-            ]) + ', ',
-            'A decorative %s gifted from ' %self.archetype + royalty() + ' to ' + royalty() + boose(
-                [' as a peace offering']) + ', '
-        ])
-        return tlore
     def partlore(self):
         # Describes the lore of each individual part
         return ''.join(map(lambda x: choose([x.lore(),'']), self.parts))
@@ -282,7 +281,7 @@ class Weapon(object):
             # http://grammar.yourdictionary.com/style-and-usage/descriptive-words-for-scents.html#VrGLY7AqDbAPBGlv.99
             smell = ['metal', blood(), 'sulfur', 'brimstone', 'smoke', 'bile', 'sweat', 'the sea', 'loam', fruit()]
             smells = choose(smell, randint(1,2))
-            smell_descriptor = ['acrid', 'airy', 'clean', 'crisp', 'dirty', 'earthy', 'faint', 'fetid', 'fishy', 'fresh','floral', 'flowery', 'light', 'loamy', 'musty', 'nauseating', 'perfumed', 'pungent', 'putrid', 'rancid', 'redolent', 'repulsive', 'rotten', 'sharp', 'sour', 'stale', 'stinking', 'sweet']
+            smell_descriptor = ['acrid', 'airy', 'clean', 'crisp', 'dirty', 'earthy', 'faint', 'fetid', 'fishy', 'fresh','floral', 'flowery', 'loamy', 'musty', 'nauseating', 'perfumed', 'pungent', 'putrid', 'rancid', 'redolent', 'repulsive', 'rotten', 'sharp', 'sour', 'stale', 'stinking', 'sweet']
             return 'smells ' + boose([
                 'strongly ',
                 'faintly '
@@ -333,11 +332,11 @@ class Weapon(object):
         lore = lore.replace('It >>>', '')
         return lore
     def lore(self):
-        tlore = gramcheck(boose([self.commission()]) + self.partlore() + self.historylore() + self.strangelore())
+        tlore = gramcheck(self.partlore() + self.historylore() + self.strangelore())
         if self.archetype == 'light saber':
             return tlore.replace('wizard','jedi').replace('magic','the force')
         return tlore
 if __name__ == "__main__":
-    seed(10)
-    weap = Weapon('axe',[WeaponMain('head'),WeaponHandle('handle')])
+    seed(19 )
+    weap = Weapon('bow',[WeaponString('bowstring'),WeaponHandle('riser')])
     print weap.lore()
