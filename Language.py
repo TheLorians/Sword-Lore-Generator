@@ -3,10 +3,94 @@
 This is a language module.  It is used in language based computations.  It can translate to a variety of languages
 '''
 #Imports~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 from BasicFunctions import *
 import re
+import json
+
+#Files~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+f = open('markov.txt')
+markov_bank = json.loads(f.read())
+f.close()
+
+# Variables~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+letters = {
+    '1': list('bcdfgjkprstvwz$%'),
+    '2': list('lr'),
+    '3': list('aeiouy&'),
+    '4': list('lr'),
+    '5': list('bcdfgjklmnprstvxz$%^'),
+    '6': list('bcdfghjklpqrstvwxyz$%^'),
+    '7': list('bcdfghjklprstvwxyz$%^'),
+    '8': ['ae', 'ai', 'ao', 'au', 'ea', 'ee', 'ei', 'ie', 'oe', 'oi', 'ou', 'ue']
+}
+frequencies = {
+    'a': 82,
+    'b': 15,
+    'c': 28,
+    'd': 43,
+    'e': 127,
+    'f': 22,
+    'g': 20,
+    'h': 61,
+    'i': 70,
+    'j': 2,
+    'k': 8,
+    'l': 40,
+    'm': 24,
+    'n': 67,
+    'o': 75,
+    'p': 19,
+    'q': 1,
+    'r': 60,
+    's': 63,
+    't': 91,
+    'u': 28,
+    'v': 10,
+    'w': 24,
+    'wh': 24,
+    'x': 2,
+    'y': 20,
+    'z': 1,
+    '$': 33,
+    '%': 33,
+    '&': 80,
+    '^': 33,
+    '3': 9,
+    '63': 30,
+    '37': 30,
+    '123': 1,
+    '637': 90,
+    '345': 1,
+    '1237': 10,
+    '6345': 13,
+    '12345': 1
+}
+syllables = [
+    '3',
+    '63',
+    '37',
+    '123',
+    '637',
+    '345',
+    '1237',
+    '6345',
+    '12345'
+]
 
 #Functions~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+def approxsyllables(string):
+    '''approximates the number of syllables based on the number of vowels'''
+    total = 0
+    for letter in list(string):
+        if letter in list('aeiou'):
+            total += 1
+    if total < 1:
+        total = 1
+    return total
+
 def polish(word):
     # Fixes any errors that might exist with the raw output of the word() function
     #TODO: rewrite with regex
@@ -14,9 +98,9 @@ def polish(word):
     word = re.sub('q', 'qu', word)
     word = re.sub('quy', 'qui', word)
     #Add multi-character letters:
-    word = re.sub('\$', 'sh', word)
+    word = re.sub('<', 'sh', word)
     word = re.sub('%', 'th', word)
-    word = re.sub('\^', 'ch', word)
+    word = re.sub('>', 'ch', word)
     word = re.sub('&', choose(letters['8']), word)
     #Fix hh:
     word = re.sub('hh', 'h', word)
@@ -54,10 +138,10 @@ def word(word):
     word = ''
     
     for x in range(0,number):
-        syllable = ''
+        syllable = '^'
         syllable_skeleton = woose(frequencies,syllables)
         for letter in syllable_skeleton:
-            syllable += woose(frequencies,letters[letter])
+            syllable += woose(markov_bank[syllable[-1]],letters[letter])
         # Fixe 'yy'
         syllable = re.sub('yy$', 'yi$', syllable)
         syllable = re.sub('yy', 'ey', syllable)
@@ -73,7 +157,7 @@ def word(word):
         # commit the syllable to word
         word += syllable
         skeleton += syllable_skeleton
-    word = polish(word)
+    word = polish(word.replace('^',''))
     if oldword[0] == oldword[0].upper():
         word = capitalize(word)
     return word
@@ -151,4 +235,4 @@ if __name__ == '__main__':
     language = raw_input('Language seed: ')
     seed(hash(language.lower()))
     text = raw_input('Text: ')
-    print(translate(text,conjugated))
+    print(translate(text))

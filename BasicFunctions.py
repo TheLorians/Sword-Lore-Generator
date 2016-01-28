@@ -29,70 +29,6 @@ import re
 
 # Variables~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-letters = {
-    '1': list('bcdfgjkprstvwz$%'),
-    '2': list('lrj'),
-    '3': list('aeiouy&'),
-    '4': list('lr'),
-    '5': list('bcdfgjklmnprstvxz$%^'),
-    '6': list('bcdfghjklpqrstvwxyz$%^'),
-    '7': list('bcdfghjklprstvwxyz$%^'),
-    '8': ['ae', 'ai', 'ao', 'au', 'ea', 'ee', 'ei', 'ie', 'oe', 'oi', 'ou', 'ue']
-}
-frequencies = {
-    'a': 82,
-    'b': 15,
-    'c': 28,
-    'd': 43,
-    'e': 127,
-    'f': 22,
-    'g': 20,
-    'h': 61,
-    'i': 70,
-    'j': 2,
-    'k': 8,
-    'l': 40,
-    'm': 24,
-    'n': 67,
-    'o': 75,
-    'p': 19,
-    'q': 1,
-    'r': 60,
-    's': 63,
-    't': 91,
-    'u': 28,
-    'v': 10,
-    'w': 24,
-    'wh': 24,
-    'x': 2,
-    'y': 20,
-    'z': 1,
-    '$': 33,
-    '%': 33,
-    '&': 80,
-    '^': 33,
-    '3': 9,
-    '63': 30,
-    '37': 30,
-    '123': 1,
-    '637': 90,
-    '345': 1,
-    '1237': 10,
-    '6345': 13,
-    '12345': 1
-}
-syllables = [
-    '3',
-    '63',
-    '37',
-    '123',
-    '637',
-    '345',
-    '1237',
-    '6345',
-    '12345'
-]
-
 seeded = False
 
 # Functions~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -216,7 +152,7 @@ def precep(word):
 
 def addaned(word):
     # Adds the ed to the end of a word in accordance with english grammar
-    special_cases = {'ear': 'eared'}
+    special_cases = {'ear': 'eared', 'tail' : 'tailed'}
     if word in special_cases:
         return special_cases[word]
     if re.search('e$', word):
@@ -227,110 +163,10 @@ def addaned(word):
         return word + word[-1] + 'ed'
     return word + 'ed'
 
-
-def approxsyllables(string):
-    '''approximates the number of syllables based on the number of vowels'''
-    total = 0
-    for letter in list(string):
-        if letter in list('aeiou'):
-            total += 1
-    if total < 1:
-        total = 1
-    return total
-
-
-def polish(word):
-    '''Fixes issues that might arise with word generation'''
-    # <polish word:
-    # <Fix q:
-    word = word.replace('q', 'qu')
-    word = word.replace('quy', 'qui')
-    # >q fixed
-    # <Add multi-character letters:
-    word = word.replace('$', 'sh')
-    word = word.replace('%', 'th')
-    word = word.replace('^', 'ch')
-    word = word.replace('&', choose(['ae', 'ai', 'ao', 'au', 'ea', 'ee', 'ei', 'ie', 'oe', 'oi', 'ou', 'ue']))
-    # >Multi-character letters added
-    # <Fix hh:
-    word = word.replace('hh', 'h')
-    # >hh fixed
-    # <Fix double multi:
-    word = word.replace('thth', 'th')
-    word = word.replace('shsh', 'sh')
-    # >double multi fixed
-    # <Enhance double vowel:
-    for vowel in list('aiu'):
-        word = word.replace(2 * vowel, vowel + '\'' + vowel)
-    # >Double vowel enhanced
-    # <Fix misc.:
-    word = word.replace('iy', 'ey')
-    word = word.replace('ih', 'eh')
-    word = word.replace('yh', 'eh')
-    # >Fixed
-    # >word polished
-    return word
-
-
-def word(word):
-    '''
-    This is the word generation function
-    # It translates words into seed based languages by the power of 
-    # '*.~MATHS~.*'
-    '''
-    # The commenting here could be improved
-    # (Also perhaps import the larger language module)
-    # returns blank requests to prevent it from being junked up
-    if word == '':
-        return word
-    # && bypasses translation
-    if word[-2:] == '&&':
-        return word[:-2]
-    number = approxsyllables(word) + randint(-1, 1)
-    if number < 1:
-        number = 1
-    skeleton = ''
-    oldword = word
-    word = ''
-    for x in range(0, number):
-        syllable = ''
-        syllable_skeleton = woose(frequencies, syllables)
-        for letter in list(syllable_skeleton):
-            syllable += woose(frequencies, letters[letter])
-        # <polish syllable:
-        # <Fix yy:
-        if 'y' == syllable[0]:
-            syllable = syllable.replace('yy', 'yi')
-        else:
-            syllable = syllable.replace('yy', 'ey')
-        # >yy fixed
-        # <Fix iw:
-        syllable = syllable.replace('iw', 'ew')
-        # >iw fixed
-        # <Fix (letter)l:
-        for letter in ['d', 't', 'r', '$', '%']:
-            syllable = syllable.replace(letter + 'l', letter + woose(frequencies, letters['3']) + 'l')
-        # >(letter)l fixed
-        # <Fix lr:
-        syllable = syllable.replace('lr', 'l' + woose(frequencies, letters['3']) + 'r')
-        # >lr fixed
-        # <Fix duplicate liquid:
-        syllable = syllable.replace('rr', 'r')
-        syllable = syllable.replace('ll', 'l')
-        syllable = syllable.replace('jj', 'j')
-        # >Duplicate liquids fixed
-        # >syllable polished
-        word += syllable
-        skeleton += syllable_skeleton
-    word = polish(word)
-    if oldword[0] == oldword[0].upper():
-        word = capitalize(word)
-    return word
-
-
 def read_list(array, oxford=True):
     '''Translates list objects into writen lists'''
-    array = list(array)
+    if isinstance(array, basestring):
+        return array
     while '' in array:
         array.remove('')
     if len(array) == 2:
@@ -345,4 +181,5 @@ def read_list(array, oxford=True):
 
 if __name__ == '__main__':
     seed(82914372)
-    print ed('hate')
+    for x in range(0,40):
+        print word('Hello world')
